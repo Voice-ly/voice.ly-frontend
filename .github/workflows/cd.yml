@@ -9,7 +9,7 @@ on:
       - main
 
 jobs:
-  cd(Deployment to vercel):
+  cd:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
