@@ -11,12 +11,16 @@ export default function PublicHeader() {
     return (
         <header className="flex flex-col w-full p-2 sm:flex-row-reverse sm:justify-between">
             <div className="flex justify-end gap-2 sm:gap-2">
-                <button className="bg-linear-to-r from-[#7B76F1] to-[#4A44ED] p-4 rounded-full text-white font-semibold text-xs sm:my-6 sm:text-base cursor-pointer">
-                    Registrarse
-                </button>
-                <button className="bg-linear-to-r from-[#7B76F1] to-[#4A44ED] p-2 rounded-full text-white font-semibold text-xs sm:my-6 cursor-pointer sm:text-base">
-                    Iniciar sesión
-                </button>
+                <Link to={"/register"}>
+                    <button className="bg-linear-to-r from-[#7B76F1] to-[#4A44ED] w-28 sm:w-36 p-4 rounded-full text-white font-semibold text-xs sm:my-6 sm:text-base cursor-pointer">
+                        Registrarse
+                    </button>
+                </Link>
+                <Link to={"/login"}>
+                    <button className="bg-linear-to-r from-[#7B76F1] to-[#4A44ED] p-4 w-28 sm:w-36 rounded-full text-white font-semibold text-xs sm:my-6 cursor-pointer sm:text-base">
+                        Iniciar sesión
+                    </button>
+                </Link>
             </div>
             <div className="flex flex-row">
                 <Link to={"/"}>
