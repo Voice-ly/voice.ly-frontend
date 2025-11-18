@@ -3,7 +3,7 @@ import logo from "/logo.jpeg";
 
 export default function PublicHeader() {
     const routes = [
-        { label: "Inicio", path: "" },
+        { label: "Inicio", path: "home" },
         { label: "Sobre nosotros", path: "" },
         { label: "Unirse a una reunión", path: "" },
         { label: "Ayuda", path: "" },
