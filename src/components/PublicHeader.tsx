@@ -8,7 +8,7 @@ export default function PublicHeader() {
         return match;
     };
     const routes = [
-        { label: "Inicio", path: "/" },
+        { label: "Inicio", path: "/home" },
         { label: "Sobre nosotros", path: "/about" },
         { label: "Unirse a una reunión", path: "/join" },
         { label: "Ayuda", path: "/help" },
@@ -28,7 +28,7 @@ export default function PublicHeader() {
                 </Link>
             </div>
             <div className="flex flex-row">
-                <Link to={"/"}>
+                <Link to={"/home"}>
                     <img
                         src={logo}
                         className="cursor-pointer w-[53px] h-[44px] sm:w-[103px] sm:h-[87px]"
