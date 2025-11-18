@@ -28,7 +28,7 @@ export default function PublicHeader() {
                 </Link>
             </div>
             <div className="flex flex-row">
-                <Link to={"/"}>
+                <Link to={"/home"}>
                     <img
                         src={logo}
                         className="cursor-pointer w-[53px] h-[44px] sm:w-[103px] sm:h-[87px]"
