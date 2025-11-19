@@ -1,0 +1,166 @@
+// Variables
+$color-white: #ffffff;
+$color-purple-600: #7c3aed;
+$color-purple-700: #6d28d9;
+$color-indigo-700: #4338ca;
+$color-gray-700: #374151;
+$color-gray-600: #4b5563;
+$color-gray-500: #6b7280;
+
+$breakpoint-md: 768px;
+$breakpoint-lg: 1024px;
+
+// Mixins
+@mixin respond-to($breakpoint) {
+    @media (min-width: $breakpoint) {
+        @content;
+    }
+}
+
+// Main Component
+.help-center {
+    min-height: 100vh;
+    background-color: $color-white;
+    padding: 1rem;
+
+    @include respond-to($breakpoint-lg) {
+        padding: 2rem 0;
+    }
+
+    &__container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 1rem;
+
+        @include respond-to($breakpoint-lg) {
+            padding: 0 2rem;
+        }
+    }
+
+    // Header
+    &__header {
+        margin-bottom: 2rem;
+
+        @include respond-to($breakpoint-lg) {
+            margin-bottom: 3rem;
+        }
+    }
+
+    &__title {
+        background: linear-gradient(to right, $color-purple-600, $color-indigo-700);
+        color: $color-white;
+        font-size: 1.5rem;
+        font-weight: bold;
+        text-align: center;
+        padding: 1.5rem 2rem;
+        border-radius: 0.75rem;
+        margin: 0;
+
+        @include respond-to($breakpoint-md) {
+            font-size: 2.25rem;
+            padding: 2rem 3rem;
+        }
+
+        @include respond-to($breakpoint-lg) {
+            font-size: 2.25rem;
+            border-radius: 1rem;
+        }
+    }
+
+    // Content
+    &__content {
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+
+        @include respond-to($breakpoint-lg) {
+            gap: 3rem;
+        }
+    }
+
+    // Section
+    &__section {
+        background-color: $color-white;
+        border: 2px solid $color-purple-600;
+        border-radius: 0.5rem;
+        padding: 1.5rem;
+
+        @include respond-to($breakpoint-md) {
+            padding: 2rem;
+            border-radius: 0.75rem;
+        }
+
+        @include respond-to($breakpoint-lg) {
+            padding: 2.5rem;
+        }
+    }
+
+    &__section-title {
+        color: $color-indigo-700;
+        font-size: 1.5rem;
+        font-weight: bold;
+        margin: 0 0 1.5rem 0;
+
+        @include respond-to($breakpoint-md) {
+            font-size: 1.75rem;
+            margin-bottom: 2rem;
+        }
+
+        @include respond-to($breakpoint-lg) {
+            font-size: 2rem;
+        }
+    }
+
+    // FAQ List
+    &__faq-list {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+
+    &__faq-item {
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba($color-purple-600, 0.2);
+
+        &:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+    }
+
+    &__question {
+        color: $color-purple-700;
+        font-size: 1rem;
+        font-weight: 600;
+        margin: 0 0 0.75rem 0;
+        line-height: 1.5;
+
+        @include respond-to($breakpoint-md) {
+            font-size: 1.125rem;
+            margin-bottom: 1rem;
+        }
+    }
+
+    &__answer {
+        color: $color-gray-700;
+        font-size: 0.9rem;
+        line-height: 1.6;
+        margin: 0;
+
+        @include respond-to($breakpoint-md) {
+            font-size: 1rem;
+            line-height: 1.7;
+        }
+    }
+}
+
+// Mobile specific adjustments
+@media (max-width: #{$breakpoint-md - 1px}) {
+    .help-center {
+        &__section {
+            border-left: none;
+            border-right: none;
+            border-radius: 0;
+        }
+    }
+}
