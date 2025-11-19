@@ -5,6 +5,9 @@ import LeftImageLayout from "./pages/layouts/LeftImageLayout";
 import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
+import AuthLayout from "./pages/layouts/AuthLayout";
+import DashboardPage from "./pages/DashboardPage";
+import MeetingPage from "./pages/MeetingPage";
 
 export default function Router() {
     return (
@@ -20,6 +23,10 @@ export default function Router() {
                         <Route path="register" element={<RegisterPage />} />
                     </Route>
                 </Route>
+                <Route path="/" element={<AuthLayout />}>
+                    <Route path="dashboard" element={<DashboardPage />} />
+                </Route>
+                <Route path="meeting" element={<MeetingPage />} />
             </Routes>
         </BrowserRouter>
     );
