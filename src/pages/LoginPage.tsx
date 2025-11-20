@@ -1,16 +1,18 @@
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import logo from "/logo.jpeg";
 import { useState, type ChangeEvent, type FormEvent } from "react";
-import { login } from "../lib/UserService";
+import { login } from "../lib/AuthService";
 import type { UserSigninForm } from "../types/User";
 
 export default function LoginPage() {
+
     const initialForm: UserSigninForm = {
         email: "",
         password: "",
-        confirmPassword: "",
     };
+
     const [form, setForm] = useState<UserSigninForm>(initialForm);
+
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setForm({ ...form, [name]: value });
@@ -23,6 +25,7 @@ export default function LoginPage() {
             if (!res.ok) {
                 throw new Error(String(res.status));
             }
+            navigate("/meeting");
         } catch (e) {
             console.log("Error " + e);
         } finally {
@@ -30,69 +33,55 @@ export default function LoginPage() {
         }
     };
 
+    const navigate = useNavigate();
+
     return (
         <div>
             <img src={logo} alt="logo" className="w-[99px] h-[77px] mx-auto" />
             <h1 className="text-3xl text-center font-bold">Inicia Sesión</h1>
             <h1>(Botones Proveedores)</h1>
+
             <form method="post" className="w-full" onSubmit={handleSubmit}>
+                
+                {/* EMAIL */}
                 <div className="flex flex-col w-5/6 mx-auto">
-                    <label
-                        htmlFor="email"
-                        className=" text-[9px] sm:text-[13px]"
-                    >
+                    <label className="text-[9px] sm:text-[13px]">
                         Email
                     </label>
+
                     <input
                         type="email"
                         value={form.email}
                         onChange={handleChange}
                         name="email"
-                        className="text-[8px] sm:text-[13px] py-2 border-b border-[#918EF4] focus:outline-none focus:border-blue-500 bg-transparent"
+                        className="text-[8px] sm:text-[13px] py-2 border-b 
+                        border-[#918EF4] focus:outline-none focus:border-blue-500 
+                        bg-transparent"
                         placeholder="johndoe@email.com"
                         required
                     />
                 </div>
-                <div className="flex flex-col w-5/6 mx-auto">
-                    <label
-                        htmlFor="email"
-                        className=" text-[9px] sm:text-[13px]"
-                    >
+
+                {/* PASSWORD */}
+                <div className="flex flex-col w-5/6 mx-auto mt-3">
+                    <label className="text-[9px] sm:text-[13px]">
                         Contraseña
                     </label>
+
                     <input
                         type="password"
                         name="password"
                         value={form.password}
                         onChange={handleChange}
-                        className="text-[8px] sm:text-[13px] py-2 border-b border-[#918EF4] focus:outline-none focus:border-blue-500 bg-transparent"
+                        className="text-[8px] sm:text-[13px] py-2 border-b 
+                        border-[#918EF4] focus:outline-none focus:border-blue-500 
+                        bg-transparent"
                         placeholder="Digita tu Contraseña"
                         required
-                        minLength={8}
-                        pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$"
-                        title="Debe contener al menos: 1 mayúscula, 1 minúscula, 1 número y 1 carácter especial (@$!%*?&)"
                     />
                 </div>
-                <div className="flex flex-col w-5/6 mx-auto">
-                    <label
-                        htmlFor="email"
-                        className=" text-[9px] sm:text-[13px]"
-                    >
-                        Confirmar Contraseña
-                    </label>
-                    <input
-                        type="password"
-                        name="confirmPassword"
-                        className="text-[8px] sm:text-[13px] py-2 border-b border-[#918EF4] focus:outline-none focus:border-blue-500 bg-transparent"
-                        placeholder="Digita tu Contraseña"
-                        required
-                        value={form.confirmPassword}
-                        onChange={handleChange}
-                        minLength={8}
-                        pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$"
-                        title="Debe contener al menos: 1 mayúscula, 1 minúscula, 1 número y 1 carácter especial (@$!%*?&)"
-                    />
-                </div>
+
+                {/* LINK OLVIDASTE CONTRASEÑA */}
                 <span className="flex justify-end">
                     <Link
                         to={"/forgot-password"}
@@ -101,16 +90,20 @@ export default function LoginPage() {
                         ¿Olvidaste tu contraseña?
                     </Link>
                 </span>
+
+                {/* BOTÓN */}
                 <span className="flex justify-center mt-6">
                     <button
                         type="submit"
-                        className="bg-[#7B76F1] rounded-full text-white font-bold w-[153px] h-[56px] cursor-pointer"
+                        className="bg-[#7B76F1] rounded-full text-white 
+                        font-bold w-[153px] h-[56px] cursor-pointer"
                     >
                         Iniciar
                     </button>
                 </span>
-                <span className="flex justify-center mt-4"></span>
-                <p className="tex-[#424242] text-[13px] text-center">
+
+                {/* LINK REGISTER */}
+                <p className="text-[#424242] text-[13px] text-center mt-4">
                     ¿No tienes una cuenta?{" "}
                     <Link to={"/register"} className="text-[#1976D2] font-bold">
                         REGISTRATE AHORA!
