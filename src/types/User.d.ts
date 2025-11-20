@@ -7,3 +7,17 @@ export interface UserSignupForm {
     password: string;
     confirmpassword: string;
 }
+
+export interface UserSigninForm {
+    email: string;
+    password: string;
+    confirmPassword: string;
+}
+
+export interface ForgotPasswordRequest {
+    email: string;
+}
+
+export interface ResetPasswordRequest {
+    password: string;
+}
