@@ -7,6 +7,8 @@ import LoginPage from "./pages/LoginPage";
 import AboutUs from "./pages/AboutUs";
 import Help from "./pages/Help";
 import RegisterPage from "./pages/RegisterPage";
+import RestorePassword from "./pages/RestorePassword";
+import ForgotPassword from "./pages/ForgotPassword";
 import AuthLayout from "./pages/layouts/AuthLayout";
 import DashboardPage from "./pages/DashboardPage";
 import MeetingPage from "./pages/MeetingPage";
@@ -25,6 +27,8 @@ export default function Router() {
                     <Route element={<LeftImageLayout />}>
                         <Route path="login" element={<LoginPage />} />
                         <Route path="register" element={<RegisterPage />} />
+                        <Route path="forgot-password" element={<ForgotPassword />} />
+                        <Route path="restore-password" element={<RestorePassword />} />
                     </Route>
                 </Route>
                 <Route path="/" element={<AuthLayout />}>
