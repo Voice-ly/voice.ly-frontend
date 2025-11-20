@@ -29,7 +29,8 @@ export default function PublicHeader() {
                         text-white font-semibold text-sm sm:text-md
                         shadow-md transition-all duration-300
                         hover:brightness-110 hover:shadow-[0_0_10px_#6b64ff]
-                    ">
+                    "
+                    >
                         Registrarse
                     </button>
                 </Link>
@@ -41,11 +42,11 @@ export default function PublicHeader() {
                         text-white font-semibold text-sm sm:text-md
                         shadow-md transition-all duration-300
                         hover:brightness-110 hover:shadow-[0_0_10px_#6b64ff]
-                    ">
+                    "
+                    >
                         Iniciar sesión
                     </button>
                 </Link>
-
             </div>
 
             {/* LOGO + MENÚ → EN MOBILE VAN ABAJO Y A LA DERECHA */}
