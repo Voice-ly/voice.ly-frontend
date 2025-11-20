@@ -10,7 +10,6 @@ export interface UserSignupForm {
 export interface UserSigninForm {
     email: string;
     password: string;
-    confirmPassword: string;
 }
 
 export interface ForgotPasswordRequest {
