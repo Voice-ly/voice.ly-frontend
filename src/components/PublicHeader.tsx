@@ -15,7 +15,6 @@ export default function PublicHeader() {
     ];
     return (
         <header className="w-full p-0 flex flex-col items-center sm:flex-row sm:justify-between sm:items-center">
-
             {/* ---------------- LOGO ---------------- */}
             <div className="flex items-center gap-4">
                 <Link to="/home">
@@ -49,33 +48,35 @@ export default function PublicHeader() {
 
             {/* ---------------- BOTONES DERECHA ---------------- */}
             <div className="flex flex-col sm:flex-row sm:gap-3 w-full sm:w-auto mt-4 sm:mt-0 pr-2 ">
-
                 <Link to="/register" className="w-full sm:w-auto">
-                    <button className="
-                        w-full sm:w-32 py-3 rounded-full 
+                    <button
+                        className="
+                        w-full sm:w-32 py-3 rounded-full cursor-pointer
                         bg-gradient-to-r from-[#7B76F1] to-[#4A44ED] 
                         text-white font-semibold text-xs sm:text-md
                         shadow-md
                         transition-all duration-300
                         hover:brightness-110 hover:shadow-[0_0_10px_#6b64ff]
-                    ">
+                    "
+                    >
                         Registrarse
                     </button>
                 </Link>
 
                 <Link to="/login" className="w-full sm:w-auto mt-2 sm:mt-0">
-                    <button className="
-                        w-full sm:w-32 py-3 rounded-full 
+                    <button
+                        className="
+                        w-full sm:w-32 py-3 rounded-full cursor-pointer
                         bg-gradient-to-r from-[#7B76F1] to-[#4A44ED] 
                         text-white font-semibold text-xs sm:text-md
                         shadow-md
                         transition-all duration-300
                         hover:brightness-110 hover:shadow-[0_0_10px_#6b64ff]
-                    ">
+                    "
+                    >
                         Iniciar sesión
                     </button>
                 </Link>
-
             </div>
         </header>
     );
