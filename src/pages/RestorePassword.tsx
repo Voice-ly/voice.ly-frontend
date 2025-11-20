@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useSearchParams, useNavigate } from "react-router-dom";
-import { resetPassword } from "../lib/UserService";
+import { resetPassword } from "../lib/AuthService";
 import type { ResetPasswordRequest } from "../types/User";
 import Logo from "/logo.jpeg";
 

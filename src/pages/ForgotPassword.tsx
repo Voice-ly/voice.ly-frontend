@@ -1,6 +1,6 @@
 import { useState} from "react";
 import { Link } from "react-router-dom";
-import { forgotPassword } from "../lib/UserService";
+import { forgotPassword } from "../lib/AuthService";
 import type { ForgotPasswordRequest } from "../types/User";
 import Logo from "/logo.jpeg";
 
