@@ -1,4 +1,3 @@
-import "./styles/Help.scss";
 
 interface FAQItem {
     question: string;
