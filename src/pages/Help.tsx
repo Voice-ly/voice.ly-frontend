@@ -1,4 +1,4 @@
-import "./styles/Help.css";
+import "./styles/Help.scss";
 
 interface FAQItem {
     question: string;
@@ -46,47 +46,59 @@ const HelpCenter: React.FC = () => {
     ];
 
     return (
-        <div className="help-center">
-            <div className="help-center__container">
+        <div className="min-h-screen bg-white py-4 md:py-8 lg:py-8">
+            <div className="max-w-6xl mx-auto px-4 md:px-8">
 
                 {/* Header Section */}
-                <div className="help-center__header">
-                    <h1 className="help-center__title">
+                <div className="mb-8 lg:mb-12">
+                    <h1 className="bg-gradient-to-r from-purple-600 to-indigo-700 text-white text-2xl md:text-3xl lg:text-4xl font-bold text-center py-6 md:py-8 px-8 md:px-12 rounded-xl md:rounded-2xl">
                         Centro de Ayuda - Preguntas Frecuentes
                     </h1>
 
                 </div>
                 
                 {/* Content */}
-                <div className="help-center__content">
+                <div className="space-y-8 lg:space-y-12">
 
                     {/* Account FAQs */}
-                    <section className="help-center__section">
-                        <h2 className="help-center__section-title">
+                    <section className="bg-white border-2 border-purple-600 rounded-none md:rounded-xl p-6 md:p-8 lg:p-10">
+                        <h2 className="text-indigo-700 text-2xl md:text-3xl lg:text-4xl font-bold mb-6 md:mb-8">
                             Cuenta y acceso
                         </h2>
 
-                        <div className="help-center__faq-list">
+                        <div className="space-y-6">
                             {accountFAQs.map((faq, index) => (
-                                <div key={index} className="help-center__faq-item">
-                                    <h3 className="helpcenter__question">{faq.question}</h3>
-                                    <p className="help-center__answer">{faq.answer}</p>
+                                <div key={index} 
+                                    className={`pb-4 ${index !== accountFAQs.length - 1 ? 'border-b border-purple-200' : ''}`}
+                                    >
+                                    <h3 className="text-purple-700 text-base md:text-lg font-semibold mb-3 leading-relaxed">
+                                        {faq.question}
+                                    </h3>
+                                    <p className="text-gray-600 text-sm md:text-base leading-relaxed">
+                                        {faq.answer}
+                                    </p>
                                 </div>
                             ))}
                         </div>
                     </section>
 
                     {/* Meeting FAQs */}
-                    <section className="help-center__section">
-                        <h2 className="help-center__section-title">
-                            Reuniones y uso de la plataforma
+                    <section className="bg-white border-2 border-purple-600 rounded-none md:rounded-xl p-6 md:p-8 lg:p-10">
+                        <h2 className="help-center__section-titext-indigo-700 text-2xl md:text-3xl lg:text-4xl font-bold mb-6 md:mb-8tle">
+                            Reuniones
                         </h2>
 
-                        <div className="help-center__faq-list">
+                        <div className="space-y-6">
                             {meetingFAQs.map((faq, index) => (
-                                <div key = {index} className="help-center__faq-item">
-                                    <h3 className="help-center__question">{faq.question}</h3>
-                                    <p className="help-center__answer">{faq.answer}</p>
+                                <div key = {index} 
+                                    className={`pb-4 ${index !== meetingFAQs.length - 1 ? 'border-b border-purple-200' : ''}`}
+                                >
+                                    <h3 className="text-purple-700 text-base md:text-lg font-semibold mb-3 leading-relaxed">
+                                        {faq.question}
+                                    </h3>
+                                    <p className="text-gray-600 text-sm md:text-base leading-relaxed">
+                                        {faq.answer}
+                                    </p>
                                 </div>
                             ))}
                         </div>

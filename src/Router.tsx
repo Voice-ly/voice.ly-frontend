@@ -4,6 +4,8 @@ import PublicLayout from "./pages/layouts/PublicLayout";
 import LeftImageLayout from "./pages/layouts/LeftImageLayout";    
 import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
+import AboutUs from "./pages/AboutUs";
+import Help from "./pages/Help";
 import RegisterPage from "./pages/RegisterPage";
 import AuthLayout from "./pages/layouts/AuthLayout";
 import DashboardPage from "./pages/DashboardPage";
@@ -17,6 +19,8 @@ export default function Router() {
                     <Route index element={<Navigate to="home" replace />} />
                     <Route path="home" element={<HomePage />} />
                     <Route path="app" element={<App />} />
+                    <Route path="about-us" element={<AboutUs />} />
+                    <Route path="help" element={<Help />} />
 
                     <Route element={<LeftImageLayout />}>
                         <Route path="login" element={<LoginPage />} />
