@@ -26,6 +26,7 @@ export default function Router() {
                     <Route path="about-us" element={<AboutUs />} />
                     <Route path="help" element={<Help />} />
 
+
                     <Route element={<LeftImageLayout />}>
                         <Route path="login" element={<LoginPage />} />
                         <Route path="register" element={<RegisterPage />} />
@@ -37,12 +38,12 @@ export default function Router() {
                             path="reset-password"
                             element={<RestorePassword />}
                         />
+                        <Route path="join" element={<JoinMeeting />} />
                     </Route>
                 </Route>
                 <Route path="/" element={<AuthLayout />}>
                     <Route path="dashboard" element={<DashboardPage />} />
                     <Route path="profile" element={<ProfilePage />} />
-                    <Route path="join-meeting" element={<JoinMeeting />} />
                 </Route>
                 <Route path="meeting" element={<MeetingPage />} />
             </Routes>
