@@ -151,13 +151,89 @@ export default function LoginPage() {
             });
     };
 
+    const handleLoginWithFacebook = (e: Event) => {
+        e.preventDefault();
+        loginWithFacebook()
+            .then(async (result) => {
+                // The signed-in user info.
+                const user: any = result.user;
+
+                const creationTime =
+                    user.auth.currentUser.metadata.creationTime;
+
+                const createdAt = {
+                    _seconds: Math.floor(
+                        new Date(creationTime).getTime() / 1000
+                    ),
+                };
+                const idToken = await user.getIdToken();
+                const res = await apiFetch(
+                    "/socialAuth",
+                    {
+                        method: "POST",
+                        body: JSON.stringify({ idToken }),
+                    },
+                    "auth"
+                );
+
+                if (res.ok) {
+                    const profile = {
+                        firstName: user.auth.currentUser.displayName,
+                        email: user.auth.currentUser.email,
+                        createdAt,
+                    };
+                    setProfile(profile);
+                    navigate("/dashboard");
+                }
+                console.log(user);
+            })
+            .catch(async (error) => {
+                if (
+                    error.code ===
+                    "auth/account-exists-with-different-credential"
+                ) {
+                    const email = error.customData.email;
+                    const pendingCred = error.credential;
+
+                    // Consultar proveedores asociados al email
+                    const providers = await fetchSignInMethodsForEmail(
+                        auth,
+                        email
+                    );
+
+                    // Caso típico: ya existe la cuenta con Google
+                    if (providers.includes("google.com")) {
+                        alert(
+                            "Este email ya está registrado con Google. Debes iniciar sesión con Google."
+                        );
+
+                        const googleProvider = new GoogleAuthProvider();
+                        const googleResult = await signInWithPopup(
+                            auth,
+                            googleProvider
+                        );
+
+                        // Vincular las credenciales de Facebook al usuario existente
+                        await linkWithCredential(
+                            googleResult.user,
+                            pendingCred
+                        );
+
+                        console.log("Cuentas vinculadas correctamente");
+                    }
+                } else {
+                    console.log(error);
+                }
+            });
+    };
+
     return (
         <div className="py-0 sm:py-49 h-full">
             <img src={logo} alt="logo" className="w-[99px] h-[77px] mx-auto" />
             <h1 className="text-3xl text-center font-bold">Inicia Sesión</h1>
             <div className="flex gap-3 justify-center my-4">
                 <GoogleLoginButton submit={handleLoginWithGoogle} />
-                <FacebookLoginButton submit={loginWithFacebook} />
+                <FacebookLoginButton submit={handleLoginWithFacebook} />
             </div>
             <form method="post" className="w-full" onSubmit={handleSubmit}>
                 {/* EMAIL */}
