@@ -45,7 +45,7 @@ const HelpCenter: React.FC = () => {
     ];
 
     return (
-        <div className="min-h-screen bg-white py-4 md:py-8 lg:py-8">
+        <div className=" bg-white py-4 md:py-8 lg:py-8">
             <div className="max-w-6xl mx-auto px-4 md:px-8">
 
                 {/* Header Section */}
