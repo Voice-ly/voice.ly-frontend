@@ -28,7 +28,7 @@ export default function LoginPage() {
             if (!res.ok) {
                 throw new Error(String(res.status));
             }
-            navigate("/meeting");
+            navigate("/dashboard");
         } catch (e) {
             console.log("Error " + e);
         } finally {
@@ -108,7 +108,7 @@ export default function LoginPage() {
                 <p className="text-[#424242] text-[13px] text-center mt-4">
                     ¿No tienes una cuenta?{" "}
                     <Link to={"/register"} className="text-[#1976D2] font-bold">
-                        REGISTRATE AHORA!
+                        Registrate ahora!
                     </Link>
                 </p>
             </form>
