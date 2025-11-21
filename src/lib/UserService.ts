@@ -1,5 +1,14 @@
 import type { UserSignupForm,} from "../types/User";
 import { apiFetch } from "./fetch";
+import {
+    FacebookAuthProvider,
+    getAuth,
+    GoogleAuthProvider,
+    signInWithPopup,
+} from "firebase/auth";
+import { auth } from "./firebase";
+
+// Rutas base: /api/users
 
 export function register(request: UserSignupForm): Promise<Response> {
     return apiFetch("/", {
@@ -26,4 +35,51 @@ export function updateProfile(data: any): Promise<Response> {
 
 export function deleteUser(data:any): Promise<Response> {
     return apiFetch("/profile", { method: "DELETE",body: JSON.stringify(data), },  "users");
+}
+
+async function handleSocialRegister(user: any) {
+    const tempPassword = "Aa!12345"; // contraseña temporal q cumple todas las reglas
+
+    const payload: UserSignupForm = {
+        firstName: user.displayName?.split(" ")[0] || "User",
+        lastName: user.displayName?.split(" ").slice(1).join(" ") || "Google",
+        email: user.email || "",
+        password: tempPassword,
+        confirmpassword: tempPassword,
+        age: 18, // debe ser > 0
+    };
+
+    return register(payload);
+}
+
+
+/* ============================================================
+   REGISTRO CON GOOGLE 
+   ============================================================ */
+export async function registerWithGoogle() {
+    const provider = new GoogleAuthProvider();
+
+    try {
+        const result = await signInWithPopup(auth, provider);
+        const user = result.user;
+
+        // Se envía al backend para crear el usuario
+        return await handleSocialRegister(user);
+
+    } catch (error) {
+        console.error("Google registration error:", error);
+        throw error;
+    }
+}
+export async function registerWithFacebook() {
+    const provider = new FacebookAuthProvider();
+    try {
+        const result = await signInWithPopup(auth, provider);
+        const user = result.user;
+
+        return await handleSocialRegister(user);
+    } catch (error) {
+        console.error("Facebook error", error);
+        throw error;
+    }
 }

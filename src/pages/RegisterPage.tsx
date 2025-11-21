@@ -1,8 +1,9 @@
 import { Link, useNavigate } from "react-router";
 import logo from "/logo.jpeg";
 import { useState, useEffect } from "react";
-import { register } from "../lib/UserService";
+import { register, registerWithGoogle, registerWithFacebook } from "../lib/UserService";
 import type { UserSignupForm } from "../types/User";
+import {FacebookLoginButton, GoogleLoginButton} from "../components/AuthButtons";
 
 // Regex
 const nameRegex = /^[A-Za-zÁÉÍÓÚáéíóúñÑ\s]+$/;
@@ -157,7 +158,11 @@ export default function RegisterPage() {
 
 
             <h1 className="text-3xl text-center font-bold mt-2">Registrate</h1>
-            <h1 className="text-center mt-3">(Botones Proveedores)</h1>
+            <div className="flex gap-3 justify-center my-4">
+                            <GoogleLoginButton submit={registerWithGoogle} />
+                            <FacebookLoginButton submit={registerWithFacebook} />
+                            
+                        </div>
 
         {/* FIRST NAME */}
         <div className="flex flex-col w-full relative">
@@ -314,7 +319,7 @@ export default function RegisterPage() {
             className={`bg-[#7B76F1] rounded-full text-white font-bold w-[153px] h-[56px]
               ${isValid ? "opacity-100" : "opacity-40 cursor-not-allowed"} cursor-pointer`}
           >
-            REGISTRARME
+            Registrarme
           </button>
         </div>
 
