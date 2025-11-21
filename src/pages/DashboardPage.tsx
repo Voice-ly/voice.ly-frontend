@@ -12,7 +12,7 @@ export default function DashboardPage() {
     // const username = user?.name;
     // Por ahora dejamos un nombre estático.
     // -------------------------------
-    const username = "Mehrab 👋";
+    //const username = "Mehrab";
 
     
     function joinMeeting() {
@@ -25,7 +25,7 @@ export default function DashboardPage() {
 
             {/* --- TÍTULO BIENVENIDA --- */}
             <h1 className="text-[28px] md:text-[34px] font-bold text-center text-[#304FFE] mb-10">
-                Bienvenido {username}
+                Bienvenido 👋
             </h1>
 
             {/* --- CONTENEDOR PRINCIPAL (Izquierda: texto+img | Derecha: formularios) --- */}
