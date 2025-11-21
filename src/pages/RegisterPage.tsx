@@ -1,6 +1,5 @@
 import { Link, useNavigate } from "react-router";
 import logo from "/logo.jpeg";
-
 import { useState, useEffect } from "react";
 import { register } from "../lib/UserService";
 import type { UserSignupForm } from "../types/User";
@@ -124,14 +123,14 @@ export default function RegisterPage() {
     e.preventDefault();
     if (!isValid) return;
 
-    const payload: UserSignupForm = {
-      firstName: firstName.trim(),
-      lastName: lastName.trim(),
-      age: Number(age),
-      email: email.trim(),
-      password,
-      confirmpassword,
-    };
+        const payload: UserSignupForm = {
+            firstName: firstName.trim(),
+            lastName: lastName.trim(),
+            age: Number(age),
+            email: email.trim(),
+            password,
+            confirmpassword,
+        };
 
     try {
       const res = await register(payload);
@@ -150,12 +149,15 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="w-full max-w-xl mx-auto px-6 py-10">
+    <div className="min-h-screen flex items-center justify-center p-4">
+      <form onSubmit={handleSubmit} className="w-full max-w-md">
+
       <img src={logo} alt="logo" className="w-[99px] h-[77px] mx-auto" />
 
-      <h1 className="text-3xl text-center font-bold mt-2">Registrate</h1>
 
-      <form className="w-full mt-6" onSubmit={handleSubmit}>
+
+            <h1 className="text-3xl text-center font-bold mt-2">Registrate</h1>
+            <h1 className="text-center mt-3">(Botones Proveedores)</h1>
 
         {/* FIRST NAME */}
         <div className="flex flex-col w-full relative">
