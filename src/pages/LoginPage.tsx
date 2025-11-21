@@ -1,8 +1,12 @@
 import { Link, useNavigate } from "react-router";
 import logo from "/logo.jpeg";
 import { useState, type ChangeEvent, type FormEvent } from "react";
-import { login, loginWithGoogle } from "../lib/AuthService";
+import { login, loginWithFacebook, loginWithGoogle } from "../lib/AuthService";
 import type { UserSigninForm } from "../types/User";
+import {
+    FacebookLoginButton,
+    GoogleLoginButton,
+} from "../components/AuthButtons";
 
 export default function LoginPage() {
     const initialForm: UserSigninForm = {
@@ -38,8 +42,10 @@ export default function LoginPage() {
         <div className="py-0 sm:py-24">
             <img src={logo} alt="logo" className="w-[99px] h-[77px] mx-auto" />
             <h1 className="text-3xl text-center font-bold">Inicia Sesión</h1>
-            <h1>(Botones Proveedores)</h1>
-            <button onClick={loginWithGoogle}>Google</button>
+            <div className="flex gap-3 justify-center my-4">
+                <GoogleLoginButton submit={loginWithGoogle} />
+                <FacebookLoginButton submit={loginWithFacebook} />
+            </div>
             <form method="post" className="w-full" onSubmit={handleSubmit}>
                 {/* EMAIL */}
                 <div className="flex flex-col w-5/6 mx-auto">
