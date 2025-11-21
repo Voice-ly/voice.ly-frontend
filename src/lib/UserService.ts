@@ -2,7 +2,7 @@ import type { UserSignupForm,} from "../types/User";
 import { apiFetch } from "./fetch";
 import {
     FacebookAuthProvider,
-    getAuth,
+    //getAuth,
     GoogleAuthProvider,
     signInWithPopup,
 } from "firebase/auth";

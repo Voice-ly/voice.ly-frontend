@@ -3,8 +3,8 @@ import logo from "/logo.jpeg";
 import { useState, useEffect } from "react";
 import {
   register,
-  registerWithGoogle,
-  registerWithFacebook,
+  //registerWithGoogle,
+  //registerWithFacebook,
 } from "../lib/UserService";
 import type { UserSignupForm } from "../types/User";
 import {
@@ -16,7 +16,7 @@ import { loginWithFacebook, loginWithGoogle } from "../lib/AuthService";
 // Regex
 const nameRegex = /^[A-Za-zÁÉÍÓÚáéíóúñÑ\s]+$/;
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/;
+//const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/;
 
 export default function RegisterPage() {
   // --- VALORES DEL FORMULARIO ---

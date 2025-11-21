@@ -1,11 +1,26 @@
-
+/**
+ * Inerface for FAQ items
+ * @interface FAQItem
+ */
 interface FAQItem {
     question: string;
     answer: string;
 }
 
-
+/**
+ * Help Center Page Component
+ * 
+ * This component renders the Help Center page, which includes frequently asked questions (FAQs)
+ * about account management and meetings.
+ * 
+ * @returns the Help Center page
+ */
 const HelpCenter: React.FC = () => {
+
+    /**
+     * Account FAQs
+     * @type {FAQItem[]} : Array of frequently asked questions about account management
+     */
     const accountFAQs: FAQItem[] = [
         {
             question: '¿Cómo creo una cuenta?',
@@ -21,6 +36,10 @@ const HelpCenter: React.FC = () => {
         }
     ];
 
+    /**
+     * Meeting FAQs
+     * @type {FAQItem[]} : Array of frequently asked questions about meetings
+     */
     const meetingFAQs: FAQItem[] = [
         {
             question: '¿Cómo creo una reunión?',
