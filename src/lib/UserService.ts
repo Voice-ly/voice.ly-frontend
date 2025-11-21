@@ -8,6 +8,7 @@ import {
 } from "firebase/auth";
 import { auth } from "./firebase";
 
+
 // Rutas base: /api/users
 
 export function register(request: UserSignupForm): Promise<Response> {

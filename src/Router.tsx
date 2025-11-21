@@ -33,7 +33,7 @@ export default function Router() {
                             element={<ForgotPassword />}
                         />
                         <Route
-                            path="restore-password"
+                            path="reset-password"
                             element={<RestorePassword />}
                         />
                     </Route>

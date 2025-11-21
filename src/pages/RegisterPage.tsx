@@ -1,9 +1,17 @@
 import { Link, useNavigate } from "react-router";
 import logo from "/logo.jpeg";
 import { useState, useEffect } from "react";
-import { register, registerWithGoogle, registerWithFacebook } from "../lib/UserService";
+import {
+  register,
+  registerWithGoogle,
+  registerWithFacebook,
+} from "../lib/UserService";
 import type { UserSignupForm } from "../types/User";
-import {FacebookLoginButton, GoogleLoginButton} from "../components/AuthButtons";
+import {
+  FacebookLoginButton,
+  GoogleLoginButton,
+} from "../components/AuthButtons";
+import { loginWithFacebook, loginWithGoogle } from "../lib/AuthService";
 
 // Regex
 const nameRegex = /^[A-Za-zÁÉÍÓÚáéíóúñÑ\s]+$/;
@@ -48,7 +56,11 @@ export default function RegisterPage() {
   const handleInput = (name: string, value: string) => {
     setActiveField(name);
 
-    if ((name === "firstName" || name === "lastName") && value && !nameRegex.test(value)) {
+    if (
+      (name === "firstName" || name === "lastName") &&
+      value &&
+      !nameRegex.test(value)
+    ) {
       return; // Solo letras
     }
 
@@ -57,12 +69,24 @@ export default function RegisterPage() {
     }
 
     switch (name) {
-      case "firstName": setName(value); break;
-      case "lastName": setLastName(value); break;
-      case "age": setAge(value); break;
-      case "email": setEmail(value); break;
-      case "password": setPassword(value); break;
-      case "confirmpassword": setConfirmPassword(value); break;
+      case "firstName":
+        setName(value);
+        break;
+      case "lastName":
+        setLastName(value);
+        break;
+      case "age":
+        setAge(value);
+        break;
+      case "email":
+        setEmail(value);
+        break;
+      case "password":
+        setPassword(value);
+        break;
+      case "confirmpassword":
+        setConfirmPassword(value);
+        break;
     }
   };
 
@@ -74,15 +98,17 @@ export default function RegisterPage() {
 
     switch (activeField) {
       case "firstName":
-        errorText = firstName.trim().length < 2 || !nameRegex.test(firstName)
-          ? "Nombre inválido"
-          : "";
+        errorText =
+          firstName.trim().length < 2 || !nameRegex.test(firstName)
+            ? "Nombre inválido"
+            : "";
         break;
 
       case "lastName":
-        errorText = lastName.trim().length < 2 || !nameRegex.test(lastName)
-          ? "Apellido inválido"
-          : "";
+        errorText =
+          lastName.trim().length < 2 || !nameRegex.test(lastName)
+            ? "Apellido inválido"
+            : "";
         break;
 
       case "email":
@@ -115,7 +141,9 @@ export default function RegisterPage() {
 
     // Form completo y sin errores
     const noErrors = Object.values(newErrors).every((e) => e === "");
-    const allFilled = Boolean(firstName && lastName && email && password && confirmpassword && age);
+    const allFilled = Boolean(
+      firstName && lastName && email && password && confirmpassword && age
+    );
     setIsValid(noErrors && allFilled);
   }, [firstName, lastName, email, password, confirmpassword, age, activeField]);
 
@@ -124,14 +152,14 @@ export default function RegisterPage() {
     e.preventDefault();
     if (!isValid) return;
 
-        const payload: UserSignupForm = {
-            firstName: firstName.trim(),
-            lastName: lastName.trim(),
-            age: Number(age),
-            email: email.trim(),
-            password,
-            confirmpassword,
-        };
+    const payload: UserSignupForm = {
+      firstName: firstName.trim(),
+      lastName: lastName.trim(),
+      age: Number(age),
+      email: email.trim(),
+      password,
+      confirmpassword,
+    };
 
     try {
       const res = await register(payload);
@@ -142,8 +170,6 @@ export default function RegisterPage() {
       }
 
       setShowSuccess(true);
-
-
     } catch (err) {
       console.error("Error al registrar:", err);
     }
@@ -152,17 +178,13 @@ export default function RegisterPage() {
   return (
     <div className="min-h-screen flex items-center justify-center p-4">
       <form onSubmit={handleSubmit} className="w-full max-w-md">
+        <img src={logo} alt="logo" className="w-[99px] h-[77px] mx-auto" />
 
-      <img src={logo} alt="logo" className="w-[99px] h-[77px] mx-auto" />
-
-
-
-            <h1 className="text-3xl text-center font-bold mt-2">Registrate</h1>
-            <div className="flex gap-3 justify-center my-4">
-                            <GoogleLoginButton submit={registerWithGoogle} />
-                            <FacebookLoginButton submit={registerWithFacebook} />
-                            
-                        </div>
+        <h1 className="text-3xl text-center font-bold mt-2">Registrate</h1>
+        <div className="flex gap-3 justify-center my-4">
+          <GoogleLoginButton submit={() => loginWithGoogle(navigate)} />
+          <FacebookLoginButton submit={() => loginWithFacebook(navigate)} />
+        </div>
 
         {/* FIRST NAME */}
         <div className="flex flex-col w-full relative">
@@ -257,10 +279,42 @@ export default function RegisterPage() {
 
           {/* CHECKLIST */}
           <ul className="text-xs mt-2 space-y-1">
-            <li className={passwordChecks.length(password) ? "text-green-600" : "text-red-600"}>• 8 caracteres</li>
-            <li className={passwordChecks.upper(password) ? "text-green-600" : "text-red-600"}>• Una mayúscula</li>
-            <li className={passwordChecks.number(password) ? "text-green-600" : "text-red-600"}>• Un número</li>
-            <li className={passwordChecks.special(password) ? "text-green-600" : "text-red-600"}>• Un caracter especial</li>
+            <li
+              className={
+                passwordChecks.length(password)
+                  ? "text-green-600"
+                  : "text-red-600"
+              }
+            >
+              • 8 caracteres
+            </li>
+            <li
+              className={
+                passwordChecks.upper(password)
+                  ? "text-green-600"
+                  : "text-red-600"
+              }
+            >
+              • Una mayúscula
+            </li>
+            <li
+              className={
+                passwordChecks.number(password)
+                  ? "text-green-600"
+                  : "text-red-600"
+              }
+            >
+              • Un número
+            </li>
+            <li
+              className={
+                passwordChecks.special(password)
+                  ? "text-green-600"
+                  : "text-red-600"
+              }
+            >
+              • Un caracter especial
+            </li>
           </ul>
         </div>
 
@@ -289,27 +343,27 @@ export default function RegisterPage() {
         </div>
         {/* SUCCESS MODAL */}
         {showSuccess && (
-        <div className="fixed inset-0 flex items-center justify-center z-50 pointer-events-none">
+          <div className="fixed inset-0 flex items-center justify-center z-50 pointer-events-none">
             <div className="bg-white p-6 rounded-xl shadow-lg w-80 text-center border border-gray-200 pointer-events-auto">
-            <h2 className="text-xl font-bold text-green-600">¡Cuenta creada!</h2>
-            <p className="mt-2 text-gray-700">
+              <h2 className="text-xl font-bold text-green-600">
+                ¡Cuenta creada!
+              </h2>
+              <p className="mt-2 text-gray-700">
                 Tu usuario ha sido registrado exitosamente.
-            </p>
+              </p>
 
-            <button
+              <button
                 onClick={() => {
-                setShowSuccess(false);
-                navigate("/login");
+                  setShowSuccess(false);
+                  navigate("/login");
                 }}
                 className="mt-4 bg-[#7B76F1] text-white px-6 py-2 rounded-full hover:brightness-110 transition"
-            >
+              >
                 Ir al login
-            </button>
+              </button>
             </div>
-        </div>
+          </div>
         )}
-
-
 
         {/* SUBMIT */}
         <div className="flex justify-center mt-8">
@@ -317,7 +371,9 @@ export default function RegisterPage() {
             type="submit"
             disabled={!isValid}
             className={`bg-[#7B76F1] rounded-full text-white font-bold w-[153px] h-[56px]
-              ${isValid ? "opacity-100" : "opacity-40 cursor-not-allowed"} cursor-pointer`}
+              ${
+                isValid ? "opacity-100" : "opacity-40 cursor-not-allowed"
+              } cursor-pointer`}
           >
             Registrarme
           </button>
@@ -325,12 +381,14 @@ export default function RegisterPage() {
 
         <p className="text-[13px] text-center mt-10">
           ¿Ya tienes una cuenta?
-          <Link to="/login" className="text-[#1976D2] font-bold ml-1 inline-block">
+          <Link
+            to="/login"
+            className="text-[#1976D2] font-bold ml-1 inline-block"
+          >
             ¡Inicia sesión ahora!
           </Link>
         </p>
       </form>
     </div>
   );
-  
 }

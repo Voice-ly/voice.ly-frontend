@@ -1,7 +1,10 @@
 //import React from "react";
+import { useNavigate } from "react-router";
 import Dashimage from "/Dashimage.png"; // Ajusta si está en otra carpeta
 
 export default function DashboardPage() {
+
+    const navigator = useNavigate();
 
     // -------------------------------
     // Aquí irá la conexión con backend
@@ -11,6 +14,10 @@ export default function DashboardPage() {
     // Por ahora dejamos un nombre estático.
     // -------------------------------
     const username = "Mehrab 👋";
+
+    function joinMeeting() {
+        navigator("/meeting");
+    }
 
     return (
         <div className="w-full px-6 md:px-14 lg:px-20 py-10">
@@ -51,7 +58,7 @@ export default function DashboardPage() {
                             className="w-full mt-2 px-4 py-2 border border-gray-300 rounded-lg outline-none focus:border-[#304FFE] transition"
                         />
 
-                        <button
+                        <button onClick={joinMeeting}
                             className="w-full mt-4 py-2 bg-[#304FFE] rounded-full text-white font-semibold hover:bg-[#1E40FF] transition"
                         >
                             Unirse

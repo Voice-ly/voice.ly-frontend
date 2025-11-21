@@ -9,6 +9,7 @@ import {
 } from "../components/AuthButtons";
 
 export default function LoginPage() {
+    const navigate = useNavigate();
     const initialForm: UserSigninForm = {
         email: "",
         password: "",
@@ -36,15 +37,14 @@ export default function LoginPage() {
         }
     };
 
-    const navigate = useNavigate();
 
     return (
         <div className="py-0 sm:py-24">
             <img src={logo} alt="logo" className="w-[99px] h-[77px] mx-auto" />
             <h1 className="text-3xl text-center font-bold">Inicia Sesión</h1>
             <div className="flex gap-3 justify-center my-4">
-                <GoogleLoginButton submit={loginWithGoogle} />
-                <FacebookLoginButton submit={loginWithFacebook} />
+                <GoogleLoginButton submit={() => loginWithGoogle(navigate)}/>
+                <FacebookLoginButton submit={()=>loginWithFacebook(navigate)} />
             </div>
             <form method="post" className="w-full" onSubmit={handleSubmit}>
                 {/* EMAIL */}
