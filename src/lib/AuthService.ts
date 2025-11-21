@@ -6,7 +6,6 @@ import type {
 import { apiFetch } from "./fetch";
 import {
     FacebookAuthProvider,
-    getAuth,
     GoogleAuthProvider,
     signInWithPopup,
 } from "firebase/auth";
