@@ -2,13 +2,36 @@
 //import { useState } from "react";
 import { Link } from "react-router-dom";
 
+/**
+ * MeetingPage Component
+ * ---------------------
+ * Displays the meeting UI with:
+ * - A video area (placeholder for future video stream).
+ * - Controls for microphone, camera, participants, and chat.
+ * - Online status indicator.
+ * - Exit button that redirects to the dashboard.
+ *
+ * @component
+ *
+ * @returns {JSX.Element} The meeting interface layout.
+ *
+ * @example
+ * <MeetingPage />
+ *
+ * @description
+ * This page simulates the main meeting interface.  
+ * Future features can include:
+ * - Live video rendering
+ * - WebRTC integration
+ * - Real-time participant list and chat
+ */
 
 export default function MeetingPage() {
 
     return (
         <div className="w-full h-screen bg-black relative overflow-hidden">
 
-            {/* --- BOTÓN "VISTA" ARRIBA DERECHA --- */}
+            {/* Online status */}
             <button className="absolute top-4 right-4 bg-[#3A3A3A] text-white text-sm px-4 py-1 rounded-md shadow-md hover:bg-[#505050] transition">
                 ▣ Vista
             </button>
@@ -18,34 +41,30 @@ export default function MeetingPage() {
             </p>
 
 
-            {/* --- ZONA NEGRA DE VIDEO (AQUÍ IRÁ LA TRANSMISIÓN) --- */}
+            {/* Video zone */}
             <div className="w-full h-full"></div>
 
-            {/* --- BARRA INFERIOR COMPLETA --- */}
+            {/* Bottom control bar */}
             <div className="absolute bottom-0 left-0 w-full bg-gradient-to-r from-[#304FFE] to-[#black] py-4 flex items-center justify-between px-5">
 
-                {/* --- GRUPO DE BOTONES CENTRALES --- */}
+                {/* Central buttons */}
                 <div className="flex gap-6 sm:gap-10 mx-auto">
 
-                    {/* MICRÓFONO */}
                     <button className="text-white flex flex-col items-center text-xs sm:text-sm hover:opacity-80 transition">
                         <span className="text-3xl">🎤</span>
                         <span>Activar micrófono</span>
                     </button>
 
-                    {/* CÁMARA */}
                     <button className="text-white flex flex-col items-center text-xs sm:text-sm hover:opacity-80 transition">
                         <span className="text-3xl">📷</span>
                         <span>Activar cámara</span>
                     </button>
 
-                    {/* PARTICIPANTES */}
                     <button className="text-white flex flex-col items-center text-xs sm:text-sm hover:opacity-80 transition">
                         <span className="text-3xl">👥</span>
                         <span>Participantes </span>
                     </button>
 
-                    {/* CHAT */}
                     <button className="text-white flex flex-col items-center text-xs sm:text-sm hover:opacity-80 transition">
                         <span className="text-3xl">💬</span>
                         <span>Chat</span>
@@ -53,8 +72,7 @@ export default function MeetingPage() {
 
                 </div>
 
-
-                {/* --- BOTÓN SALIR (A LA DERECHA) --- */}
+                 {/* Exit button */}
                 <Link to="/dashboard">
                     <button className="bg-red-600 text-white px-6 py-2 rounded-full text-sm font-semibold shadow-md hover:bg-red-700 transition">
                         Salir

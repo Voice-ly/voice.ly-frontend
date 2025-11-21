@@ -13,13 +13,25 @@ import {
 } from "../components/AuthButtons";
 import { loginWithFacebook, loginWithGoogle } from "../lib/AuthService";
 
+/**
+ * RegisterPage Component
+ * ----------------------
+ * This component renders the user registration form, including:
+ * - Name, lastname, age, email and password fields
+ * - Real-time validation for each input
+ * - Password requirements checklist
+ * - Google and Facebook login buttons
+ * - Success modal after registration
+ *
+ * It manages multiple validation rules using regex and dynamic UI states.
+ */
 // Regex
 const nameRegex = /^[A-Za-zÁÉÍÓÚáéíóúñÑ\s]+$/;
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 //const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/;
 
 export default function RegisterPage() {
-  // --- VALORES DEL FORMULARIO ---
+  // --- Form state variables--
   const [firstName, setName] = useState("");
   const [lastName, setLastName] = useState("");
   const [age, setAge] = useState<string>("");
@@ -27,7 +39,9 @@ export default function RegisterPage() {
   const [password, setPassword] = useState("");
   const [confirmpassword, setConfirmPassword] = useState("");
   const [showSuccess, setShowSuccess] = useState(false);
-
+  /**
+   * Error tracking for each input
+   */
   const [activeField, setActiveField] = useState("");
   const [errors, setErrors] = useState({
     firstName: "",
@@ -37,14 +51,15 @@ export default function RegisterPage() {
     password: "",
     confirmpassword: "",
   });
-
+  /** Password visibility toggle */
   const [showPassword, setShowPassword] = useState(false);
   const togglePasswordVisibility = () => setShowPassword(!showPassword);
-
+  /** Form validation flag */
   const [isValid, setIsValid] = useState(false);
   const navigate = useNavigate();
-
-  // --- CHECKS DE CONTRASEÑA ---
+  /**
+   * Password validation functions
+   */
   const passwordChecks = {
     length: (pw: string) => pw.length >= 8,
     upper: (pw: string) => /[A-Z]/.test(pw),
@@ -52,7 +67,12 @@ export default function RegisterPage() {
     special: (pw: string) => /[!@#$%^&*(),.?":{}|<>]/.test(pw),
   };
 
-  // --- CAMBIO DE INPUTS ---
+  /**
+   * Updates input value and applies restrictions based on field type.
+   *
+   * @param {string} name - Name of the field being updated
+   * @param {string} value - New value entered by the user
+   */
   const handleInput = (name: string, value: string) => {
     setActiveField(name);
 
@@ -90,7 +110,9 @@ export default function RegisterPage() {
     }
   };
 
-  // --- VALIDACIONES ---
+  /**
+   * Runs live validation whenever an input changes.
+   */
   useEffect(() => {
     if (!activeField) return;
 
@@ -139,7 +161,7 @@ export default function RegisterPage() {
     const newErrors = { ...errors, [activeField]: errorText };
     setErrors(newErrors);
 
-    // Form completo y sin errores
+    /** If all fields are filled and error-free, enable the form */
     const noErrors = Object.values(newErrors).every((e) => e === "");
     const allFilled = Boolean(
       firstName && lastName && email && password && confirmpassword && age
@@ -147,7 +169,11 @@ export default function RegisterPage() {
     setIsValid(noErrors && allFilled);
   }, [firstName, lastName, email, password, confirmpassword, age, activeField]);
 
-  // --- SUBMIT ---
+  /**
+   * Handles form submission and sends data to backend.
+   *
+   * @param {React.FormEvent<HTMLFormElement>} e - Submit event
+   */
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!isValid) return;
