@@ -4,6 +4,13 @@ import { forgotPassword } from "../lib/AuthService";
 import type { ForgotPasswordRequest } from "../types/User";
 import Logo from "/logo.jpeg";
 
+/**
+ *  Forgot Password Page Component
+ * 
+ * This component renders the "Forgot Password" page, allowing users to request a password
+ * reset by entering and confirming their email address.
+ * @returns the Forgot Password page
+ */
 export default function ForgotPassword() {
     const [email, setEmail] = useState("");
     const [confirmEmail, setConfirmEmail] = useState("");
@@ -11,7 +18,11 @@ export default function ForgotPassword() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
 
-    // Handle form submission
+    /**
+     *  Handle form submission for forgot password
+     *  @param e : React.FormEvent - The form submission event
+     *  @returns void
+     */
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setError("");
@@ -52,6 +63,9 @@ export default function ForgotPassword() {
         }
     }
 
+    /**
+     * Render the Forgot Password form
+     */
     return (
         <main className="flex flex-col w-full max-w-md mx-auto px-4">
             {/* Logo solo visible en móvil */}

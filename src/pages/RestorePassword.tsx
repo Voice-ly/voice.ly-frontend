@@ -4,6 +4,14 @@ import { resetPassword } from "../lib/AuthService";
 import type { ResetPasswordRequest } from "../types/User";
 import Logo from "/logo.jpeg";
 
+/**
+ *  Restore Password Page Component
+ * 
+ * This component renders the "Restore Password" page, allowing users to reset their password
+ * using a token sent to their email.
+ * 
+ * @returns the Restore Password page
+ */
 export default function ForgotPassword() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
@@ -19,30 +27,42 @@ export default function ForgotPassword() {
   // Extract token from URL
   const token = searchParams.get("token") || "";
 
-  // Verify token on component mount
-  useEffect(() => {
-    // Verify token existence on URL
-    if (!token) {
-      setIsValidToken(false);
-      setError("Token inválido o ausente.");
-      return;
-    }
+    /**
+     * useEffect Hook to verify the token on component mount
+     * and set the validity state accordingly.
+     */
+    useEffect(() => {
+        // Verify token existence on URL
+        if (!token) {
+            setIsValidToken(false);
+            setError("Token inválido o ausente.");
+            return;
+        }
 
     // If there is a token, we assume it's valid until back-end answers
     setIsValidToken(true);
   }, [token]);
 
-  // Verify passwords
-  const validatePassword = (pass: string): boolean => {
-    const regex =
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/;
-    return regex.test(pass);
-  };
+    /**
+     *  Validate password complexity
+     * 
+     *  @param pass: string - The password to validate 
+     *  @returns boolean - True if valid, false otherwise
+     */
+    const validatePassword = (pass: string): boolean => {
+        const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/;
+        return regex.test(pass);
+    };
 
-  // Handle form submission
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError("");
+    /**
+     *  Handle form submission for password reset
+     * 
+     *  @param e: React.FormEvent - The form submission event 
+     *  @returns void
+     */
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setError("");
 
     //Validations
     if (password !== confirmPassword) {
@@ -90,63 +110,72 @@ export default function ForgotPassword() {
     }
   };
 
-  // If token is invalid or does not exist
-  if (isValidToken === false) {
+    /**
+     * Render invalid token message
+     */
+    if (isValidToken === false) {
+        return (
+            <main className="flex flex-col w-full max-w-md mx-auto px-4 text-center">
+                <div className="lg:hidden mb-10">
+                    <img src={Logo} alt="logo" className="w-[99px] h-[77px] mx-auto" />
+                </div>
+                
+                <div className="bg-red-50 border border-red-200 rounded-lg p-6 mb-6">
+                    <h2 className="text-xl font-semibold text-red-700 mb-2">
+                        Enlace Inválido
+                    </h2>
+                    <p className="text-red-600 mb-4">
+                        {error || "El enlace de recuperación es inválido o ha expirado."}
+                    </p>
+                    <Link 
+                        to="/forgot-password"
+                        className="inline-block bg-indigo-600 text-white px-6 py-2 rounded-full hover:bg-indigo-700 transition-colors"
+                    >
+                        Solicitar nuevo enlace
+                    </Link>
+                </div>
+            </main>
+        );
+    }
+
+    /**
+     * Render success message
+     */
+    if (success) {
+        return (
+            <main className="flex flex-col w-full max-w-md mx-auto px-4 text-center">
+                <div className="lg:hidden mb-10">
+                    <img src={Logo} alt="logo" className="w-[99px] h-[77px] mx-auto" />
+                </div>
+                
+                <div className="bg-green-50 border border-green-200 rounded-lg p-6">
+                    <div className="w-16 h-16 bg-gradient-to-br from-indigo-600 to-purple-600 text-white rounded-full flex items-center justify-center text-3xl font-bold mx-auto mb-4">
+                        ✓
+                    </div>
+                    <h2 className="text-xl font-semibold text-green-700 mb-2">
+                        ¡Contraseña Cambiada!
+                    </h2>
+                    <p className="text-green-600">
+                        Tu contraseña ha sido actualizada exitosamente. Serás redirigido al inicio de sesión...
+                    </p>
+                </div>
+            </main>
+        );
+    }
+
+    /**
+     * Render the password reset form
+     */
     return (
-      <main className="flex flex-col w-full max-w-md mx-auto px-4 text-center">
-        <div className="lg:hidden mb-10">
-          <img src={Logo} alt="logo" className="w-[99px] h-[77px] mx-auto" />
-        </div>
-
-        <div className="bg-red-50 border border-red-200 rounded-lg p-6 mb-6">
-          <h2 className="text-xl font-semibold text-red-700 mb-2">
-            Enlace Inválido
-          </h2>
-          <p className="text-red-600 mb-4">
-            {error || "El enlace de recuperación es inválido o ha expirado."}
-          </p>
-          <Link
-            to="/forgot-password"
-            className="inline-block bg-indigo-600 text-white px-6 py-2 rounded-full hover:bg-indigo-700 transition-colors"
-          >
-            Solicitar nuevo enlace
-          </Link>
-        </div>
-      </main>
-    );
-  }
-
-  //If change was successful
-  if (success) {
-    return (
-      <main className="flex flex-col w-full max-w-md mx-auto px-4 text-center">
-        <div className="lg:hidden mb-10">
-          <img src={Logo} alt="logo" className="w-[99px] h-[77px] mx-auto" />
-        </div>
-
-        <div className="bg-green-50 border border-green-200 rounded-lg p-6">
-          <div className="w-16 h-16 bg-gradient-to-br from-indigo-600 to-purple-600 text-white rounded-full flex items-center justify-center text-3xl font-bold mx-auto mb-4">
-            ✓
-          </div>
-          <h2 className="text-xl font-semibold text-green-700 mb-2">
-            ¡Contraseña Cambiada!
-          </h2>
-          <p className="text-green-600">
-            Tu contraseña ha sido actualizada exitosamente. Serás redirigido al
-            inicio de sesión...
-          </p>
-        </div>
-      </main>
-    );
-  }
-
-  // Main form
-  return (
-    <main className="flex flex-col w-full max-w-md mx-auto px-4">
-      {/* Logo solo visible en móvil */}
-      <div className="lg:hidden mb-10">
-        <img src={Logo} alt="logo" className="w-[99px] h-[77px] mx-auto" />
-      </div>
+        <main className="flex flex-col w-full max-w-md mx-auto px-4">
+            {/* Logo solo visible en móvil */}
+            <div className="lg:hidden mb-10">
+                <img
+                    src={Logo}
+                    alt="logo"
+                    className="w-[99px] h-[77px] mx-auto"
+                />
+            </div>
 
       <h1 className="text-2xl md:text-3xl text-center font-semibold text-gray-900 mb-10">
         Recuperar Contraseña
