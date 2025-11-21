@@ -9,7 +9,7 @@ import { Link } from "react-router";
 const HomePage: React.FC = () => {
    return (
     <div
-      className="min-h-screen w-full flex items-center justify-center bg-cover bg-center bg-no-repeat"
+      className=" w-full flex items-center justify-center bg-cover bg-center bg-no-repeat"
       style={{
         backgroundImage: `url('/wallpaper-home.png')`,
       }}

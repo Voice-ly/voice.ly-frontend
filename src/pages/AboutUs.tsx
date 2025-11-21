@@ -2,13 +2,13 @@
 
 export default function AboutUs() {
     return (
-        <div className="min-h-screen bg-white">
-            <div className="container mx-auto px-4 py-12 lg:py-20">
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
+        <div className=" bg-white">
+            <div className="container mx-auto px-4 py-2 lg:py-1">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-1 lg:gap-1">
 
                     {/* Left Section - Sobre Nosotros */}
-                    <div className="flex flex-col justify-center px-4 lg:px-8">
-                        <h1 className="text-4xl lg:text-5xl font-bold text-gray-600 mb-8 text-center lg:text-left">
+                    <div className="flex flex-col justify-center px-1 lg:px-8">
+                        <h1 className="text-4xl lg:text-5xl font-bold text-purple-600 mb-8 text-center ">
                             Sobre Nosotros
                         </h1>
 
@@ -31,9 +31,9 @@ export default function AboutUs() {
                     </div>
 
                     {/* Right Section - More Section */}
-                    <div className="relative bg-gradient-to-br from-indigo-600 to-purple-700 rounded-lg lg:rounded-none p-8 lg:p-12 overflow-hidden">
+                    <div className="relative bg-gradient-to-br from-indigo-600 to-purple-1500 rounded-lg lg:rounded-none p-8 lg:p-12 overflow-hidden">
                         {/* Background Image or Decorative Element */}
-                        <div className="absolute top-0 left-0 w-full h-full z-0">
+                        <div className="absolute top-0 left-0 w-full h-full z-9">
                             <img src="/wallpaper-public.png" alt="" className="w-full h-full object-cover object-center" />
                         </div>
 
