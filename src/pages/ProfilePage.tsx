@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router";
-import { deleteUser, getUsers, updateProfile } from "../lib/UserService";
+import { deleteUser, updateProfile } from "../lib/UserService";
 import { useEffect, useState } from "react";
 import { showToast } from "../utils/toast";
 import { useUserStore } from "../stores/useUserStore";

@@ -12,7 +12,6 @@ import {
     signInWithPopup,
 } from "firebase/auth";
 import { auth } from "./firebase";
-import { getUsers } from "./UserService";
 
 // Routes base URL: /auth
 /**

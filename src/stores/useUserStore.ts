@@ -1,9 +1,9 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
-export const useUserStore = create()(
+export const useUserStore = create<any>()(
     persist(
-        (set, get) => ({
+        (set) => ({
             profile: {
                 id: "",
                 name: "",
