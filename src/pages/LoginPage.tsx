@@ -1,11 +1,15 @@
 import { Link, useNavigate } from "react-router";
 import logo from "/logo.jpeg";
 import { useState, type ChangeEvent, type FormEvent } from "react";
-import { login } from "../lib/AuthService";
+import { login, loginWithFacebook, loginWithGoogle } from "../lib/AuthService";
 import type { UserSigninForm } from "../types/User";
+import {
+    FacebookLoginButton,
+    GoogleLoginButton,
+} from "../components/AuthButtons";
 
 export default function LoginPage() {
-
+    const navigate = useNavigate();
     const initialForm: UserSigninForm = {
         email: "",
         password: "",
@@ -25,7 +29,7 @@ export default function LoginPage() {
             if (!res.ok) {
                 throw new Error(String(res.status));
             }
-            navigate("/meeting");
+            navigate("/dashboard");
         } catch (e) {
             console.log("Error " + e);
         } finally {
@@ -33,21 +37,19 @@ export default function LoginPage() {
         }
     };
 
-    const navigate = useNavigate();
 
     return (
-        <div>
+        <div className="py-0 sm:py-24">
             <img src={logo} alt="logo" className="w-[99px] h-[77px] mx-auto" />
             <h1 className="text-3xl text-center font-bold">Inicia Sesión</h1>
-            <h1>(Botones Proveedores)</h1>
-
+            <div className="flex gap-3 justify-center my-4">
+                <GoogleLoginButton submit={() => loginWithGoogle(navigate)}/>
+                <FacebookLoginButton submit={()=>loginWithFacebook(navigate)} />
+            </div>
             <form method="post" className="w-full" onSubmit={handleSubmit}>
-                
                 {/* EMAIL */}
                 <div className="flex flex-col w-5/6 mx-auto">
-                    <label className="text-[9px] sm:text-[13px]">
-                        Email
-                    </label>
+                    <label className="text-[9px] sm:text-[13px]">Email</label>
 
                     <input
                         type="email"
@@ -106,7 +108,7 @@ export default function LoginPage() {
                 <p className="text-[#424242] text-[13px] text-center mt-4">
                     ¿No tienes una cuenta?{" "}
                     <Link to={"/register"} className="text-[#1976D2] font-bold">
-                        REGISTRATE AHORA!
+                        Registrate ahora!
                     </Link>
                 </p>
             </form>
