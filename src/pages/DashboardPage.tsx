@@ -1,37 +1,40 @@
 //import React from "react";
 import { useNavigate } from "react-router";
 import Dashimage from "/Dashimage.png"; 
+
+/**
+ * Dashboard page for authenticated users.
+ * Provides quick access to join or create a meeting,
+ * along with a welcoming layout.
+ *
+ * @component
+ */
 export default function DashboardPage() {
 
     const navigator = useNavigate();
 
-    // -------------------------------
-    // Aquí irá la conexión con backend
-    // Ejemplo:
-    // const { user } = useAuth();
-    // const username = user?.name;
-    // Por ahora dejamos un nombre estático.
-    // -------------------------------
-    //const username = "Mehrab";
-
-    
+     /**
+     * Redirects the user to the meeting page.
+     * Used for both joining and creating a meeting (temporary behavior).
+     *
+     * @function
+     */
     function joinMeeting() {
         navigator("/meeting");
     }
-        
 
     return (
         <div className="w-full px-6 md:px-14 lg:px-20 py-10">
 
-            {/* --- TÍTULO BIENVENIDA --- */}
+              {/* --- WELCOME TITLE --- */}
             <h1 className="text-[28px] md:text-[34px] font-bold text-center text-[#304FFE] mb-10">
                 Bienvenido 👋
             </h1>
 
-            {/* --- CONTENEDOR PRINCIPAL (Izquierda: texto+img | Derecha: formularios) --- */}
+            {/* --- MAIN SECTION: LEFT (text + illustration) | RIGHT (forms) --- */}
             <section className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
 
-                {/* ---------------- LEFT: TEXTO + IMAGEN ---------------- */}
+                {/* ---------------- LEFT: TEXT + IMAGE ---------------- */}
                 <div className="flex flex-col items-center">
                     <h2 className="text-[28px] md:text-[32px] font-bold text-[#304FFE] text-center mb-6 leading-tight">
                         Conéctate ahora con varias <br /> personas.
@@ -47,7 +50,7 @@ export default function DashboardPage() {
                 {/* ---------------- RIGHT: FORMULARIOS ---------------- */}
                 <div className="w-full max-w-lg mx-auto flex flex-col gap-8">
 
-                    {/* --- FORMULARIO: UNIRSE CON ID --- */}
+                    {/* --- FORM: JOIN WITH ID --- */}
                     <div className="bg-white p-6 rounded-xl shadow-md border">
                         <label className="block text-sm font-medium text-[#304FFE]">
                             Ingresa inmediatamente con la ID de la reunión
@@ -65,20 +68,20 @@ export default function DashboardPage() {
                         </button>
                     </div>
 
-                    {/* --- FORMULARIO: CREAR REUNIÓN --- */}
+                    {/* --- FORM: CREATE MEETING --- */}
                     <div className="bg-white rounded-xl shadow-md border overflow-hidden">
 
-                        {/* HEADER GRADIENTE */}
+                        {/* HEADER GRADIENT*/}
                         <div className="px-6 py-3 bg-gradient-to-r from-[#304FFE] to-[#5E6BFF]">
                             <h3 className="text-white font-semibold text-lg">
                                 Crear una reunión
                             </h3>
                         </div>
 
-                        {/* CUERPO DEL FORM */}
+                        {/* BODY OF FORM */}
                         <div className="px-6 py-6">
 
-                            {/* TÍTULO */}
+                            {/* TITLE */}
                             <label className="block text-sm font-medium text-[#304FFE]">
                                 Título de la reunión
                             </label>
@@ -89,7 +92,7 @@ export default function DashboardPage() {
                                 className="w-full mt-2 px-4 py-2 border border-gray-300 rounded-lg outline-none focus:border-[#304FFE]"
                             />
 
-                            {/* DESCRIPCIÓN */}
+                            {/* DESCRIPTION */}
                             <label className="block text-sm font-medium text-[#304FFE] mt-5">
                                 Descripción
                             </label>
@@ -100,7 +103,7 @@ export default function DashboardPage() {
                                 rows={5}
                             ></textarea>
 
-                            {/* BOTÓN CREAR */}
+                            {/* BUTTON OF CREATE */}
                             <button onClick={joinMeeting}
                                 className="w-full mt-6 py-3 bg-[#304FFE] text-white font-semibold rounded-full hover:bg-[#1E40FF] transition"
                             >
