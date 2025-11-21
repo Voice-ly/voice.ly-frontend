@@ -16,7 +16,7 @@ export default function JoinMeeting() {
     }
 
     return (
-        <div className="w-full max-w-xl">
+        <div className="w-full max-w-xl sm:py-50">
 
             {/* Card Container */}
             <div className="bg-white rounded-lg border-2 border-gray-200 shadow-sm overflow-hidden">
@@ -65,7 +65,7 @@ export default function JoinMeeting() {
                         <p className="text-sm text-gray-600 text-center">
                             ¿No tienes un ID de reunión?{' '}
                             <a 
-                                href="/dashboard"
+                                href="/login"
                                 className="text-blue-600 font-semibold hover:text-indigo-600 hover:underline transition-colors"
                             >
                                 Crea una nueva reunión

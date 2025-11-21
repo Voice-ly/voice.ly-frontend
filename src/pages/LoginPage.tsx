@@ -1,3 +1,4 @@
+
 import { Link, useNavigate } from "react-router";
 import logo from "/logo.jpeg";
 import { useState, type ChangeEvent, type FormEvent } from "react";
@@ -7,7 +8,18 @@ import {
     FacebookLoginButton,
     GoogleLoginButton,
 } from "../components/AuthButtons";
-
+/**
+ * LoginPage Component
+ *
+ * This component renders the login page, allowing users to authenticate
+ * using email/password, Google OAuth, or Facebook OAuth.
+ *
+ * It includes:
+ * - Controlled form inputs for email and password.
+ * - submit handler connected to the AuthService.
+ * - Social login buttons (Google and Facebook).
+ * - Redirect to "/dashboard" on successful login.
+ */
 export default function LoginPage() {
     const navigate = useNavigate();
     const initialForm: UserSigninForm = {
@@ -15,13 +27,29 @@ export default function LoginPage() {
         password: "",
     };
 
+    /**
+     * React state holding the login form fields.
+     * @type {[UserSigninForm, Function]}
+     */
     const [form, setForm] = useState<UserSigninForm>(initialForm);
 
+    /**
+     * Handles changes in form input fields.
+     *
+     * @param {ChangeEvent<HTMLInputElement>} e - The input change event.
+     */
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setForm({ ...form, [name]: value });
     };
 
+    /**
+     * Handles the submit event for the login form.
+     * Calls the login service and redirects on success.
+     *
+     * @param {FormEvent} e - The form submission event.
+     * @returns {Promise<void>}
+     */
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
         try {
@@ -84,7 +112,7 @@ export default function LoginPage() {
                     />
                 </div>
 
-                {/* LINK OLVIDASTE CONTRASEÑA */}
+                 {/* Forgot password link */}
                 <span className="flex justify-end">
                     <Link
                         to={"/forgot-password"}
@@ -94,7 +122,7 @@ export default function LoginPage() {
                     </Link>
                 </span>
 
-                {/* BOTÓN */}
+                {/* Submit Button */}
                 <span className="flex justify-center mt-6">
                     <button
                         type="submit"

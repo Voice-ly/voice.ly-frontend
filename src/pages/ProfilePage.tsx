@@ -3,20 +3,54 @@ import { deleteUser, getUsers, updateProfile } from "../lib/UserService";
 import { useEffect, useState } from "react";
 import { showToast } from "../utils/toast";
 
+/**
+ * ProfilePage Component
+ * ----------------------
+ * This component displays and manages the user's profile information.
+ * Users can update their personal data (name, last name, email, age, password)
+ * and permanently delete their account after confirming their password.
+ *
+ * Features:
+ * - Fetch user profile data on mount.
+ * - Update user profile through a form.
+ * - Delete account with password confirmation.
+ * - UI modal for account deletion confirmation.
+ *
+ * @component
+ */
+
 export default function ProfilePage() {
     const navigate = useNavigate();
 
+  /** User profile state */
   const [user, setUser] = useState<any>(null);
+  /** Controls visibility of the delete confirmation modal */
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+   /** Password input used to confirm account deletion */
   const [deletePassword, setDeletePassword] = useState("");
+  /** Loading state for delete action */
   const [loadingDelete, setLoadingDelete] = useState(false);
 
+  /**
+   * Opens the account deletion modal.
+   * @returns {void}
+   */
   const openDeleteModal = () => setShowDeleteModal(true);
+  /**
+   * Closes the account deletion modal and resets its form.
+   * @returns {void}
+   */
   const closeDeleteModal = () => {
     setShowDeleteModal(false);
     setDeletePassword("");
   };
 
+   /**
+   * Handles account deletion after password confirmation.
+   *
+   * @param {React.FormEvent} e - Form submit event.
+   * @returns {Promise<void>}
+   */
   const handleDelete = async (e: React.FormEvent) => {
     e.preventDefault(); // evita submit automático
 
@@ -40,7 +74,11 @@ export default function ProfilePage() {
       closeDeleteModal();
     }
   };
-
+  /**
+   * Fetches the user profile when the page loads.
+   *
+   * @returns {Promise<void>}
+   */
   useEffect(() => {
     const fetchUser = async () => {
       const data = await getUsers();
@@ -48,7 +86,12 @@ export default function ProfilePage() {
     };
     fetchUser();
   }, []);
-
+  /**
+   * Handles updating the user profile.
+   *
+   * @param {React.FormEvent<HTMLFormElement>} e - Form submit event.
+   * @returns {Promise<void>}
+   */
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!user.firstName || !user.lastName || !user.email || !user.age) {

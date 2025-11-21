@@ -115,7 +115,7 @@ export default function ForgotPassword() {
      */
     if (isValidToken === false) {
         return (
-            <main className="flex flex-col w-full max-w-md mx-auto px-4 text-center">
+            <main className="flex flex-col w-full sm:py-49 max-w-md mx-auto px-4 text-center">
                 <div className="lg:hidden mb-10">
                     <img src={Logo} alt="logo" className="w-[99px] h-[77px] mx-auto" />
                 </div>
