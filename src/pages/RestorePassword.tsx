@@ -4,6 +4,14 @@ import { resetPassword } from "../lib/AuthService";
 import type { ResetPasswordRequest } from "../types/User";
 import Logo from "/logo.jpeg";
 
+/**
+ *  Restore Password Page Component
+ * 
+ * This component renders the "Restore Password" page, allowing users to reset their password
+ * using a token sent to their email.
+ * 
+ * @returns the Restore Password page
+ */
 export default function ForgotPassword() {
     const [searchParams] = useSearchParams();
     const navigate = useNavigate();
@@ -19,7 +27,10 @@ export default function ForgotPassword() {
     // Extract token from URL
     const token = searchParams.get("token") || "";
 
-    // Verify token on component mount
+    /**
+     * useEffect Hook to verify the token on component mount
+     * and set the validity state accordingly.
+     */
     useEffect(() => {
         // Verify token existence on URL
         if (!token) {
@@ -32,13 +43,23 @@ export default function ForgotPassword() {
         setIsValidToken(true);
     }, [token]);
 
-    // Verify passwords
+    /**
+     *  Validate password complexity
+     * 
+     *  @param pass: string - The password to validate 
+     *  @returns boolean - True if valid, false otherwise
+     */
     const validatePassword = (pass: string): boolean => {
         const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/;
         return regex.test(pass);
     };
 
-    // Handle form submission
+    /**
+     *  Handle form submission for password reset
+     * 
+     *  @param e: React.FormEvent - The form submission event 
+     *  @returns void
+     */
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setError("");
@@ -87,7 +108,9 @@ export default function ForgotPassword() {
         }
     }
 
-    // If token is invalid or does not exist
+    /**
+     * Render invalid token message
+     */
     if (isValidToken === false) {
         return (
             <main className="flex flex-col w-full max-w-md mx-auto px-4 text-center">
@@ -113,7 +136,9 @@ export default function ForgotPassword() {
         );
     }
 
-    //If change was successful
+    /**
+     * Render success message
+     */
     if (success) {
         return (
             <main className="flex flex-col w-full max-w-md mx-auto px-4 text-center">
@@ -136,7 +161,9 @@ export default function ForgotPassword() {
         );
     }
 
-    // Main form
+    /**
+     * Render the password reset form
+     */
     return (
         <main className="flex flex-col w-full max-w-md mx-auto px-4">
             {/* Logo solo visible en móvil */}

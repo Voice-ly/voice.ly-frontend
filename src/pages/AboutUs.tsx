@@ -1,5 +1,13 @@
 //import React from "react";
 
+/**
+ * About Us Page Component
+ * 
+ * This component renders the "About Us" page for the application. It includes sections
+ * for the company's mission, vision, and team, along with relevant illustrations.
+ * 
+ * @returns the About Us page
+ */
 export default function AboutUs() {
     return (
         <div className="min-h-screen bg-white">
