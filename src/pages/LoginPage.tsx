@@ -72,8 +72,8 @@ export default function LoginPage() {
             <img src={logo} alt="logo" className="w-[99px] h-[77px] mx-auto" />
             <h1 className="text-3xl text-center font-bold">Inicia Sesión</h1>
             <div className="flex gap-3 justify-center my-4">
-                <GoogleLoginButton submit={() => loginWithGoogle(navigate)}/>
-                <FacebookLoginButton submit={()=>loginWithFacebook(navigate)} />
+                <GoogleLoginButton submit={handleLoginWithGoogle} />
+                <FacebookLoginButton submit={loginWithFacebook} />
             </div>
             <form method="post" className="w-full" onSubmit={handleSubmit}>
                 {/* EMAIL */}

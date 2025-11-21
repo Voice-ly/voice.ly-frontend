@@ -37,50 +37,10 @@ export function login(request: UserSigninForm): Promise<Response> {
  * @returns {Promise<void>} Resolves when authentication completes.
  */
 
-export function loginWithGoogle(navigate:any) {
+export function loginWithGoogle() {
 
     const provider = new GoogleAuthProvider();
-    signInWithPopup(auth, provider)
-        .then(async (result) => {
-            const user = result.user;
-            const idToken = await user.getIdToken();
-            const res = await apiFetch(
-                "/socialAuth",
-                {
-                    method: "POST",
-                    body: JSON.stringify({ idToken }),
-                },
-                "auth"
-            )
-
-            if (res.ok) {
-                navigate("/dashboard");
-            }
-        })
-        .catch(async (error) => {
-            if (error.code === "auth/account-exists-with-different-credential") {
-                const email = error.customData.email;
-                const pendingCred = error.credential;
-
-                // Consultar proveedores asociados al email
-                const providers = await fetchSignInMethodsForEmail(auth, email);
-
-                // Caso típico: ya existe la cuenta con Google
-                if (providers.includes("google.com")) {
-                    alert("Este email ya está registrado con Google. Debes iniciar sesión con Google.");
-
-                    const googleProvider = new GoogleAuthProvider();
-                    const googleResult = await signInWithPopup(auth, googleProvider);
-
-                    // Vincular las credenciales de Facebook al usuario existente
-                    await linkWithCredential(googleResult.user, pendingCred);
-
-                    console.log("Cuentas vinculadas correctamente");
-                }
-            } else {
-                console.log(error);
-            }
-        });
+    return signInWithPopup(auth, provider);
 }
 
 /**
