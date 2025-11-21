@@ -11,7 +11,7 @@ import type { MouseEventHandler } from "react";
  * @param {MouseEventHandler} props.submit - Click handler for the button.
  * @returns {JSX.Element} A Google login button.
  */
-export function GoogleLoginButton({ submit }: { submit: MouseEventHandler }) {
+export function GoogleLoginButton({ submit }: { submit: any }) {
     return (
         <button
             onClick={submit}

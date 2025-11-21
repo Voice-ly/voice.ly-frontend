@@ -1,4 +1,3 @@
-
 import { Link, useNavigate } from "react-router";
 import logo from "/logo.jpeg";
 import { useState, type ChangeEvent, type FormEvent } from "react";
@@ -8,6 +7,16 @@ import {
     FacebookLoginButton,
     GoogleLoginButton,
 } from "../components/AuthButtons";
+import { getUsers } from "../lib/UserService";
+import { useUserStore } from "../stores/useUserStore";
+import { apiFetch } from "../lib/fetch";
+import {
+    fetchSignInMethodsForEmail,
+    GoogleAuthProvider,
+    linkWithCredential,
+    signInWithPopup,
+} from "firebase/auth";
+import { auth } from "../lib/firebase";
 /**
  * LoginPage Component
  *
@@ -26,6 +35,8 @@ export default function LoginPage() {
         email: "",
         password: "",
     };
+
+    const { setProfile } = useUserStore();
 
     /**
      * React state holding the login form fields.
@@ -57,23 +68,96 @@ export default function LoginPage() {
             if (!res.ok) {
                 throw new Error(String(res.status));
             }
+            const getProfile = await getUsers();
+            console.log(getProfile);
+            setProfile(getProfile);
             navigate("/dashboard");
         } catch (e) {
             console.log("Error " + e);
-        } finally {
-            console.log("Exito");
         }
     };
 
+    const handleLoginWithGoogle = (e: Event) => {
+        e.preventDefault();
+        loginWithGoogle()
+            .then(async (result) => {
+                const user: any = result.user;
+                const creationTime =
+                    user.auth.currentUser.metadata.creationTime;
+
+                const createdAt = {
+                    _seconds: Math.floor(
+                        new Date(creationTime).getTime() / 1000
+                    ),
+                };
+
+                const idToken = await user.getIdToken();
+                const res = await apiFetch(
+                    "/socialAuth",
+                    {
+                        method: "POST",
+                        body: JSON.stringify({ idToken }),
+                    },
+                    "auth"
+                );
+
+                if (res.ok) {
+                    const profile = {
+                        firstName: user.auth.currentUser.displayName,
+                        email: user.auth.currentUser.email,
+                        createdAt,
+                    };
+                    setProfile(profile);
+                    navigate("/dashboard");
+                }
+            })
+            .catch(async (error) => {
+                if (
+                    error.code ===
+                    "auth/account-exists-with-different-credential"
+                ) {
+                    const email = error.customData.email;
+                    const pendingCred = error.credential;
+
+                    // Consultar proveedores asociados al email
+                    const providers = await fetchSignInMethodsForEmail(
+                        auth,
+                        email
+                    );
+
+                    // Caso típico: ya existe la cuenta con Google
+                    if (providers.includes("google.com")) {
+                        alert(
+                            "Este email ya está registrado con Google. Debes iniciar sesión con Google."
+                        );
+
+                        const googleProvider = new GoogleAuthProvider();
+                        const googleResult = await signInWithPopup(
+                            auth,
+                            googleProvider
+                        );
+
+                        // Vincular las credenciales de Facebook al usuario existente
+                        await linkWithCredential(
+                            googleResult.user,
+                            pendingCred
+                        );
+
+                        console.log("Cuentas vinculadas correctamente");
+                    }
+                } else {
+                    console.log(error);
+                }
+            });
+    };
 
     return (
         <div className="py-0 sm:py-49 h-full">
-            
             <img src={logo} alt="logo" className="w-[99px] h-[77px] mx-auto" />
             <h1 className="text-3xl text-center font-bold">Inicia Sesión</h1>
             <div className="flex gap-3 justify-center my-4">
-                <GoogleLoginButton submit={() => loginWithGoogle(navigate)}/>
-                <FacebookLoginButton submit={()=>loginWithFacebook(navigate)} />
+                <GoogleLoginButton submit={handleLoginWithGoogle} />
+                <FacebookLoginButton submit={loginWithFacebook} />
             </div>
             <form method="post" className="w-full" onSubmit={handleSubmit}>
                 {/* EMAIL */}
@@ -112,7 +196,7 @@ export default function LoginPage() {
                     />
                 </div>
 
-                 {/* Forgot password link */}
+                {/* Forgot password link */}
                 <span className="flex justify-end">
                     <Link
                         to={"/forgot-password"}
