@@ -102,7 +102,7 @@ export default function AuthHeader() {
                     {[
                         { name: "INICIO", path: "/home" },
                         { name: "REUNIONES", path: "/meetings" },
-                        { name: "NOSOTROS", path: "/about" },
+                        { name: "NOSOTROS", path: "/about-us" },
                         { name: "AYUDA", path: "/help" },
                     ].map((item) => (
                         <Link

@@ -1,7 +1,6 @@
 //import React from "react";
 import { useNavigate } from "react-router";
-import Dashimage from "/Dashimage.png"; // Ajusta si está en otra carpeta
-import { Link } from "react-router";
+import Dashimage from "/Dashimage.png"; 
 export default function DashboardPage() {
 
     const navigator = useNavigate();
@@ -15,9 +14,11 @@ export default function DashboardPage() {
     // -------------------------------
     const username = "Mehrab 👋";
 
+    
     function joinMeeting() {
         navigator("/meeting");
     }
+        
 
     return (
         <div className="w-full px-6 md:px-14 lg:px-20 py-10">
@@ -57,13 +58,11 @@ export default function DashboardPage() {
                             placeholder="Introduce el ID"
                             className="w-full mt-2 px-4 py-2 border border-gray-300 rounded-lg outline-none focus:border-[#304FFE] transition"
                         />
-                    <Link to="/meeting">
-                        <button
+                        <button onClick={joinMeeting}
                             className="w-full mt-4 py-2 bg-[#304FFE] rounded-full text-white font-semibold hover:bg-[#1E40FF] transition"
                         >
                             Unirse
                         </button>
-                    </Link>
                     </div>
 
                     {/* --- FORMULARIO: CREAR REUNIÓN --- */}
@@ -102,7 +101,7 @@ export default function DashboardPage() {
                             ></textarea>
 
                             {/* BOTÓN CREAR */}
-                            <button
+                            <button onClick={joinMeeting}
                                 className="w-full mt-6 py-3 bg-[#304FFE] text-white font-semibold rounded-full hover:bg-[#1E40FF] transition"
                             >
                                 Crear
