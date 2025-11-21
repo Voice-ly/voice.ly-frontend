@@ -5,6 +5,7 @@ export const useUserStore = create()(
     persist(
         (set, get) => ({
             profile: {
+                id: "",
                 name: "",
                 lastName: "",
                 email: "",

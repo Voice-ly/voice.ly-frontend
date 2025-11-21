@@ -12,6 +12,7 @@ import {
     signInWithPopup,
 } from "firebase/auth";
 import { auth } from "./firebase";
+import { getUsers } from "./UserService";
 
 // Routes base URL: /auth
 /**
@@ -38,7 +39,6 @@ export function login(request: UserSigninForm): Promise<Response> {
  */
 
 export function loginWithGoogle() {
-
     const provider = new GoogleAuthProvider();
     return signInWithPopup(auth, provider);
 }
@@ -49,7 +49,7 @@ export function loginWithGoogle() {
  * @returns {Promise<void>} Resolves when authentication completes.
  */
 
-export function loginWithFacebook(navigate:any) {
+export function loginWithFacebook(navigate: any) {
     const provider = new FacebookAuthProvider();
     signInWithPopup(auth, provider)
         .then(async (result) => {
@@ -63,18 +63,17 @@ export function loginWithFacebook(navigate:any) {
                     body: JSON.stringify({ idToken }),
                 },
                 "auth"
-            )
+            );
 
             if (res.ok) {
                 navigate("/dashboard");
             }
             console.log(user);
-
-
-
         })
         .catch(async (error) => {
-            if (error.code === "auth/account-exists-with-different-credential") {
+            if (
+                error.code === "auth/account-exists-with-different-credential"
+            ) {
                 const email = error.customData.email;
                 const pendingCred = error.credential;
 
@@ -83,10 +82,15 @@ export function loginWithFacebook(navigate:any) {
 
                 // Caso típico: ya existe la cuenta con Google
                 if (providers.includes("google.com")) {
-                    alert("Este email ya está registrado con Google. Debes iniciar sesión con Google.");
+                    alert(
+                        "Este email ya está registrado con Google. Debes iniciar sesión con Google."
+                    );
 
                     const googleProvider = new GoogleAuthProvider();
-                    const googleResult = await signInWithPopup(auth, googleProvider);
+                    const googleResult = await signInWithPopup(
+                        auth,
+                        googleProvider
+                    );
 
                     // Vincular las credenciales de Facebook al usuario existente
                     await linkWithCredential(googleResult.user, pendingCred);
@@ -135,7 +139,7 @@ export function forgotPassword(
  */
 export function resetPassword(
     request: ResetPasswordRequest,
-    token:string
+    token: string
 ): Promise<Response> {
     return apiFetch(
         `/reset-password?token=${token}`,
@@ -146,4 +150,3 @@ export function resetPassword(
         "auth"
     );
 }
-
