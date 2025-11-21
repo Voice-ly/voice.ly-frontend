@@ -9,8 +9,12 @@ export function register(request: UserSignupForm): Promise<Response> {
 }
 
 
-export function getUsers(): Promise<Response> {
-    return apiFetch("/profile", { method: "GET" }, "users");
+export async function getUsers(): Promise<any> {
+  const res = await apiFetch("/profile", { method: "GET" }, "users");
+
+  if (!res.ok) throw new Error("Error obteniendo usuario");
+
+  return await res.json(); // <-- AQUÍ EL JSON REAL
 }
 
 export function updateProfile(data: any): Promise<Response> {
@@ -20,6 +24,6 @@ export function updateProfile(data: any): Promise<Response> {
     }, "users");
 }
 
-export function deleteUser(): Promise<Response> {
-    return apiFetch("/profile", { method: "DELETE" }, "users");
+export function deleteUser(data:any): Promise<Response> {
+    return apiFetch("/profile", { method: "DELETE",body: JSON.stringify(data), },  "users");
 }
