@@ -50,7 +50,7 @@ export function GoogleLoginButton({ submit }: { submit: any }) {
  * @param {MouseEventHandler} props.submit - Click handler for the button.
  * @returns {JSX.Element} A Facebook login button.
  */
-export function FacebookLoginButton({ submit }: { submit: MouseEventHandler }) {
+export function FacebookLoginButton({ submit }: { submit: any }) {
     return (
         <button
             onClick={submit}
