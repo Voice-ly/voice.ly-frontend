@@ -1,5 +1,3 @@
-import type { MouseEventHandler } from "react";
-
 /**
  * Google Login Button component.
  *
