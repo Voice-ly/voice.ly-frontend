@@ -310,7 +310,7 @@ export default function RegisterPage() {
             type="submit"
             disabled={!isValid}
             className={`bg-[#7B76F1] rounded-full text-white font-bold w-[153px] h-[56px]
-              ${isValid ? "opacity-100" : "opacity-40 cursor-not-allowed"}`}
+              ${isValid ? "opacity-100" : "opacity-40 cursor-not-allowed"} cursor-pointer`}
           >
             REGISTRARME
           </button>
