@@ -379,7 +379,7 @@ export default function RegisterPage() {
           </button>
         </div>
 
-        <p className="text-[13px] text-center mt-10">
+        <p className="text-[13px] text-center mt-10 cursor-pointer">
           ¿Ya tienes una cuenta?
           <Link
             to="/login"

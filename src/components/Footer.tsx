@@ -1,7 +1,27 @@
 import { Link } from "react-router";
 import logo from "/logo.jpeg";
 
+/**
+ * Footer Component
+ *
+ * Displays the site footer including:
+ * - Company logo and brief description
+ * - Site map with navigation links
+ * - Contact information
+ * - User manual section
+ * - Copyright text
+ *
+ * Responsive design is applied for mobile and desktop layouts.
+ *
+ * @component
+ * @returns {JSX.Element} The footer section for the application.
+ */
 export default function Footer() {
+    
+    /**
+     * List of navigation routes displayed in the "Site Map" section.
+     * @type {{ label: string, path: string }[]}
+     */
     const siteMap = [
         { label: "Inicio", path: "" },
         { label: "Sobre Nosotros", path: "" },
