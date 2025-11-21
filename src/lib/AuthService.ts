@@ -5,20 +5,23 @@ import type {
 } from "../types/User";
 import { apiFetch } from "./fetch";
 import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
-
+import { auth } from "./firebase";
 
 // Rutas base: /api/auth
 
 export function login(request: UserSigninForm): Promise<Response> {
-    return apiFetch("/login", {
-        method: "POST",
-        body: JSON.stringify(request),
-    }, "auth");
+    return apiFetch(
+        "/login",
+        {
+            method: "POST",
+            body: JSON.stringify(request),
+        },
+        "auth"
+    );
 }
 
 export function loginWithGoogle() {
     const provider = new GoogleAuthProvider();
-    const auth = getAuth();
     signInWithPopup(auth, provider)
         .then((result) => {
             // This gives you a Google Access Token. You can use it to access the Google API.
@@ -45,16 +48,28 @@ export function logout(): Promise<Response> {
     return apiFetch("/logout", { method: "POST" }, "auth");
 }
 
-export function forgotPassword(request: ForgotPasswordRequest): Promise<Response> {
-    return apiFetch("/forgot-password", {
-        method: "POST",
-        body: JSON.stringify(request),
-    }, "auth");
+export function forgotPassword(
+    request: ForgotPasswordRequest
+): Promise<Response> {
+    return apiFetch(
+        "/forgot-password",
+        {
+            method: "POST",
+            body: JSON.stringify(request),
+        },
+        "auth"
+    );
 }
 
-export function resetPassword(request: ResetPasswordRequest): Promise<Response> {
-    return apiFetch("/reset-password", {
-        method: "POST",
-        body: JSON.stringify(request),
-    }, "auth");
+export function resetPassword(
+    request: ResetPasswordRequest
+): Promise<Response> {
+    return apiFetch(
+        "/reset-password",
+        {
+            method: "POST",
+            body: JSON.stringify(request),
+        },
+        "auth"
+    );
 }
