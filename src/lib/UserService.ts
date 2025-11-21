@@ -16,6 +16,8 @@ import { auth } from "./firebase";
  * @returns {Promise<Response>} A promise that resolves with the server's response.
  */
 
+// Rutas base: /api/users
+
 export function register(request: UserSignupForm): Promise<Response> {
     return apiFetch("/", {
         method: "POST",
@@ -29,8 +31,12 @@ export function register(request: UserSignupForm): Promise<Response> {
  * @returns {Promise<Response>} A promise containing the user profile data.
  */
 
-export function getUsers(): Promise<Response> {
-    return apiFetch("/profile", { method: "GET" }, "users");
+export async function getUsers(): Promise<any> {
+  const res = await apiFetch("/profile", { method: "GET" }, "users");
+
+  if (!res.ok) throw new Error("Error obteniendo usuario");
+
+  return await res.json(); // <-- AQUÍ EL JSON REAL
 }
 
 /**
@@ -52,9 +58,8 @@ export function updateProfile(data: any): Promise<Response> {
  *
  * @returns {Promise<Response>} A promise that resolves when the account is deleted.
  */
-
-export function deleteUser(): Promise<Response> {
-    return apiFetch("/profile", { method: "DELETE" }, "users");
+export function deleteUser(data:any): Promise<Response> {
+    return apiFetch("/profile", { method: "DELETE",body: JSON.stringify(data), },  "users");
 }
 
 /**

@@ -6,8 +6,9 @@ import type {
 import { apiFetch } from "./fetch";
 import {
     FacebookAuthProvider,
-    getAuth,
+    fetchSignInMethodsForEmail,
     GoogleAuthProvider,
+    linkWithCredential,
     signInWithPopup,
 } from "firebase/auth";
 import { auth } from "./firebase";
@@ -35,27 +36,50 @@ export function login(request: UserSigninForm): Promise<Response> {
  *
  * @returns {Promise<void>} Resolves when authentication completes.
  */
-export function loginWithGoogle() {
+
+export function loginWithGoogle(navigate:any) {
+
     const provider = new GoogleAuthProvider();
     signInWithPopup(auth, provider)
-        .then((result) => {
-            // This gives you a Google Access Token. You can use it to access the Google API.
-            const credential = GoogleAuthProvider.credentialFromResult(result);
-            const token = credential?.accessToken;
-            // The signed-in user info.
+        .then(async (result) => {
             const user = result.user;
-            // IdP data available using getAdditionalUserInfo(result)
-            // ...
+            const idToken = await user.getIdToken();
+            const res = await apiFetch(
+                "/socialAuth",
+                {
+                    method: "POST",
+                    body: JSON.stringify({ idToken }),
+                },
+                "auth"
+            )
+
+            if (res.ok) {
+                navigate("/dashboard");
+            }
         })
-        .catch((error) => {
-            // Handle Errors here.
-            const errorCode = error.code;
-            const errorMessage = error.message;
-            // The email of the user's account used.
-            const email = error.customData.email;
-            // The AuthCredential type that was used.
-            const credential = GoogleAuthProvider.credentialFromError(error);
-            // ...
+        .catch(async (error) => {
+            if (error.code === "auth/account-exists-with-different-credential") {
+                const email = error.customData.email;
+                const pendingCred = error.credential;
+
+                // Consultar proveedores asociados al email
+                const providers = await fetchSignInMethodsForEmail(auth, email);
+
+                // Caso típico: ya existe la cuenta con Google
+                if (providers.includes("google.com")) {
+                    alert("Este email ya está registrado con Google. Debes iniciar sesión con Google.");
+
+                    const googleProvider = new GoogleAuthProvider();
+                    const googleResult = await signInWithPopup(auth, googleProvider);
+
+                    // Vincular las credenciales de Facebook al usuario existente
+                    await linkWithCredential(googleResult.user, pendingCred);
+
+                    console.log("Cuentas vinculadas correctamente");
+                }
+            } else {
+                console.log(error);
+            }
         });
 }
 
@@ -64,31 +88,54 @@ export function loginWithGoogle() {
  *
  * @returns {Promise<void>} Resolves when authentication completes.
  */
-export function loginWithFacebook() {
+
+export function loginWithFacebook(navigate:any) {
     const provider = new FacebookAuthProvider();
     signInWithPopup(auth, provider)
-        .then((result) => {
+        .then(async (result) => {
             // The signed-in user info.
             const user = result.user;
+            const idToken = await user.getIdToken();
+            const res = await apiFetch(
+                "/socialAuth",
+                {
+                    method: "POST",
+                    body: JSON.stringify({ idToken }),
+                },
+                "auth"
+            )
 
-            // This gives you a Facebook Access Token. You can use it to access the Facebook API.
-            const credential =
-                FacebookAuthProvider.credentialFromResult(result);
-            const accessToken = credential?.accessToken;
+            if (res.ok) {
+                navigate("/dashboard");
+            }
+            console.log(user);
 
-            // IdP data available using getAdditionalUserInfo(result)
-            // ...
+
+
         })
-        .catch((error) => {
-            // Handle Errors here.
-            const errorCode = error.code;
-            const errorMessage = error.message;
-            // The email of the user's account used.
-            const email = error.customData.email;
-            // The AuthCredential type that was used.
-            const credential = FacebookAuthProvider.credentialFromError(error);
+        .catch(async (error) => {
+            if (error.code === "auth/account-exists-with-different-credential") {
+                const email = error.customData.email;
+                const pendingCred = error.credential;
 
-            // ...
+                // Consultar proveedores asociados al email
+                const providers = await fetchSignInMethodsForEmail(auth, email);
+
+                // Caso típico: ya existe la cuenta con Google
+                if (providers.includes("google.com")) {
+                    alert("Este email ya está registrado con Google. Debes iniciar sesión con Google.");
+
+                    const googleProvider = new GoogleAuthProvider();
+                    const googleResult = await signInWithPopup(auth, googleProvider);
+
+                    // Vincular las credenciales de Facebook al usuario existente
+                    await linkWithCredential(googleResult.user, pendingCred);
+
+                    console.log("Cuentas vinculadas correctamente");
+                }
+            } else {
+                console.log(error);
+            }
         });
 }
 
@@ -127,10 +174,11 @@ export function forgotPassword(
  * @returns {Promise<Response>} The API response.
  */
 export function resetPassword(
-    request: ResetPasswordRequest
+    request: ResetPasswordRequest,
+    token:string
 ): Promise<Response> {
     return apiFetch(
-        "/reset-password",
+        `/reset-password?token=${token}`,
         {
             method: "POST",
             body: JSON.stringify(request),
@@ -138,3 +186,4 @@ export function resetPassword(
         "auth"
     );
 }
+

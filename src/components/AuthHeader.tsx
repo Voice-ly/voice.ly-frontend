@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import minilogo from "/minilogo.png";
 
 /**
@@ -18,10 +18,14 @@ import minilogo from "/minilogo.png";
  * @returns {JSX.Element} The authentication header UI.
  */
 export default function AuthHeader() {
-     /** Controls whether the left menu is open */
+    const navigate = useNavigate()
     const [isMenuOpen, setIsMenuOpen] = useState(false);
      /** Controls whether the profile dropdown is open */
     const [isProfileOpen, setIsProfileOpen] = useState(false);
+
+    function logout() {
+        navigate("/login")
+    }
 
     return (
         <header className="relative w-full bg-[#5568FE] text-white py-3 px-4 flex items-center justify-between shadow-md">
@@ -67,7 +71,7 @@ export default function AuthHeader() {
                             className="w-full text-left px-4 py-3 text-sm text-red-600 hover:bg-red-100 transition"
                             onClick={() => {
                                 setIsProfileOpen(false);
-                                // logout()
+                                logout()
                             }}
                         >
                             🔒 Cerrar sesión

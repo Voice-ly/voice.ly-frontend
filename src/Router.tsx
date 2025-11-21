@@ -1,7 +1,7 @@
 import { BrowserRouter, Route, Routes, Navigate } from "react-router";
 import App from "./App";
 import PublicLayout from "./pages/layouts/PublicLayout";
-import LeftImageLayout from "./pages/layouts/LeftImageLayout";    
+import LeftImageLayout from "./pages/layouts/LeftImageLayout";
 import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
 import AboutUs from "./pages/AboutUs";
@@ -12,6 +12,7 @@ import ForgotPassword from "./pages/ForgotPassword";
 import AuthLayout from "./pages/layouts/AuthLayout";
 import DashboardPage from "./pages/DashboardPage";
 import MeetingPage from "./pages/MeetingPage";
+import ProfilePage from "./pages/ProfilePage";
 
 export default function Router() {
     return (
@@ -27,12 +28,19 @@ export default function Router() {
                     <Route element={<LeftImageLayout />}>
                         <Route path="login" element={<LoginPage />} />
                         <Route path="register" element={<RegisterPage />} />
-                        <Route path="forgot-password" element={<ForgotPassword />} />
-                        <Route path="restore-password" element={<RestorePassword />} />
+                        <Route
+                            path="forgot-password"
+                            element={<ForgotPassword />}
+                        />
+                        <Route
+                            path="reset-password"
+                            element={<RestorePassword />}
+                        />
                     </Route>
                 </Route>
                 <Route path="/" element={<AuthLayout />}>
                     <Route path="dashboard" element={<DashboardPage />} />
+                    <Route path="profile" element={<ProfilePage />} />
                 </Route>
                 <Route path="meeting" element={<MeetingPage />} />
             </Routes>
