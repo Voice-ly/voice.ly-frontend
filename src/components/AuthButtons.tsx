@@ -1,5 +1,16 @@
 import type { MouseEventHandler } from "react";
 
+/**
+ * Google Login Button component.
+ *
+ * Renders a clickable button styled with Google's branding.
+ * The button triggers the provided `submit` handler when clicked.
+ *
+ * @component
+ * @param {Object} props - Component props.
+ * @param {MouseEventHandler} props.submit - Click handler for the button.
+ * @returns {JSX.Element} A Google login button.
+ */
 export function GoogleLoginButton({ submit }: { submit: MouseEventHandler }) {
     return (
         <button
@@ -28,7 +39,17 @@ export function GoogleLoginButton({ submit }: { submit: MouseEventHandler }) {
     );
 }
 
-// Botón Facebook (sin estado)
+/**
+ * Facebook Login Button component.
+ *
+ * Renders a clickable button styled with Facebook's branding.
+ * The button triggers the provided `submit` handler when clicked.
+ *
+ * @component
+ * @param {Object} props - Component props.
+ * @param {MouseEventHandler} props.submit - Click handler for the button.
+ * @returns {JSX.Element} A Facebook login button.
+ */
 export function FacebookLoginButton({ submit }: { submit: MouseEventHandler }) {
     return (
         <button

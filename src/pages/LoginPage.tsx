@@ -39,7 +39,8 @@ export default function LoginPage() {
     const navigate = useNavigate();
 
     return (
-        <div className="py-0 sm:py-24">
+        <div className="py-0 sm:py-49 h-full">
+            
             <img src={logo} alt="logo" className="w-[99px] h-[77px] mx-auto" />
             <h1 className="text-3xl text-center font-bold">Inicia Sesión</h1>
             <div className="flex gap-3 justify-center my-4">

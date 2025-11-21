@@ -2,8 +2,19 @@ import React from "react";
 import { Link } from "react-router";
 
 /**
- * Home page for Voicely
- * Matches the design: gradient background + text + illustration.
+ * HomePage component
+ *
+ * This is the main landing page for Voicely. It includes:
+ * - A full-screen background image
+ * - Marketing text promoting real-time communication
+ * - A call-to-action button leading to the registration page
+ * - An illustration aligned with the product theme
+ *
+ * The layout is fully responsive, shifting from a centered column on mobile
+ * to a two-column design on larger screens.
+ *
+ * @component
+ * @returns {JSX.Element} The Voicely home/landing page.
  */
 
 const HomePage: React.FC = () => {
@@ -47,7 +58,7 @@ const HomePage: React.FC = () => {
               px-8 py-3 rounded-full shadow-lg
             "
           >
-            EMPEZAR
+            Empezar
           </Link>
         </div>
 

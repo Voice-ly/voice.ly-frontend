@@ -1,6 +1,6 @@
 //import React from "react";
 import Dashimage from "/Dashimage.png"; // Ajusta si está en otra carpeta
-
+import { Link } from "react-router";
 export default function DashboardPage() {
 
     // -------------------------------
@@ -50,12 +50,13 @@ export default function DashboardPage() {
                             placeholder="Introduce el ID"
                             className="w-full mt-2 px-4 py-2 border border-gray-300 rounded-lg outline-none focus:border-[#304FFE] transition"
                         />
-
+                    <Link to="/meeting">
                         <button
                             className="w-full mt-4 py-2 bg-[#304FFE] rounded-full text-white font-semibold hover:bg-[#1E40FF] transition"
                         >
                             Unirse
                         </button>
+                    </Link>
                     </div>
 
                     {/* --- FORMULARIO: CREAR REUNIÓN --- */}

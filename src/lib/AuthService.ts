@@ -12,8 +12,13 @@ import {
 } from "firebase/auth";
 import { auth } from "./firebase";
 
-// Rutas base: /api/auth
-
+// Routes base URL: /auth
+/**
+ * Sends a login request to the API using email and password.
+ *
+ * @param {UserSigninForm} request - The user's login credentials.
+ * @returns {Promise<Response>} The API response.
+ */
 export function login(request: UserSigninForm): Promise<Response> {
     return apiFetch(
         "/login",
@@ -25,6 +30,11 @@ export function login(request: UserSigninForm): Promise<Response> {
     );
 }
 
+/**
+ * Authenticates the user using Google OAuth via Firebase.
+ *
+ * @returns {Promise<void>} Resolves when authentication completes.
+ */
 export function loginWithGoogle() {
     const provider = new GoogleAuthProvider();
     signInWithPopup(auth, provider)
@@ -49,6 +59,11 @@ export function loginWithGoogle() {
         });
 }
 
+/**
+ * Authenticates the user using Facebook OAuth via Firebase.
+ *
+ * @returns {Promise<void>} Resolves when authentication completes.
+ */
 export function loginWithFacebook() {
     const provider = new FacebookAuthProvider();
     signInWithPopup(auth, provider)
@@ -77,10 +92,21 @@ export function loginWithFacebook() {
         });
 }
 
+/**
+ * Logs out the currently authenticated user by calling the API.
+ *
+ * @returns {Promise<Response>} The API response.
+ */
 export function logout(): Promise<Response> {
     return apiFetch("/logout", { method: "POST" }, "auth");
 }
 
+/**
+ * Sends a request to initiate a password recovery process.
+ *
+ * @param {ForgotPasswordRequest} request - The user's email for password recovery.
+ * @returns {Promise<Response>} The API response.
+ */
 export function forgotPassword(
     request: ForgotPasswordRequest
 ): Promise<Response> {
@@ -94,6 +120,12 @@ export function forgotPassword(
     );
 }
 
+/**
+ * Sends a request to reset the user's password.
+ *
+ * @param {ResetPasswordRequest} request - The reset token and new password data.
+ * @returns {Promise<Response>} The API response.
+ */
 export function resetPassword(
     request: ResetPasswordRequest
 ): Promise<Response> {

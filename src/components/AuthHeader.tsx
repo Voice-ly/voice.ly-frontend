@@ -2,23 +2,40 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import minilogo from "/minilogo.png";
 
+/**
+ * AuthHeader Component
+ *
+ * Renders the main authenticated header, including:
+ * - A logo on the left
+ * - A help button
+ * - A profile button with dropdown options (Profile, Logout)
+ * - A floating menu button
+ * - A left-side collapsible navigation menu
+ *
+ * This header is used in authenticated areas of the app.
+ *
+ * @component
+ * @returns {JSX.Element} The authentication header UI.
+ */
 export default function AuthHeader() {
+     /** Controls whether the left menu is open */
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+     /** Controls whether the profile dropdown is open */
     const [isProfileOpen, setIsProfileOpen] = useState(false);
 
     return (
         <header className="relative w-full bg-[#5568FE] text-white py-3 px-4 flex items-center justify-between shadow-md">
 
-            {/* --- LOGO A LA IZQUIERDA --- */}
+            {/* --- LOGO LEFT --- */}
             <div className="flex items-center gap-2">
                 <img src={minilogo} className="h-10" />
                 <span className="font-semibold text-lg"></span>
             </div>
 
-            {/* --- CONTROLES DERECHA (¿? + Perfil) --- */}
+             {/* --- RIGHT SIDE CONTROLS (Help + Profile) --- */}
             <div className="flex items-center gap-4">
 
-                {/* --- SIGNO DE PREGUNTA --- */}
+                {/* --- ? --- */}
                 <Link
                     to="/help"
                     className="text-2xl hover:bg-white/20 rounded-full px-2 py-1 transition"
@@ -26,7 +43,7 @@ export default function AuthHeader() {
                     ?
                 </Link>
 
-                {/* --- BOTÓN PERFIL --- */}
+                 {/* --- PROFILE DROPDOWN --- */}
                 <button
                     onClick={() => setIsProfileOpen(!isProfileOpen)}
                     className="p-2 hover:bg-white/20 rounded-full transition text-xl px-2 py-1 overflow-hidden animate-fade-in"
@@ -59,7 +76,7 @@ export default function AuthHeader() {
                 )}
             </div>
 
-            {/* --- BOTÓN MENÚ (ABAJO DEL BORDE AZUL) --- */}
+            {/* --- FLOATING MENU BUTTON --- */} 
             <button
                 onClick={() => setIsMenuOpen(true)}
                 className="absolute left-4 -bottom-14 text-[#5568FE] bg-white p-2 rounded-full shadow-md border border-gray-200 hover:bg-[#eef0ff] transition text-xl"
@@ -67,7 +84,7 @@ export default function AuthHeader() {
                 ☰
             </button>
 
-            {/* --- MENÚ LATERAL (NO SOBREPASA EL BORDE AZUL) --- */}
+            {/* --- LEFT SIDE SLIDE MENU --- */}
             <aside
                 className={`fixed top-[64px] left-0 bottom-0  w-60 bg-white text-[#5568FE] border-r shadow-xl 
                 transform transition-transform duration-300 z-50 
@@ -95,7 +112,7 @@ export default function AuthHeader() {
                     ))}
                 </nav>
 
-                {/* Botón cerrar */}
+                {/* Close button */}
                 <button
                     onClick={() => setIsMenuOpen(false)}
                     className="absolute top-4 right-4 text-2xl text-[#5568FE] hover:opacity-70"
