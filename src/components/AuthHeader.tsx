@@ -101,7 +101,7 @@ export default function AuthHeader() {
                 <nav className="flex flex-col px-4 py-6 gap-4">
                     {[
                         { name: "INICIO", path: "/home" },
-                        { name: "REUNIONES", path: "/meetings" },
+                        { name: "REUNIONES", path: "/meeting" },
                         { name: "NOSOTROS", path: "/about-us" },
                         { name: "AYUDA", path: "/help" },
                     ].map((item) => (
