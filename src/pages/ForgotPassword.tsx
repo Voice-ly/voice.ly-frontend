@@ -67,7 +67,7 @@ export default function ForgotPassword() {
      * Render the Forgot Password form
      */
     return (
-        <main className="flex flex-col w-full max-w-md mx-auto px-4">
+        <main className="flex flex-col w-full  sm:py-49 max-w-md mx-auto px-4">
             {/* Logo solo visible en móvil */}
             <div className="lg:hidden mb-10">
                 <img
@@ -147,7 +147,7 @@ export default function ForgotPassword() {
                             to="/register"
                             className="text-blue-600 font-semibold uppercase text-sm tracking-wide hover:text-indigo-600 hover:underline transition-colors"
                         >
-                            REGÍSTRATE AHORA!
+                             Registrate ahora!
                         </Link>
                     </p>
 
@@ -157,7 +157,7 @@ export default function ForgotPassword() {
                             to="/login"
                             className="text-blue-600 font-semibold uppercase text-sm tracking-wide hover:text-indigo-600 hover:underline transition-colors"
                         >
-                            INICIA SESIÓN AHORA!
+                            Iniciar sesión ahora!
                         </Link>
                     </p>
                 </div>
