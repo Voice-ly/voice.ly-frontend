@@ -11,6 +11,7 @@ import RestorePassword from "./pages/RestorePassword";
 import ForgotPassword from "./pages/ForgotPassword";
 import AuthLayout from "./pages/layouts/AuthLayout";
 import DashboardPage from "./pages/DashboardPage";
+import JoinMeeting from "./pages/JoinMeeting";
 import MeetingPage from "./pages/MeetingPage";
 import ProfilePage from "./pages/ProfilePage";
 
@@ -41,6 +42,7 @@ export default function Router() {
                 <Route path="/" element={<AuthLayout />}>
                     <Route path="dashboard" element={<DashboardPage />} />
                     <Route path="profile" element={<ProfilePage />} />
+                    <Route path="join-meeting" element={<JoinMeeting />} />
                 </Route>
                 <Route path="meeting" element={<MeetingPage />} />
             </Routes>
