@@ -22,8 +22,8 @@ import { useUserStore } from "../stores/useUserStore";
 
 export default function ProfilePage() {
     const navigate = useNavigate();
-    const { profile } = useUserStore();
-
+    const { profile, setProfile } = useUserStore();
+    const [fullName, setFullName] = useState<string>("");
     /** User profile state */
     const [user, setUser] = useState<any>(null);
     /** Controls visibility of the delete confirmation modal */
@@ -86,6 +86,11 @@ export default function ProfilePage() {
      */
     useEffect(() => {
         setUser(profile);
+        if (profile.lastName) {
+            setFullName(profile.firstName + profile.lastName);
+            return;
+        }
+        setFullName(profile.firstName);
     }, []);
     /**
      * Handles updating the user profile.
@@ -95,7 +100,7 @@ export default function ProfilePage() {
      */
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        if (!user.firstName || !user.lastName || !user.email || !user.age) {
+        if (!fullName || !user.email || !user.age) {
             showToast(
                 "Por favor, completa todos los campos antes de guardar.",
                 "error"
@@ -111,6 +116,7 @@ export default function ProfilePage() {
             return;
         }
         showToast("Perfil actualizado correctamente.", "success");
+        setProfile(user);
     };
 
     return (
@@ -127,48 +133,25 @@ export default function ProfilePage() {
 
                 <form className="space-y-6" onSubmit={handleSubmit}>
                     {/* Nombre y Apellido */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div className="flex flex-col">
-                            <label
-                                htmlFor="firstName"
-                                className="text-lg font-semibold mb-1"
-                            >
-                                Nombres
-                            </label>
-                            <input
-                                type="text"
-                                name="firstName"
-                                defaultValue={user?.firstName || ""}
-                                className="border rounded-lg h-11 px-3 focus:ring-2 focus:ring-blue-400 focus:outline-none"
-                                onChange={(e) =>
-                                    setUser((prev: any) => ({
-                                        ...prev,
-                                        firstName: e.target.value,
-                                    }))
-                                }
-                            />
-                        </div>
-
-                        <div className="flex flex-col">
-                            <label
-                                htmlFor="lastName"
-                                className="text-lg font-semibold mb-1"
-                            >
-                                Apellidos
-                            </label>
-                            <input
-                                type="text"
-                                name="lastName"
-                                defaultValue={user?.lastName || ""}
-                                className="border rounded-lg h-11 px-3 focus:ring-2 focus:ring-blue-400 focus:outline-none"
-                                onChange={(e) =>
-                                    setUser((prev: any) => ({
-                                        ...prev,
-                                        lastName: e.target.value,
-                                    }))
-                                }
-                            />
-                        </div>
+                    <div className="flex flex-col">
+                        <label
+                            htmlFor="firstName"
+                            className="text-lg font-semibold mb-1"
+                        >
+                            Nombres y Apellidos
+                        </label>
+                        <input
+                            type="text"
+                            name="firstName"
+                            defaultValue={fullName || ""}
+                            className="border rounded-lg h-11 px-3 focus:ring-2 focus:ring-blue-400 focus:outline-none"
+                            onChange={(e) =>
+                                setUser((prev: any) => ({
+                                    ...prev,
+                                    firstName: e.target.value,
+                                }))
+                            }
+                        />
                     </div>
 
                     {/* Email */}
