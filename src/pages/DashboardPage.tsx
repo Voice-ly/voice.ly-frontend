@@ -1,7 +1,8 @@
 //import React from "react";
 import { useNavigate } from "react-router";
+import { useEffect, useState } from "react";
 import Dashimage from "/Dashimage.png"; 
-
+import { useUserStore } from "../stores/useUserStore";
 /**
  * Dashboard page for authenticated users.
  * Provides quick access to join or create a meeting,
@@ -12,8 +13,21 @@ import Dashimage from "/Dashimage.png";
 export default function DashboardPage() {
 
     const navigator = useNavigate();
+    const { profile } = useUserStore();
 
+    /** User profile state */
+    const [user, setUser] = useState<any>(null);
      /**
+     * Fetches the user profile when the page loads.
+     *
+     * @returns {Promise<void>}
+     */
+    useEffect(() => {
+        setUser(profile);
+    }, []);
+    
+    /**
+      
      * Redirects the user to the meeting page.
      * Used for both joining and creating a meeting (temporary behavior).
      *
@@ -28,7 +42,7 @@ export default function DashboardPage() {
 
               {/* --- WELCOME TITLE --- */}
             <h1 className="text-[28px] md:text-[34px] font-bold text-center text-[#304FFE] mb-10">
-                Bienvenido 👋
+                Bienvenido  {user?.firstName || ""} 👋
             </h1>
 
             {/* --- MAIN SECTION: LEFT (text + illustration) | RIGHT (forms) --- */}

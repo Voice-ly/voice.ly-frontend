@@ -1,5 +1,5 @@
 
-//import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 
 /**
@@ -27,6 +27,26 @@ import { Link } from "react-router-dom";
  */
 
 export default function MeetingPage() {
+    
+    const [showChat, setShowChat] = useState(false);
+
+    type Message = { text: string; self: boolean };
+    const [messages, setMessages] = useState<Message[]>([]);
+
+    const [inputValue, setInputValue] = useState("");
+    const messagesEndRef = useRef<HTMLDivElement | null>(null);
+
+    useEffect(() => {
+        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    }, [messages]);
+
+    const sendMessage = () => {
+        if (!inputValue.trim()) return;
+        // use functional update to avoid stale state when updates are frequent
+        setMessages(prev => [...prev, { text: inputValue.trim(), self: true }]);
+        setInputValue("");
+    };
+
 
     return (
         <div className="w-full h-screen bg-black relative overflow-hidden">
@@ -35,19 +55,74 @@ export default function MeetingPage() {
             <button className="absolute top-4 right-4 bg-[#3A3A3A] text-white text-sm px-4 py-1 rounded-md shadow-md hover:bg-[#505050] transition">
                 ▣ Vista
             </button>
+
             <p className="absolute top-4 left-4 flex items-center gap-2 text-sm text-white px-4 py-1 rounded-md transition">
-            <span className="text-green-400 text-lg">●</span>
-            En línea
+                <span className="text-green-400 text-lg">●</span>
+                En línea
             </p>
 
-
-            {/* Video zone */}
             <div className="w-full h-full"></div>
 
-            {/* Bottom control bar */}
-            <div className="absolute bottom-0 left-0 w-full bg-gradient-to-r from-[#304FFE] to-[#black] py-4 flex items-center justify-between px-5">
+            {/* CHAT PANEL */}
+            {showChat && (
+                <div className="
+                    absolute right-0 top-0 h-full w-80 bg-[#1E1E1E] text-white 
+                    shadow-xl border-l border-gray-700 p-4 pb-24 flex flex-col
+                    animate-slide-left
+                ">
 
-                {/* Central buttons */}
+                    {/* Header */}
+                    <h2 className="text-lg font-semibold mb-3 pb-2 border-b border-gray-700/50 tracking-wide">
+                        Chat de la reunión 
+                    </h2>
+
+                    {/* Messages */}
+                    <div className="flex-1 overflow-y-auto space-y-3 pr-2">
+
+                        {messages.map((msg, index) => (
+                            <div
+                                key={index}
+                                className={`w-fit max-w-[70%] px-4 py-2 rounded-2xl text-sm shadow-md break-words 
+                                    ${msg.self
+                                        ? "bg-blue-600 ml-auto text-white rounded-br-none"
+                                        : "bg-[#2E2E2E] text-left rounded-bl-none border border-gray-700/40"
+                                    }`
+                                }
+                            >
+                                {msg.text}
+                            </div>
+                        ))}
+
+                        <div ref={messagesEndRef} />
+                    </div>
+
+                    {/* Input */}
+                    <div className="mt-4 flex gap-2 bg-[#2A2A2A] p-2 rounded-xl border border-gray-700/40 shadow-inner">
+
+                        <input
+                            type="text"
+                            placeholder="Escribe un mensaje..."
+                            className="flex-1 px-3 py-2 rounded-lg bg-[#1E1E1E] text-sm border border-gray-700 
+                            focus:border-blue-500 focus:ring-2 focus:ring-blue-600 transition outline-none"
+                            value={inputValue}
+                            onChange={(e) => setInputValue(e.target.value)}
+                            onKeyDown={(e) => e.key === "Enter" && sendMessage()}
+                        />
+
+                        <button
+                            onClick={sendMessage}
+                            className="bg-gradient-to-r from-[#304FFE] to-black hover:bg-blue-700 active:scale-95 transition px-4 py-2 rounded-lg shadow-md text-lg"
+                        >
+                            ➤
+                        </button>
+                    </div>
+
+                </div>
+            )}
+
+            {/* Bottom bar */}
+            <div className="absolute bottom-0 left-0 w-full bg-gradient-to-r from-[#304FFE] to-black py-4 flex items-center justify-between px-5">
+
                 <div className="flex gap-6 sm:gap-10 mx-auto">
 
                     <button className="text-white flex flex-col items-center text-xs sm:text-sm hover:opacity-80 transition">
@@ -62,23 +137,24 @@ export default function MeetingPage() {
 
                     <button className="text-white flex flex-col items-center text-xs sm:text-sm hover:opacity-80 transition">
                         <span className="text-3xl">👥</span>
-                        <span>Participantes </span>
+                        <span>Participantes</span>
                     </button>
 
-                    <button className="text-white flex flex-col items-center text-xs sm:text-sm hover:opacity-80 transition">
+                    <button
+                        onClick={() => setShowChat(!showChat)}
+                        className="text-white flex flex-col items-center text-xs sm:text-sm hover:opacity-80 transition"
+                    >
                         <span className="text-3xl">💬</span>
                         <span>Chat</span>
                     </button>
 
                 </div>
 
-                 {/* Exit button */}
                 <Link to="/dashboard">
                     <button className="bg-red-600 text-white px-6 py-2 rounded-full text-sm font-semibold shadow-md hover:bg-red-700 transition">
                         Salir
                     </button>
                 </Link>
-
 
             </div>
 
