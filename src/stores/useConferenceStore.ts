@@ -35,7 +35,6 @@ export const useConferenceStore = create<ConferenceState>()(
                     ),
                 })),
             setLocalStream: (stream) => set({ localStream: stream }),
-            setScreenStream: (stream) => set({ screenStream: stream }),
             toggleAudio: () => {
                 const state = get();
                 if (state.currentUser) {
