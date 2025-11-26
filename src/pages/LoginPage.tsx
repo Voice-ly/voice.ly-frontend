@@ -17,6 +17,7 @@ import {
     signInWithPopup,
 } from "firebase/auth";
 import { auth } from "../lib/firebase";
+import { showToast } from "../utils/toast";
 /**
  * LoginPage Component
  *
@@ -44,6 +45,31 @@ export default function LoginPage() {
      */
     const [form, setForm] = useState<UserSigninForm>(initialForm);
 
+    /** Password vibility toggle**/ 
+    const [showPassword, setShowPassword] = useState (false);
+    const togglePasswordVisibility = () => setShowPassword(!showPassword);
+    // validation function on inputs
+    const validateInputs = () => {
+        if (!form.email.trim() || !form.password.trim()) {
+            showToast("Por favor completa todos los campos", "error");
+            return false;
+        }
+
+        const emailRegex = /\S+@\S+\.\S+/;
+        if (!emailRegex.test(form.email)) {
+            showToast("Correo inválido", "error");
+            return false;
+        }
+
+        if (form.password.length < 8) {
+            showToast("La contraseña debe tener mínimo 8 caracteres", "error");
+            return false;
+        }
+
+        return true;
+    };
+
+
     /**
      * Handles changes in form input fields.
      *
@@ -63,17 +89,21 @@ export default function LoginPage() {
      */
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
+        if (!validateInputs()) return;
         try {
             const res = await login(form);
             if (!res.ok) {
-                throw new Error(String(res.status));
+                showToast("Correo o contraseña inválidos", "error");
+                return;
             }
             const getProfile = await getUsers();
             console.log(getProfile);
+            showToast("Inicio de sesión exitoso", "success");
             setProfile(getProfile);
             navigate("/dashboard");
         } catch (e) {
             console.log("Error " + e);
+            showToast("Error al iniciar sesión", "error");
         }
     };
 
@@ -108,6 +138,7 @@ export default function LoginPage() {
                         createdAt,
                     };
                     setProfile(profile);
+                    showToast("Inicio de sesión con Google exitoso", "success");
                     navigate("/dashboard");
                 }
             })
@@ -130,7 +161,7 @@ export default function LoginPage() {
                         alert(
                             "Este email ya está registrado con Google. Debes iniciar sesión con Google."
                         );
-
+                        showToast("Este correo ya está registrado con otro método", "error");
                         const googleProvider = new GoogleAuthProvider();
                         const googleResult = await signInWithPopup(
                             auth,
@@ -147,6 +178,7 @@ export default function LoginPage() {
                     }
                 } else {
                     console.log(error);
+                    showToast("Error al iniciar sesión con Google", "error");
                 }
             });
     };
@@ -183,6 +215,7 @@ export default function LoginPage() {
                         createdAt,
                     };
                     setProfile(profile);
+                    showToast("Inicio de sesión con Facebook exitoso", "success");
                     navigate("/dashboard");
                 }
                 console.log(user);
@@ -191,6 +224,7 @@ export default function LoginPage() {
                 if (
                     error.code ===
                     "auth/account-exists-with-different-credential"
+                    
                 ) {
                     const email = error.customData.email;
                     const pendingCred = error.credential;
@@ -206,7 +240,7 @@ export default function LoginPage() {
                         alert(
                             "Este email ya está registrado con Google. Debes iniciar sesión con Google."
                         );
-
+                        showToast("Este correo ya está registrado con otro método", "error");
                         const googleProvider = new GoogleAuthProvider();
                         const googleResult = await signInWithPopup(
                             auth,
@@ -223,6 +257,7 @@ export default function LoginPage() {
                     }
                 } else {
                     console.log(error);
+                     showToast("Error al iniciar sesión con Facebook", "error");
                 }
             });
     };
@@ -254,13 +289,13 @@ export default function LoginPage() {
                 </div>
 
                 {/* PASSWORD */}
-                <div className="flex flex-col w-5/6 mx-auto mt-3">
+                <div className="flex flex-col w-5/6 mx-auto mt-3 relative">
                     <label className="text-[9px] sm:text-[13px]">
                         Contraseña
                     </label>
 
                     <input
-                        type="password"
+                        type={showPassword ? "text" : "password"}
                         name="password"
                         value={form.password}
                         onChange={handleChange}
@@ -270,6 +305,15 @@ export default function LoginPage() {
                         placeholder="Digita tu Contraseña"
                         required
                     />
+
+                    <button
+                            type="button"
+                            onClick={togglePasswordVisibility}
+                            className="absolute right-2 top-7 text-xs text-blue-800"
+                        >
+                            {showPassword ? "Ocultar" : "Ver"}
+                    </button>
+                    
                 </div>
 
                 {/* Forgot password link */}
