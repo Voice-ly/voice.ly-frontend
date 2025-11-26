@@ -32,7 +32,9 @@ export default function ProfilePage() {
     const [deletePassword, setDeletePassword] = useState("");
     /** Loading state for delete action */
     const [loadingDelete, setLoadingDelete] = useState(false);
-
+    /** Password vibility toggle**/ 
+    const [showPassword, setShowPassword] = useState (false);
+    const togglePasswordVisibility = () => setShowPassword(!showPassword);
     /**
      * Opens the account deletion modal.
      * @returns {void}
@@ -87,11 +89,19 @@ export default function ProfilePage() {
     useEffect(() => {
         setUser(profile);
         if (profile.lastName) {
-            setFullName(profile.firstName + profile.lastName);
+            setFullName(`${profile.firstName} ${profile.lastName}`);
             return;
         }
         setFullName(profile.firstName);
     }, []);
+    
+    const formatFullName = (value: string) => {
+    // elimina espacios dobles y ajusta el nombre
+    return value
+        .replace(/\s+/g, " ")     // convierte dobles espacios → 1 espacio
+        .trimStart();             // evita espacio al inicio
+        };
+
     /**
      * Handles updating the user profile.
      *
@@ -121,52 +131,52 @@ export default function ProfilePage() {
 
     return (
         <section className="flex justify-center p-6">
-            <div className="w-full max-w-3xl bg-white rounded-2xl shadow-lg p-8">
+            <div className="w-full max-w-3xl bg-white rounded-2xl shadow-lg p-10">
+
+                {/* Volver */}
                 <Link
-                    to={"/dashboard"}
-                    className="text-blue-600 underline text-sm mb-4 inline-block"
+                    to="/dashboard"
+                    className="text-blue-600 underline text-sm mb-6 inline-block"
                 >
                     ← Volver al Dashboard
                 </Link>
 
-                <h1 className="text-4xl font-bold mb-6">Perfil de Usuario</h1>
+                {/* Título */}
+                <h1 className="text-4xl font-bold mb-8 text-gray-800">
+                    Perfil de Usuario
+                </h1>
 
-                <form className="space-y-6" onSubmit={handleSubmit}>
-                    {/* Nombre y Apellido */}
+                {/* FORMULARIO */}
+                <form className="space-y-7" onSubmit={handleSubmit}>
+                    
+                    {/* Nombres + Apellidos */}
                     <div className="flex flex-col">
-                        <label
-                            htmlFor="firstName"
-                            className="text-lg font-semibold mb-1"
-                        >
+                        <label className="text-lg font-semibold mb-1">
                             Nombres y Apellidos
                         </label>
                         <input
-                            type="text"
-                            name="firstName"
-                            defaultValue={fullName || ""}
-                            className="border rounded-lg h-11 px-3 focus:ring-2 focus:ring-blue-400 focus:outline-none"
-                            onChange={(e) =>
-                                setUser((prev: any) => ({
-                                    ...prev,
-                                    firstName: e.target.value,
-                                }))
-                            }
-                        />
+                        type="text"
+                        value={fullName}
+                        className="border tracking-wide rounded-xl h-12 px-4 bg-gray-50"
+                        onChange={(e) => {
+                            const formatted = formatFullName(e.target.value);
+                            setFullName(formatted);
+
+                            setUser((prev: any) => ({
+                                ...prev,
+                                firstName: formatted,
+                            }));
+                        }}
+                    />
                     </div>
 
                     {/* Email */}
                     <div className="flex flex-col">
-                        <label
-                            htmlFor="email"
-                            className="text-lg font-semibold mb-1"
-                        >
-                            Email
-                        </label>
+                        <label className="text-lg font-semibold mb-1">Email</label>
                         <input
                             type="email"
-                            name="email"
-                            defaultValue={user?.email || ""}
-                            className="border rounded-lg h-11 px-3 focus:ring-2 focus:ring-blue-400 focus:outline-none"
+                            defaultValue={user?.email}
+                            className="border rounded-xl h-12 px-4 bg-gray-50 focus:ring-2 focus:ring-blue-400 focus:outline-none"
                             onChange={(e) =>
                                 setUser((prev: any) => ({
                                     ...prev,
@@ -178,17 +188,11 @@ export default function ProfilePage() {
 
                     {/* Edad */}
                     <div className="flex flex-col">
-                        <label
-                            htmlFor="age"
-                            className="text-lg font-semibold mb-1"
-                        >
-                            Edad
-                        </label>
+                        <label className="text-lg font-semibold mb-1">Edad</label>
                         <input
                             type="number"
-                            name="age"
-                            defaultValue={user?.age || ""}
-                            className="border rounded-lg h-11 px-3 focus:ring-2 focus:ring-blue-400 focus:outline-none"
+                            defaultValue={user?.age}
+                            className="border rounded-xl h-12 px-4 bg-gray-50 focus:ring-2 focus:ring-blue-400 focus:outline-none"
                             onChange={(e) =>
                                 setUser((prev: any) => ({
                                     ...prev,
@@ -199,18 +203,14 @@ export default function ProfilePage() {
                     </div>
 
                     {/* Contraseña */}
-                    <div className="flex flex-col">
-                        <label
-                            htmlFor="password"
-                            className="text-lg font-semibold mb-1"
-                        >
+                    <div className="flex flex-col relative">
+                        <label className="text-lg font-semibold mb-1">
                             Contraseña
                         </label>
                         <input
-                            type="password"
-                            name="password"
+                            type={showPassword ? "text" : "password"}
                             placeholder="Ingresa una nueva contraseña"
-                            className="border rounded-lg h-11 px-3 focus:ring-2 focus:ring-blue-400 focus:outline-none"
+                            className="border rounded-xl h-12 px-4 bg-gray-50 focus:ring-2 focus:ring-blue-400 focus:outline-none"
                             onChange={(e) =>
                                 setUser((prev: any) => ({
                                     ...prev,
@@ -218,68 +218,92 @@ export default function ProfilePage() {
                                 }))
                             }
                         />
+                        <button
+                            type="button"
+                            onClick={togglePasswordVisibility}
+                            className="absolute right-2 top-12 text-xs text-blue-800"
+                        >
+                            {showPassword ? "Ocultar" : "Ver"}
+                        </button>
                     </div>
+                        
 
-                    {/* Creado desde */}
+                    {/* Fecha de creación */}
                     <div className="pt-2">
-                        <span className="text-lg font-semibold">
-                            Creado desde:{" "}
-                        </span>
-                        <span className="text-md text-gray-700">
+                        <span className="text-lg font-semibold">Creado desde:</span>
+                        <span className="text-md text-gray-700 ml-2">
                             {user
                                 ? new Date(
-                                      user.createdAt._seconds * 1000
-                                  ).toLocaleDateString()
+                                    user.createdAt._seconds * 1000
+                                ).toLocaleDateString()
                                 : ""}
                         </span>
                     </div>
 
-                    {/* Eliminar Cuenta */}
-                    <div className="flex justify-center gap-4 pt-4">
+                    {/* Botones */}
+                    <div className="flex justify-center gap-6 pt-6">
                         <button
                             type="button"
                             onClick={openDeleteModal}
-                            className="bg-red-500 hover:bg-red-600 text-white font-bold px-6 py-2 rounded-lg text-lg transition-all"
+                            className="bg-blue-600 hover:bg-red-600 text-white font-semibold px-8 py-3 rounded-2xl text-lg shadow transition"
                         >
-                            Eliminar Cuenta
+                            Eliminar cuenta
                         </button>
 
-                        <button className="bg-green-500 hover:bg-green-600 text-white font-bold px-6 py-2 rounded-lg text-lg transition-all">
+                        <button
+                            className="bg-blue-600 hover:bg-green-700 text-white font-semibold px-8 py-3 rounded-2xl text-lg shadow transition"
+                        >
                             Guardar cambios
                         </button>
                     </div>
-
-                    {/* Eliminar Cuenta */}
                 </form>
             </div>
 
+            {/* MODAL DE ELIMINAR */}
             {showDeleteModal && (
-                <div className="fixed inset-0 flex items-center justify-center bg-black/50">
-                    <div className="bg-white p-6 rounded-md w-80 shadow-lg">
-                        <h2 className="text-lg font-semibold mb-4">
-                            Confirmar eliminación
+                <div className="fixed inset-0 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4">
+                    <div className="bg-white w-full max-w-md rounded-2xl p-8 shadow-lg relative">
+
+                        <img
+                            src="/warning.png"
+                            alt="warning"
+                            className="w-20 mx-auto mb-4"
+                        />
+
+                        <h2 className="text-2xl font-bold text-center mb-3">
+                            Eliminar cuenta
                         </h2>
-                        <p className="text-sm mb-4">
-                            Para eliminar tu cuenta, ingresa tu contraseña:
+
+                        <p className="text-center text-gray-600 mb-5 text-sm">
+                            Para confirmar, ingresa tu contraseña.
                         </p>
 
-                        <form onSubmit={handleDelete}>
+                        <form onSubmit={handleDelete} className="space-y-5">
+                            
+                        <div className="relative">
                             <input
-                                type="password"
-                                className="border px-3 py-2 w-full rounded mb-4"
-                                placeholder="Contraseña"
+                                type={showPassword ? "text" : "password"}
+                                className="border rounded-xl h-12 px-4 w-full bg-gray-50 focus:ring-2 focus:ring-blue-400 focus:outline-none"
+                                placeholder="Ingresa tu contraseña"
                                 value={deletePassword}
-                                onChange={(e) =>
-                                    setDeletePassword(e.target.value)
-                                }
+                                onChange={(e) => setDeletePassword(e.target.value)}
                             />
+                            <button
+                                type="button"
+                                onClick={togglePasswordVisibility}
+                                className="absolute right-4 top-4 text-xs text-blue-800"
+                            >
+                                {showPassword ? "Ocultar" : "Ver"}
+                            </button>
+                        </div>
+                            
 
-                            <div className="flex justify-end gap-3">
+                            {/* Botones del modal */}
+                            <div className="flex justify-center gap-4 mt-4">
                                 <button
                                     type="button"
                                     onClick={closeDeleteModal}
-                                    disabled={loadingDelete}
-                                    className="px-3 py-2 bg-gray-300 rounded"
+                                    className="bg-blue-600 hover:bg-blue-900 text-white px-6 py-2 rounded-xl font-semibold"
                                 >
                                     Cancelar
                                 </button>
@@ -287,11 +311,9 @@ export default function ProfilePage() {
                                 <button
                                     type="submit"
                                     disabled={loadingDelete}
-                                    className="px-3 py-2 bg-red-600 text-white rounded"
+                                    className="bg-blue-600 hover:bg-red-700 text-white px-6 py-2 rounded-xl font-semibold"
                                 >
-                                    {loadingDelete
-                                        ? "Eliminando..."
-                                        : "Eliminar"}
+                                    {loadingDelete ? "Eliminando..." : "Eliminar"}
                                 </button>
                             </div>
                         </form>
@@ -300,4 +322,5 @@ export default function ProfilePage() {
             )}
         </section>
     );
+
 }
