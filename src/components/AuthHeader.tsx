@@ -64,7 +64,7 @@ export default function AuthHeader() {
                             className="block px-4 py-3 text-sm font-medium hover:bg-gray-100 transition"
                             onClick={() => setIsProfileOpen(false)}
                         >
-                            ⭐ Mi perfil
+                            Mi perfil
                         </Link>
 
                         <button
@@ -74,7 +74,7 @@ export default function AuthHeader() {
                                 logout()
                             }}
                         >
-                            🔒 Cerrar sesión
+                            Cerrar sesión
                         </button>
                     </div>
                 )}
