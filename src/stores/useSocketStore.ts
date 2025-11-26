@@ -7,7 +7,7 @@ export const useSocketStore = create<SocketState>((set, get) => ({
     isConnected: false,
     error: null,
     connect: (roomId: string, userId: string) => {
-        const connectionId: string = import.meta.env.VITE_SOCKET_URL || "";
+        const connectionId: string = import.meta.env.VITE_SOCKET_BACKEND || "";
         const socket = io(connectionId, { query: { roomId, userId } });
 
         socket.on("connect", () => {
