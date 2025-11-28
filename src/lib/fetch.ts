@@ -26,7 +26,6 @@ export function apiFetch(
     options: RequestInit = {},
     base: "users" | "auth" = "users"
 ): Promise<Response> {
-
     const baseUrl = import.meta.env.VITE_BASE_URL + `/api/${base}`;
 
     const headers = new Headers({
@@ -44,7 +43,7 @@ export function apiFetch(
 export function chatApiFetch(
     endpoint: string = "",
     options: RequestInit = {},
-    base: "meeting" = "meeting"
+    base: "chat" = "chat"
 ): Promise<Response> {
     const baseUrl = import.meta.env.VITE_CHAT_URL + `/api/${base}`;
 
