@@ -5,6 +5,7 @@ import { useUserStore } from "../stores/useUserStore";
 interface Props {
   roomId: string | undefined;
   messagesEndRef: React.RefObject<HTMLDivElement | null>;
+  showChat: boolean;
 }
 
 interface ParticipantMap {
