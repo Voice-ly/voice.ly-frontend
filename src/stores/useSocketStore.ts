@@ -1,21 +1,34 @@
-// useSocketStore.ts - Versión actualizada
+// useSocketStore.ts
 import { create } from "zustand";
 import type { SocketState } from "../types/Socket";
-import { io } from "socket.io-client";
+import { io, Socket } from "socket.io-client";
 
 export const useSocketStore = create<SocketState>((set, get) => ({
     socket: null,
     isConnected: false,
     error: null,
-    connect: (roomId?: string, userId?: string) => {
-        const connectionId: string = import.meta.env.VITE_SOCKET_URL || "";
-        const socket = io(connectionId, {
-            query: {
-                ...(roomId && { roomId }),
-                ...(userId && { userId }),
+
+    connect: (roomId?: string, userId?: string, token?: string) => {
+        const connectionUrl: string = import.meta.env.VITE_SOCKET_URL || "";
+
+        // Si ya existe un socket previo, evitar duplicados
+        const oldSocket = get().socket;
+        if (oldSocket) {
+            oldSocket.disconnect();
+        }
+
+        // Crear socket sin autoconectar
+        const socket: Socket = io(connectionUrl, {
+            autoConnect: false,
+            auth: {
+                token,         
+                roomId,
+                userId,
             },
+            transports: ["websocket"],
         });
 
+        // Listeners
         socket.on("connect", () => {
             set({ isConnected: true, error: null });
         });
@@ -24,11 +37,17 @@ export const useSocketStore = create<SocketState>((set, get) => ({
             set({ isConnected: false });
         });
 
-        socket.on("error", (error) => {
-            set({ error: error.message });
+        socket.on("connect_error", (err) => {
+            set({ error: err.message });
+        });
+
+        socket.on("error", (err) => {
+            set({ error: err.message });
         });
 
         set({ socket });
+
+        socket.connect(); // conectar después de asignarlo
     },
 
     disconnect: () => {
