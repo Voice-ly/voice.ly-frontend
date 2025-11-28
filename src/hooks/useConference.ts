@@ -23,11 +23,11 @@ export const useConference = (roomId: string, userId: string) => {
         reset,
     } = useConferenceStore();
 
-    const { socket, connect, disconnect, emitEvent } = useSocketStore();
+    const { socket, Conference, disconnect, emitEvent } = useSocketStore();
 
     useEffect(() => {
         setJoiningStatus(true);
-        connect(roomId, userId);
+        Conference(roomId, userId);
         return () => {
             disconnect();
             reset();
@@ -63,7 +63,7 @@ export const useConference = (roomId: string, userId: string) => {
 
         socket?.on("user-joined", handleUserJoined);
         socket?.on("user-left", handleUserLeft);
-        socket?.on("uset-updated", handleUserUpdated);
+        socket?.on("user-updated", handleUserUpdated);
         socket?.on("room-info", handleRoomInfo);
 
         return () => {
