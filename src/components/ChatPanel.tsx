@@ -22,9 +22,8 @@ const ChatPanel: React.FC<Props> = ({ messagesEndRef, roomId }) => {
     useEffect(() => {
         const token = localStorage.getItem("token");
         if (!token) return;
-
-        connect(token);
-    }, []);
+        if (!socket) connect(token);
+    }, [socket]);
 
     // 2. Cargar historial + unirse a la sala + escuchar mensajes
     useEffect(() => {
