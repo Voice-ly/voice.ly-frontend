@@ -18,6 +18,7 @@ interface Message {
   meetingId: string;
   senderId: string;
   message: string;
+  senderDisplayName?: string;
   createdAt: number;
 }
 
@@ -77,9 +78,9 @@ export default function ChatPanel({ roomId, messagesEndRef }: Props) {
     setInputText("");
   };
 
-  const getSenderName = (senderId: string) => {
-    if (senderId === profile.id) return profile.firstName;
-    return participantsMap[senderId] || "Usuario";
+  const getSenderName = (msg: Message) => {
+    if (msg.senderId === profile.id) return profile.firstName;
+    return msg.senderDisplayName || participantsMap[msg.senderId] || "Usuario";
   };
 
   return (
@@ -101,7 +102,7 @@ export default function ChatPanel({ roomId, messagesEndRef }: Props) {
 
         {messages.map((msg, index) => (
           <li key={index}>
-            <strong>{getSenderName(msg.senderId)}</strong>: {msg.message}
+            <strong>{getSenderName(msg)}</strong>: {msg.message}
           </li>
         ))}
 
