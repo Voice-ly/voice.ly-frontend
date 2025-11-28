@@ -1,65 +1,57 @@
-// useSocketStore.ts
 import { create } from "zustand";
-import type { SocketState } from "../types/Socket";
 import { io, Socket } from "socket.io-client";
 
-export const useSocketStore = create<SocketState>((set, get) => ({
+interface SocketStore {
+    socket: Socket | null;
+
+    // CHAT ONLY
+    connect: (token: string) => void;
+    joinRoom: (meetingId: string) => void;
+    onMessage: (callback: (msg: any) => void) => void;
+    sendMessage: (meetingId: string, message: string) => void;
+
+    disconnect: () => void;
+}
+
+export const useSocketStore = create<SocketStore>((set, get) => ({
     socket: null,
-    isConnected: false,
-    error: null,
 
-    connect: (roomId?: string, userId?: string, token?: string) => {
-        const connectionUrl: string = import.meta.env.VITE_SOCKET_URL || "";
-
-        // Si ya existe un socket previo, evitar duplicados
-        const oldSocket = get().socket;
-        if (oldSocket) {
-            oldSocket.disconnect();
-        }
-
-        // Crear socket sin autoconectar
-        const socket: Socket = io(connectionUrl, {
-            autoConnect: false,
-            auth: {
-                token,         
-                roomId,
-                userId,
-            },
-            transports: ["websocket"],
+    connect: (token: string) => {
+        const socket = io(import.meta.env.VITE_SOCKET_URL, {
+            auth: { token },
+            transports: ["websocket"]
         });
 
-        // Listeners
         socket.on("connect", () => {
-            set({ isConnected: true, error: null });
+            console.log("Chat socket conectado:", socket.id);
         });
 
-        socket.on("disconnect", () => {
-            set({ isConnected: false });
-        });
-
-        socket.on("connect_error", (err) => {
-            set({ error: err.message });
-        });
-
-        socket.on("error", (err) => {
-            set({ error: err.message });
-        });
+        // restaurar listener si existía
+        const savedCallback = (get() as any)._onMessage;
+        if (savedCallback) socket.on("receive_message", savedCallback);
 
         set({ socket });
+    },
 
-        socket.connect(); // conectar después de asignarlo
+    joinRoom: (meetingId) => {
+        get().socket?.emit("join_room", { meetingId });
+    },
+
+    onMessage: (callback) => {
+        const socket = get().socket;
+
+        (get() as any)._onMessage = callback;
+
+        if (socket) socket.on("receive_message", callback);
+    },
+
+    sendMessage: (meetingId, message) => {
+        get().socket?.emit("send_message", { meetingId, message });
     },
 
     disconnect: () => {
-        const { socket } = get();
-        socket?.disconnect();
-        set({ socket: null, isConnected: false });
-    },
-
-    emitEvent: (event: string, data: any) => {
-        const { socket } = get();
-        socket?.emit(event, data);
-    },
-
-    setError: (error) => set({ error }),
+        const socket = get().socket;
+        if (socket) socket.disconnect();
+        set({ socket: null });
+    }
 }));
