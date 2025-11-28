@@ -10,7 +10,7 @@ import { useMeetingApiStore } from "../stores/useMeetingApiStore";
 export default function DashboardPage() {
     const navigator = useNavigate();
 
-    const { profile, token } = useUserStore();
+    const { profile } = useUserStore();
     const { setCurrentRoom, setError, isCreating, setCreating } =
         useRoomStore();
     const { createMeeting, joinMeeting, error } = useMeetingApiStore();
