@@ -20,7 +20,7 @@ export default function AboutUs() {
                             Sobre Nosotros
                         </h1>
 
-                        <div className="space-y-6 text-center lg:text-center">
+                        <div className="space-y-6 text-left lg:text-left">
                             <p className="text-lg text-indigo-600 leading-relaxed">
                                 En voicely creemos que la comunicación no tiene límites.
                                 Nuestra plataforma de videoconferencias fue creada para
