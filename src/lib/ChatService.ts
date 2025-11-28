@@ -10,7 +10,7 @@ export function sendMessage(
     return chatApiFetch(`/${meetingId}/messages`, {
         method: "POST",
         body: JSON.stringify(request),
-        headers: { "Content-Type": "application/json", authorization: token },
+        headers: { "Content-Type": "application/json", Authorization: token },
     });
 }
 
@@ -19,17 +19,20 @@ export function getMessages(
     limit: number = 50,
     startAfter?: number
 ): Promise<Response> {
-    const params = new URLSearchParams({
-        limit: limit.toString(),
-    });
-    const token = "Bearer " + localStorage.getItem("token");
+    const params = new URLSearchParams();
+    params.append("limit", limit.toString());
 
-    if (startAfter) {
-        params.append("startAfter", startAfter.toString());
+    if (startAfter !== undefined && startAfter !== null) {
+        params.append("startAfter", String(startAfter));
     }
 
-    return chatApiFetch(`/${meetingId}/messages?${params.toString}`, {
+    const token = "Bearer " + localStorage.getItem("token");
+
+    return chatApiFetch(`/${meetingId}/messages?${params.toString()}`, {
         method: "GET",
-        headers: { authorization: token },
+        headers: {
+            "Authorization": token,
+            "Content-Type": "application/json",
+        },
     });
 }
