@@ -76,9 +76,9 @@ export default function ChatPanel({ roomId, messagesEndRef }: Props) {
     setInputText("");
   };
 
-  const getSenderName = (msg: Message) => {
-    if (msg.senderId === profile.id) return profile.firstName;
-    return msg.senderDisplayName || participantsMap[msg.senderId] || "Usuario";
+  const getSenderName = (senderId: string) => {
+    if (senderId === profile.id) return profile.firstName;
+    return participantsMap[senderId] || "Usuario";
   };
 
   return (
@@ -100,7 +100,7 @@ export default function ChatPanel({ roomId, messagesEndRef }: Props) {
 
         {messages.map((msg, index) => (
           <li key={index}>
-            <strong>{getSenderName(msg)}</strong>: {msg.message}
+            <strong>{getSenderName(msg.senderId)}</strong>: {msg.message}
           </li>
         ))}
 
