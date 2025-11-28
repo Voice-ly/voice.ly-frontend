@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import { useConferenceStore } from "../stores/useConferenceStore";
 import { useSocketStore } from "../stores/useSocketStore";
 import type { Participant } from "../types/Conference";
@@ -23,15 +23,7 @@ export const useConference = (roomId: string, userId: string) => {
         reset,
     } = useConferenceStore();
 
-    const {
-        socket,
-        isConnected: socketConnected,
-        connect,
-        disconnect,
-        emitEvent,
-    } = useSocketStore();
-
-    const streamsRef = useRef<Map<string, MediaStream>>(new Map());
+    const { socket, connect, disconnect, emitEvent } = useSocketStore();
 
     useEffect(() => {
         setJoiningStatus(true);

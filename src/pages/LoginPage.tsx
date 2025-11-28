@@ -45,8 +45,8 @@ export default function LoginPage() {
      */
     const [form, setForm] = useState<UserSigninForm>(initialForm);
 
-    /** Password vibility toggle**/ 
-    const [showPassword, setShowPassword] = useState (false);
+    /** Password vibility toggle**/
+    const [showPassword, setShowPassword] = useState(false);
     const togglePasswordVisibility = () => setShowPassword(!showPassword);
     // validation function on inputs
     const validateInputs = () => {
@@ -69,7 +69,6 @@ export default function LoginPage() {
         return true;
     };
 
-
     /**
      * Handles changes in form input fields.
      *
@@ -90,14 +89,23 @@ export default function LoginPage() {
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
         if (!validateInputs()) return;
+
         try {
             const res = await login(form);
+
+            const data = await res.json();
+            console.log(data);
             if (!res.ok) {
                 showToast("Correo o contraseña inválidos", "error");
                 return;
             }
+
+            // guardar token real del backend
+            localStorage.setItem("token", data.token);
+
             const getProfile = await getUsers();
             console.log(getProfile);
+
             showToast("Inicio de sesión exitoso", "success");
             setProfile(getProfile);
             navigate("/dashboard");
@@ -161,7 +169,10 @@ export default function LoginPage() {
                         alert(
                             "Este email ya está registrado con Google. Debes iniciar sesión con Google."
                         );
-                        showToast("Este correo ya está registrado con otro método", "error");
+                        showToast(
+                            "Este correo ya está registrado con otro método",
+                            "error"
+                        );
                         const googleProvider = new GoogleAuthProvider();
                         const googleResult = await signInWithPopup(
                             auth,
@@ -215,7 +226,10 @@ export default function LoginPage() {
                         createdAt,
                     };
                     setProfile(profile);
-                    showToast("Inicio de sesión con Facebook exitoso", "success");
+                    showToast(
+                        "Inicio de sesión con Facebook exitoso",
+                        "success"
+                    );
                     navigate("/dashboard");
                 }
                 console.log(user);
@@ -224,7 +238,6 @@ export default function LoginPage() {
                 if (
                     error.code ===
                     "auth/account-exists-with-different-credential"
-                    
                 ) {
                     const email = error.customData.email;
                     const pendingCred = error.credential;
@@ -240,7 +253,10 @@ export default function LoginPage() {
                         alert(
                             "Este email ya está registrado con Google. Debes iniciar sesión con Google."
                         );
-                        showToast("Este correo ya está registrado con otro método", "error");
+                        showToast(
+                            "Este correo ya está registrado con otro método",
+                            "error"
+                        );
                         const googleProvider = new GoogleAuthProvider();
                         const googleResult = await signInWithPopup(
                             auth,
@@ -257,7 +273,7 @@ export default function LoginPage() {
                     }
                 } else {
                     console.log(error);
-                     showToast("Error al iniciar sesión con Facebook", "error");
+                    showToast("Error al iniciar sesión con Facebook", "error");
                 }
             });
     };
@@ -307,13 +323,12 @@ export default function LoginPage() {
                     />
 
                     <button
-                            type="button"
-                            onClick={togglePasswordVisibility}
-                            className="absolute right-2 top-7 text-xs text-blue-800"
-                        >
-                            {showPassword ? "Ocultar" : "Ver"}
+                        type="button"
+                        onClick={togglePasswordVisibility}
+                        className="absolute right-2 top-7 text-xs text-blue-800"
+                    >
+                        {showPassword ? "Ocultar" : "Ver"}
                     </button>
-                    
                 </div>
 
                 {/* Forgot password link */}
