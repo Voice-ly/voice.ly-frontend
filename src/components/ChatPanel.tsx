@@ -7,6 +7,7 @@ import type { GetMessageResponse, Message } from "../types/Chat";
 interface Props {
   roomId: string | undefined;
   messagesEndRef: React.RefObject<HTMLDivElement | null>;
+  showChat: boolean;
 }
 
 interface ParticipantMap {
