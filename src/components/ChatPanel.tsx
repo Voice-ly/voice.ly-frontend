@@ -33,7 +33,22 @@ export default function ChatPanel({ roomId, messagesEndRef }: Props) {
     const token = localStorage.getItem("token");
     if (!token) return;
     connect(token);
+
+    //Add event to send w Enter or Intro keys
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Enter or Intro
+      if (e.key === "Enter") {
+        e.preventDefault();
+        handleSend();
+      }
+    }
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
+
+
 
   // Unirse al room y escuchar mensajes
   useEffect(() => {
@@ -76,9 +91,9 @@ export default function ChatPanel({ roomId, messagesEndRef }: Props) {
     setInputText("");
   };
 
-  const getSenderName = (msg: Message) => {
-    if (msg.senderId === profile.id) return profile.firstName;
-    return msg.senderDisplayName || participantsMap[msg.senderId] || "Usuario";
+  const getSenderName = (senderId: string) => {
+    if (senderId === profile.id) return profile.firstName;
+    return participantsMap[senderId] || "Usuario";
   };
 
   return (
@@ -100,7 +115,7 @@ export default function ChatPanel({ roomId, messagesEndRef }: Props) {
 
         {messages.map((msg, index) => (
           <li key={index}>
-            <strong>{getSenderName(msg)}</strong>: {msg.message}
+            <strong>{getSenderName(msg.senderId)}</strong>: {msg.message}
           </li>
         ))}
 

@@ -37,6 +37,16 @@ export default function MeetingPage() {
 
         loadMeeting();
         // eslint-disable-next-line react-hooks/exhaustive-deps
+
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (e.key === "Escape") {
+                e.preventDefault();
+                setShowChat((s) => !s);
+            }
+        }
+
+        window.addEventListener("keydown", handleKeyDown);
+        return () => window.removeEventListener("keydown", handleKeyDown);
     }, [
         roomId /* deliberately not including getMeetingById/setCurrentRoom if they are stable */,
     ]);
@@ -131,12 +141,16 @@ export default function MeetingPage() {
             {/* Bottom bar */}
             <div className="absolute bottom-0 left-0 w-full bg-gradient-to-r from-[#304FFE] to-black py-4 flex items-center justify-between px-5 z-20">
                 <div className="flex gap-6 sm:gap-10 mx-auto">
-                    <button className="text-white flex flex-col items-center text-xs sm:text-sm hover:opacity-80">
+                    <button className="text-white flex flex-col items-center text-xs sm:text-sm hover:opacity-80"
+                        title="Activar/Desactivar de microfono (Ctrl + D)"
+                    >
                         <span className="text-3xl">🎤</span>
                         <span>Mic</span>
                     </button>
 
-                    <button className="text-white flex flex-col items-center text-xs sm:text-sm hover:opacity-80">
+                    <button className="text-white flex flex-col items-center text-xs sm:text-sm hover:opacity-80"
+                        title="Activar/Desactivar camara (Ctrl + E)"
+                    >
                         <span className="text-3xl">📷</span>
                         <span>Cam</span>
                     </button>
@@ -144,6 +158,7 @@ export default function MeetingPage() {
                     <button
                         onClick={() => setShowChat((s) => !s)}
                         className="text-white flex flex-col items-center text-xs sm:text-sm hover:opacity-80"
+                        title="Mostrar/Cerrar chat (Esc)"
                     >
                         <span className="text-3xl">💬</span>
                         <span>{showChat ? "Cerrar chat" : "Chat"}</span>
