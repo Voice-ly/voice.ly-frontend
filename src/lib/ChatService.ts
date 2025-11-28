@@ -10,7 +10,7 @@ export function sendMessage(
     return chatApiFetch(`/${meetingId}/messages`, {
         method: "POST",
         body: JSON.stringify(request),
-        headers: { "Content-Type": "application/json", Authorization: token },
+        headers: { "Content-Type": "application/json", Authorization: token }, // fix header
     });
 }
 
