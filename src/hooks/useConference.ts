@@ -1,3 +1,4 @@
+/**
 import { useEffect } from "react";
 import { useConferenceStore } from "../stores/useConferenceStore";
 import { useSocketStore } from "../stores/useSocketStore";
@@ -23,12 +24,11 @@ export const useConference = (roomId: string, userId: string) => {
         reset,
     } = useConferenceStore();
 
-    //const { socket, Conference, disconnect, emitEvent } = useSocketStore();
-    const { socket, disconnect } = useSocketStore();
+    const { socket, Conference, disconnect, emitEvent } = useSocketStore();
 
     useEffect(() => {
         setJoiningStatus(true);
-        //Conference(roomId, userId);
+        Conference(roomId, userId);
         return () => {
             disconnect();
             reset();
@@ -92,7 +92,7 @@ export const useConference = (roomId: string, userId: string) => {
                 isCurrentUser: true,
             };
 
-            //emitEvent("join-room", { roomId, user });
+            emitEvent("join-room", { roomId, user });
         } catch (error) {
             console.log("Error: ", error);
         }
@@ -103,17 +103,17 @@ export const useConference = (roomId: string, userId: string) => {
     const toggleAudio = () => {
         const { toggleAudio } = useConferenceStore.getState();
         toggleAudio();
-        //emitEvent("toggle-audio", { userId });
+        emitEvent("toggle-audio", { userId });
     };
 
     const toggleVideo = () => {
         const { toggleVideo } = useConferenceStore.getState();
         toggleVideo();
-        //emitEvent("toggle-video", { userId });
+        emitEvent("toggle-video", { userId });
     };
 
     const leaveRoom = () => {
-        //emitEvent("leave-room", { userId, roomId });
+        emitEvent("leave-room", { userId, roomId });
         disconnect();
         reset();
     };
@@ -133,3 +133,4 @@ export const useConference = (roomId: string, userId: string) => {
         leaveRoom,
     };
 };
+*/
