@@ -1,101 +1,125 @@
 import { useEffect, useState } from "react";
-import { getMessages } from "../lib/ChatService";
+import { useChatSocketStore } from "../stores/useChatSocketStore";
 import { useUserStore } from "../stores/useUserStore";
-import { useSocketStore } from "../stores/useSocketStore";
-import type { GetMessageResponse, Message } from "../types/Chat";
 
 interface Props {
-    messagesEndRef: React.RefObject<HTMLDivElement | null>;
-    roomId: string | undefined;
-    showChat: boolean;
+  roomId: string | undefined;
+  messagesEndRef: React.RefObject<HTMLDivElement | null>;
 }
 
-const ChatPanel: React.FC<Props> = ({ messagesEndRef, roomId }) => {
-    const { profile } = useUserStore();
-    const { socket, connect, joinRoom, onMessage, sendMessage: sendSocketMessage } =
-        useSocketStore();
+interface ParticipantMap {
+  [uid: string]: string; // uid -> firstName
+}
 
-    const [inputText, setInputText] = useState("");
-    const [messages, setMessages] = useState<Message[]>([]);
+interface Message {
+  meetingId: string;
+  senderId: string;
+  message: string;
+  createdAt: number;
+}
 
-    // 1. Conectar socket si no está conectado
-    useEffect(() => {
-        const token = localStorage.getItem("token");
-        if (!token) return;
-        if (!socket) connect(token);
-    }, [socket]);
+export default function ChatPanel({ roomId, messagesEndRef }: Props) {
+  const { profile } = useUserStore();
+  const { socket, connect } = useChatSocketStore();
 
-    // 2. Cargar historial + unirse a la sala + escuchar mensajes
-    useEffect(() => {
-        if (!roomId || !socket) return;
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [inputText, setInputText] = useState("");
+  const [participantsMap, setParticipantsMap] = useState<ParticipantMap>({});
 
-        joinRoom(roomId);
-        loadMessages();
+  // Conectar socket al montar
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) return;
+    connect(token);
+  }, []);
 
-        onMessage((msg: Message) => {
-            if (msg.meetingId !== roomId) return;
+  // Unirse al room y escuchar mensajes
+  useEffect(() => {
+    if (!socket || !roomId) return;
 
-            setMessages((prev) => [...prev, msg]);
+    // Unirse al room
+    socket.emit("join_room", { meetingId: roomId });
 
-            messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-        });
-    }, [roomId, socket]);
-
-    // cargar historial desde HTTP
-    const loadMessages = async () => {
-        if (!roomId) return;
-
-        const response = await getMessages(roomId);
-        if (response.ok) {
-            const data: GetMessageResponse = await response.json();
-            setMessages(data.data);
-        }
+    // Escuchar mensajes entrantes
+    const handleReceiveMessage = (msg: Message) => {
+      setMessages((prev) => [...prev, msg]);
+      messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
     };
 
-    // enviar mensaje por websocket
-    const handleSend = () => {
-        if (!roomId || !inputText.trim()) return;
+    socket.on("receive_message", handleReceiveMessage);
 
-        sendSocketMessage(roomId, inputText);
-        setInputText("");
+    // Escuchar lista de participantes para mapear senderId -> firstName
+    const handleParticipants = (participants: { uid: string; firstName: string }[]) => {
+      const map: ParticipantMap = {};
+      participants.forEach((p) => (map[p.uid] = p.firstName));
+      setParticipantsMap(map);
     };
 
-    // obtiene nombre que se va a mostrar
-    const getSenderName = (msg: Message) => {
-        if (msg.senderId === profile.id) return profile.firstName;
+    socket.on("room_participants", handleParticipants);
 
-        return msg.senderDisplayName || "Usuario";
+    return () => {
+      socket.off("receive_message", handleReceiveMessage);
+      socket.off("room_participants", handleParticipants);
     };
+  }, [socket, roomId]);
 
-    return (
-        <div className="absolute right-0 top-0 h-full w-80 bg-[#1E1E1E] text-white p-4 pb-24 flex flex-col">
-            <h2 className="text-lg font-semibold mb-3 pb-2 border-b border-gray-700/50">
-                Chat de la reunión
-            </h2>
+  const handleSend = () => {
+    if (!socket || !inputText.trim() || !roomId) return;
 
-            <div className="flex-1 overflow-y-auto space-y-3 pr-2">
-                {messages.map((msg, i) => (
-                    <div key={i}>
-                        <strong>{getSenderName(msg)}</strong>: {msg.message}
-                    </div>
-                ))}
+    socket.emit("send_message", {
+      meetingId: roomId,
+      message: inputText,
+    });
 
-                <div ref={messagesEndRef} />
-            </div>
+    setInputText("");
+  };
 
-            <div className="mt-4 flex gap-2 bg-[#2A2A2A] p-2 rounded-xl">
-                <input
-                    value={inputText}
-                    onChange={(e) => setInputText(e.target.value)}
-                    className="flex-1 px-3 py-2 rounded-lg bg-[#1E1E1E]"
-                    placeholder="Escribe un mensaje..."
-                />
-                <button onClick={handleSend} className="px-4 py-2 bg-blue-600 rounded-lg">
-                    ➤
-                </button>
-            </div>
-        </div>
-    );
-};
+  const getSenderName = (senderId: string) => {
+    if (senderId === profile.id) return profile.firstName;
+    return participantsMap[senderId] || "Usuario";
+  };
 
-export default ChatPanel;
+  return (
+    <div
+      className="
+        absolute right-0 top-0 h-full w-80 bg-[#1E1E1E] text-white 
+        shadow-xl border-l border-gray-700 p-4 pb-24 flex flex-col
+        animate-slide-left z-30
+      "
+    >
+      <h2 className="text-lg font-semibold mb-3 pb-2 border-b border-gray-700/50 tracking-wide">
+        Chat de la reunión
+      </h2>
+
+      <div className="flex-1 overflow-y-auto space-y-3 pr-2">
+        {messages.length === 0 && (
+          <div className="text-sm text-gray-300">No hay mensajes aún.</div>
+        )}
+
+        {messages.map((msg, index) => (
+          <li key={index}>
+            <strong>{getSenderName(msg.senderId)}</strong>: {msg.message}
+          </li>
+        ))}
+
+        <div ref={messagesEndRef} />
+      </div>
+
+      <div className="mt-4 flex gap-2 bg-[#2A2A2A] p-2 rounded-xl border border-gray-700/40 shadow-inner">
+        <input
+          type="text"
+          placeholder="Escribe un mensaje..."
+          value={inputText}
+          onChange={(e) => setInputText(e.target.value)}
+          className="flex-1 px-3 py-2 rounded-lg bg-[#1E1E1E] text-sm border border-gray-700 focus:border-blue-500 outline-none"
+        />
+        <button
+          className="bg-gradient-to-r from-[#304FFE] to-black px-4 py-2 rounded-lg"
+          onClick={handleSend}
+        >
+          ➤
+        </button>
+      </div>
+    </div>
+  );
+}
