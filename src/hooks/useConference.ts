@@ -1,3 +1,4 @@
+/**
 import { useEffect } from "react";
 import { useConferenceStore } from "../stores/useConferenceStore";
 import { useSocketStore } from "../stores/useSocketStore";
@@ -132,3 +133,4 @@ export const useConference = (roomId: string, userId: string) => {
         leaveRoom,
     };
 };
+*/
