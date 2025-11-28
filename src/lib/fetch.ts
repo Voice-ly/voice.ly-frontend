@@ -34,8 +34,8 @@ export function apiFetch(
     });
 
     return fetch(baseUrl + endpoint, {
-        headers,
         ...options,
+        headers,
     });
 }
 
@@ -52,7 +52,7 @@ export function chatApiFetch(
     });
 
     return fetch(baseUrl + endpoint, {
-        headers,
         ...options,
+        headers,
     });
 }
