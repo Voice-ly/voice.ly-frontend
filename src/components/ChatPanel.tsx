@@ -39,7 +39,6 @@ const ChatPanel: React.FC<Props> = ({ messagesEndRef, roomId, showChat }) => {
             message: inputText,
             senderDisplayName: profile.firstName,
         };
-
         const response = await sendMessage(roomId, request);
 
         if (response.ok) {
@@ -63,9 +62,16 @@ const ChatPanel: React.FC<Props> = ({ messagesEndRef, roomId, showChat }) => {
 
             <div className="flex-1 overflow-y-auto space-y-3 pr-2">
                 {/* mensajes de ejemplo (puedes ligarlo al store real) */}
-                <div className="text-sm text-gray-300">
-                    No hay mensajes aún.
-                </div>
+                {messages.length === 0 && (
+                    <div className="text-sm text-gray-300">
+                        No hay mensajes aún.
+                    </div>
+                )}
+                {messages.map((message: any, index: number) => (
+                    <li key={index}>
+                        {message.senderDisplayName}: {message.message}
+                    </li>
+                ))}
                 <div ref={messagesEndRef} />
             </div>
 
