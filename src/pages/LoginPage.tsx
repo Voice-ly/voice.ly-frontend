@@ -118,11 +118,10 @@ export default function LoginPage() {
     const handleLoginWithGoogle = (e: Event) => {
         e.preventDefault();
         loginWithGoogle()
-            .then(async (result) => {
+            .then(async (result: any) => {
                 const user: any = result.user;
                 const creationTime =
                     user.auth.currentUser.metadata.creationTime;
-
                 const createdAt = {
                     _seconds: Math.floor(
                         new Date(creationTime).getTime() / 1000
@@ -145,6 +144,8 @@ export default function LoginPage() {
                         email: user.auth.currentUser.email,
                         createdAt,
                     };
+                    const token = await res.json();
+                    localStorage.setItem("token", token.token);
                     setProfile(profile);
                     showToast("Inicio de sesión con Google exitoso", "success");
                     navigate("/dashboard");
