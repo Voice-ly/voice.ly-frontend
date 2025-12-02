@@ -45,3 +45,22 @@ export function apiFetch(
         credentials: "include",
     });
 }
+
+export function chatApiFetch(
+    endpoint: string = "",
+    options: RequestInit = {},
+    base: "meeting" = "meeting"
+): Promise<Response> {
+    const baseUrl = import.meta.env.VITE_CHAT_URL + `/api/${base}`;
+
+    const headers = new Headers({
+        "Content-Type": "application/json",
+        ...options.headers,
+    });
+
+    return fetch(baseUrl + endpoint, {
+        headers,
+        ...options,
+        credentials: "include",
+    });
+}

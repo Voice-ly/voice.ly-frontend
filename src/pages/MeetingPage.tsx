@@ -3,13 +3,16 @@ import { Link, useParams } from "react-router-dom";
 import { useUserStore } from "../stores/useUserStore";
 import { useRoomStore } from "../stores/useRoomStore";
 import { useMeetingApiStore } from "../stores/useMeetingApiStore";
+import { sendMessage, getMessages } from "../lib/ChatService";
+import type { SendMessageRequest, Message, GetMessageResponse } from "../types/Chat";
 
 export default function MeetingPage() {
   const { roomId } = useParams<{ roomId: string }>();
   const { profile } = useUserStore();
   const { currentRoom, setCurrentRoom } = useRoomStore();
   const { getMeetingById } = useMeetingApiStore();
-
+  const [messages, setMessages] = useState<Message[]>([])
+  const [inputText, setInputText] = useState('');
   const [loading, setLoading] = useState(true);
   const [showChat, setShowChat] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
@@ -41,6 +44,16 @@ export default function MeetingPage() {
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    const loadMessages = async () => {
+      const response = await getMessages(roomId);
+
+      if (response.ok) {
+        const data: GetMessageResponse = await response.json();
+        setMessages(data.data);
+      };
+
+      loadMessages();
+    }
   }, [showChat]);
 
   if (loading) {
@@ -88,6 +101,21 @@ export default function MeetingPage() {
       alert("No se pudo copiar el enlace");
     }
   };
+
+  const handleSend = async () => {
+    const request: SendMessageRequest = {
+      message: inputText,
+      senderDisplayName: ''
+    };
+
+    const response = await sendMessage(roomId, request);
+
+    if (response.ok) {
+      const result = await response.json();
+      setMessages([...messages, result.data]);
+      setInputText('');
+    }
+  }
 
   return (
     <div className="w-full h-screen bg-black relative overflow-hidden">
