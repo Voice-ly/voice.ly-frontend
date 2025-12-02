@@ -45,7 +45,11 @@ export default function Router() {
                     <Route path="dashboard" element={<DashboardPage />} />
                     <Route path="profile" element={<ProfilePage />} />
                 </Route>
+<<<<<<< HEAD
                 <Route path="meeting/:id" element={<MeetingPage />} />
+=======
+                <Route path="meeting/:roomId" element={<MeetingPage />} /> 
+>>>>>>> dedd02b (fix: funcionando del meeting)
             </Routes>
         </BrowserRouter>
     );
