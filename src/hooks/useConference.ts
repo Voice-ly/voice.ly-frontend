@@ -1,4 +1,5 @@
-import { useEffect, useRef } from "react";
+/**
+import { useEffect } from "react";
 import { useConferenceStore } from "../stores/useConferenceStore";
 import { useSocketStore } from "../stores/useSocketStore";
 import type { Participant } from "../types/Conference";
@@ -23,19 +24,11 @@ export const useConference = (roomId: string, userId: string) => {
         reset,
     } = useConferenceStore();
 
-    const {
-        socket,
-        isConnected: socketConnected,
-        connect,
-        disconnect,
-        emitEvent,
-    } = useSocketStore();
-
-    const streamsRef = useRef<Map<string, MediaStream>>(new Map());
+    const { socket, Conference, disconnect, emitEvent } = useSocketStore();
 
     useEffect(() => {
         setJoiningStatus(true);
-        connect(roomId, userId);
+        Conference(roomId, userId);
         return () => {
             disconnect();
             reset();
@@ -71,7 +64,7 @@ export const useConference = (roomId: string, userId: string) => {
 
         socket?.on("user-joined", handleUserJoined);
         socket?.on("user-left", handleUserLeft);
-        socket?.on("uset-updated", handleUserUpdated);
+        socket?.on("user-updated", handleUserUpdated);
         socket?.on("room-info", handleRoomInfo);
 
         return () => {
@@ -140,3 +133,4 @@ export const useConference = (roomId: string, userId: string) => {
         leaveRoom,
     };
 };
+*/

@@ -13,7 +13,6 @@ import Logo from "/logo.jpeg";
  */
 export default function ForgotPassword() {
     const [email, setEmail] = useState("");
-    const [confirmEmail, setConfirmEmail] = useState("");
     const [isSubmitted, setIsSubmitted] = useState(false);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
@@ -27,11 +26,6 @@ export default function ForgotPassword() {
         e.preventDefault();
         setError("");
 
-        // Validate that emails match
-        if (email !== confirmEmail) {
-            setError("Los correos electrónicos no coinciden.");
-            return;
-        }
 
         // Validate email format
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -111,22 +105,7 @@ export default function ForgotPassword() {
                     />
                 </div>
 
-                {/* Confirmar Email Field */}
-                <div className="flex flex-col w-full mb-10">
-                    <label htmlFor="confirmEmail" className="text-sm text-gray-700 mb-2">
-                        Confirmar Email
-                    </label>
-                    <input
-                        type="email"
-                        id="confirmEmail"
-                        name="confirmEmail"
-                        value={confirmEmail}
-                        onChange={(e) => setConfirmEmail(e.target.value)}
-                        className="text-base py-3 px-4 border-b border-gray-300 focus:outline-none focus:border-indigo-600 bg-transparent transition-colors"
-                        placeholder="Confirma tu email"
-                        required
-                    />
-                </div>
+                
 
                 {/* Submit Button */}
                 <div className="flex justify-center mb-10">

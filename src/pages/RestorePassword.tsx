@@ -260,7 +260,7 @@ export default function ForgotPassword() {
               to="/register"
               className="text-blue-600 font-semibold uppercase text-sm tracking-wide hover:text-indigo-600 hover:underline transition-colors"
             >
-              REGÍSTRATE AHORA!
+              ¡Regístrate ahora!
             </Link>
           </p>
 
@@ -270,7 +270,7 @@ export default function ForgotPassword() {
               to="/login"
               className="text-blue-600 font-semibold uppercase text-sm tracking-wide hover:text-indigo-600 hover:underline transition-colors"
             >
-              INICIA SESIÓN AHORA!
+              ¡Inicia sesión ahora!
             </Link>
           </p>
         </div>

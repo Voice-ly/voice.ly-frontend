@@ -19,10 +19,14 @@ import { auth } from "./firebase";
 // Rutas base: /api/users
 
 export function register(request: UserSignupForm): Promise<Response> {
-    return apiFetch("/", {
-        method: "POST",
-        body: JSON.stringify(request),
-    }, "users");
+    return apiFetch(
+        "/",
+        {
+            method: "POST",
+            body: JSON.stringify(request),
+        },
+        "users"
+    );
 }
 
 /**
@@ -47,10 +51,17 @@ export async function getUsers(): Promise<Response> {
  */
 
 export function updateProfile(data: any): Promise<Response> {
-    return apiFetch("/profile", {
-        method: "PUT",
-        body: JSON.stringify(data),
-    }, "users");
+    const token = "Bearer " + localStorage.getItem("token");
+
+    return apiFetch(
+        "/profile",
+        {
+            method: "PUT",
+            body: JSON.stringify(data),
+            headers: { authorization: token },
+        },
+        "users"
+    );
 }
 
 /**
@@ -86,7 +97,6 @@ async function handleSocialRegister(user: any) {
     return register(payload);
 }
 
-
 /**
  * Registers a user using Google authentication.
  * After successful Google sign-in, user data is sent to the backend for account creation.
@@ -105,7 +115,6 @@ export async function registerWithGoogle() {
 
         // Se envía al backend para crear el usuario
         return await handleSocialRegister(user);
-
     } catch (error) {
         console.error("Google registration error:", error);
         throw error;

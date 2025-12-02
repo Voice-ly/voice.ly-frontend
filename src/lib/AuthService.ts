@@ -57,7 +57,12 @@ export function loginWithFacebook() {
  * @returns {Promise<Response>} The API response.
  */
 export function logout(): Promise<Response> {
-    return apiFetch("/logout", { method: "POST" }, "auth");
+    const token = "Bearer " + localStorage.getItem("token");
+    return apiFetch(
+        "/logout",
+        { method: "POST", headers: { authorization: token } },
+        "auth"
+    );
 }
 
 /**
@@ -69,11 +74,14 @@ export function logout(): Promise<Response> {
 export function forgotPassword(
     request: ForgotPasswordRequest
 ): Promise<Response> {
+    const token = "Bearer " + localStorage.getItem("token");
+
     return apiFetch(
         "/forgot-password",
         {
             method: "POST",
             body: JSON.stringify(request),
+            headers: { authorization: token },
         },
         "auth"
     );
@@ -89,11 +97,14 @@ export function resetPassword(
     request: ResetPasswordRequest,
     token: string
 ): Promise<Response> {
+    const authToken = "Bearer " + localStorage.getItem("token");
+
     return apiFetch(
         `/reset-password?token=${token}`,
         {
             method: "POST",
             body: JSON.stringify(request),
+            headers: { authorization: authToken },
         },
         "auth"
     );
