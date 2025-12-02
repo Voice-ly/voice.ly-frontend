@@ -1,4 +1,4 @@
-import type { UserSignupForm } from "../types/User";
+import type { UserSignupForm, } from "../types/User";
 import { apiFetch } from "./fetch";
 import {
     FacebookAuthProvider,
@@ -35,14 +35,8 @@ export function register(request: UserSignupForm): Promise<Response> {
  * @returns {Promise<Response>} A promise containing the user profile data.
  */
 
-export async function getUsers(): Promise<any> {
-    const token = "Bearer " + localStorage.getItem("token");
-
-    const res = await apiFetch(
-        "/profile",
-        { method: "GET", headers: { authorization: token } },
-        "users"
-    );
+export async function getUsers(): Promise<Response> {
+    const res = await apiFetch("/profile", { method: "GET" }, "users");
 
     if (!res.ok) throw new Error("Error obteniendo usuario");
 
@@ -76,17 +70,7 @@ export function updateProfile(data: any): Promise<Response> {
  * @returns {Promise<Response>} A promise that resolves when the account is deleted.
  */
 export function deleteUser(data: any): Promise<Response> {
-    const token = "Bearer " + localStorage.getItem("token");
-
-    return apiFetch(
-        "/profile",
-        {
-            method: "DELETE",
-            body: JSON.stringify(data),
-            headers: { authorization: token },
-        },
-        "users"
-    );
+    return apiFetch("/profile", { method: "DELETE", body: JSON.stringify(data), }, "users");
 }
 
 /**

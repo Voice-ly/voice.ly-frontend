@@ -1,3 +1,4 @@
+import React from "react";
 import { useNavigate } from "react-router";
 
 /**
@@ -9,10 +10,13 @@ import { useNavigate } from "react-router";
  */
 export default function JoinMeeting() {
     const navigate = useNavigate();
+    const [meetingId, setMeetingId] = React.useState("");
 
     function tempJoinMeeting(e: React.MouseEvent) {
         e.preventDefault();
-        navigate("/meeting");
+        if (meetingId.trim()) {
+            navigate(`/meeting/${meetingId}`);
+        }
     }
 
     return (
@@ -45,6 +49,8 @@ export default function JoinMeeting() {
                                 placeholder="Introduce el ID de la reunión"
                                 className="w-full px-4 py-3 border border-gray-300 rounded-md text-base focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                                 required
+                                value={meetingId}
+                                onChange={(e) => setMeetingId(e.target.value)}
                             />
                         </div>
 

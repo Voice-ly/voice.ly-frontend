@@ -33,7 +33,6 @@ export default function DashboardPage() {
             setError("Por favor ingresa un ID");
             return;
         }
-
         setIsJoining(true);
         setError(null);
 
