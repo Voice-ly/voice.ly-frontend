@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useUserStore } from "../stores/useUserStore";
+import { socket } from "../lib/Socket";
 
 /**
  * MeetingPage Component
@@ -27,13 +28,12 @@ import { useUserStore } from "../stores/useUserStore";
  */
 
 export default function MeetingPage() {
-    const { roomId } = useParams();
-    const { profile } = useUserStore();
 
     const [showChat, setShowChat] = useState(false);
 
-    type Message = { text: string; self: boolean };
+    type Message = { text: string; self: boolean; name: string };
     const [messages, setMessages] = useState<Message[]>([]);
+    const [onlineUsersCount, setOnlineUsersCount] = useState(0);
 
     const [inputValue, setInputValue] = useState("");
     const messagesEndRef = useRef<HTMLDivElement | null>(null);
@@ -42,13 +42,61 @@ export default function MeetingPage() {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
     }, [messages]);
 
+
+
+    const { profile } = useUserStore();
+    const { id: meetingId } = useParams();
+    const [guestId] = useState(() => "guest-" + Math.random().toString(36).substr(2, 9));
+    const userId = profile?.id || guestId;
+    const userName = profile?.firstName || "Invitado";
+
+    useEffect(() => {
+        if (!meetingId) return;
+
+        socket.connect();
+
+        socket.emit("newUser", { userId, name: userName, roomId: meetingId });
+
+        const handleMessage = (payload: { userId: string; message: string; name: string }) => {
+            setMessages((prev) => [
+                ...prev,
+                { 
+                    text: payload.message, 
+                    self: payload.userId === userId,
+                    name: payload.name 
+                },
+            ]);
+        };
+
+        socket.on("chat:message", handleMessage);
+
+        const handleUsersOnline = (users: any[]) => {
+            setOnlineUsersCount(users.length);
+        };
+        socket.on("usersOnline", handleUsersOnline);
+
+        return () => {
+            socket.off("chat:message", handleMessage);
+            socket.off("usersOnline", handleUsersOnline);
+            socket.disconnect();
+        };
+        return () => {
+            socket.off("chat:message", handleMessage);
+            socket.off("usersOnline", handleUsersOnline);
+            socket.disconnect();
+        };
+    }, [userId, userName, meetingId]);
+
     const sendMessage = () => {
         if (!inputValue.trim()) return;
-        // use functional update to avoid stale state when updates are frequent
-        setMessages((prev) => [
-            ...prev,
-            { text: inputValue.trim(), self: true },
-        ]);
+        
+        socket.emit("chat:message", {
+            userId,
+            name: userName,
+            message: inputValue.trim(),
+            roomId: meetingId,
+        });
+
         setInputValue("");
     };
 
@@ -61,7 +109,7 @@ export default function MeetingPage() {
 
             <p className="absolute top-4 left-4 flex items-center gap-2 text-sm text-white px-4 py-1 rounded-md transition">
                 <span className="text-green-400 text-lg">●</span>
-                En línea
+                En línea ({onlineUsersCount})
             </p>
 
             <div className="w-full h-full"></div>
@@ -81,18 +129,27 @@ export default function MeetingPage() {
                     </h2>
 
                     {/* Messages */}
-                    <div className="flex-1 overflow-y-auto space-y-3 pr-2">
+                    <div className="flex-1 overflow-y-auto space-y-4 pr-2">
                         {messages.map((msg, index) => (
                             <div
                                 key={index}
-                                className={`w-fit max-w-[70%] px-4 py-2 rounded-2xl text-sm shadow-md break-words 
+                                className={`flex flex-col ${
+                                    msg.self ? "items-end" : "items-start"
+                                }`}
+                            >
+                                <span className="text-xs text-gray-400 mb-1 px-1">
+                                    {msg.self ? "Tú" : msg.name}
+                                </span>
+                                <div
+                                    className={`w-fit max-w-[85%] px-4 py-2 rounded-2xl text-sm shadow-md break-words 
                                     ${
                                         msg.self
-                                            ? "bg-blue-600 ml-auto text-white rounded-br-none"
-                                            : "bg-[#2E2E2E] text-left rounded-bl-none border border-gray-700/40"
+                                            ? "bg-blue-600 text-white rounded-br-none"
+                                            : "bg-[#2E2E2E] text-white rounded-bl-none border border-gray-700/40"
                                     }`}
-                            >
-                                {msg.text}
+                                >
+                                    {msg.text}
+                                </div>
                             </div>
                         ))}
 

@@ -45,7 +45,7 @@ export default function Router() {
                     <Route path="dashboard" element={<DashboardPage />} />
                     <Route path="profile" element={<ProfilePage />} />
                 </Route>
-                <Route path="meeting" element={<MeetingPage />} />
+                <Route path="meeting/:id" element={<MeetingPage />} />
             </Routes>
         </BrowserRouter>
     );

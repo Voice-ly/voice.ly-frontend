@@ -15,8 +15,7 @@ import { useRoomStore } from "../stores/useRoomStore";
  */
 export default function DashboardPage() {
     const navigator = useNavigate();
-    const { profile } = useUserStore();
-    const { socket, connect, error, disconnect, emitEvent } = useSocketStore();
+
     const { currentRoom, setCurrentRoom, setError, isCreating, setCreating } =
         useRoomStore();
 
@@ -33,59 +32,7 @@ export default function DashboardPage() {
      *
      * @returns {Promise<void>}
      */
-    useEffect(() => {
-        setUser(profile);
 
-        // Conectar el socket si no está conectado
-        if (!socket) {
-            connect();
-        }
-
-        // Configurar listeners de socket
-        if (socket) {
-            socket.on("room-created-success", handleRoomCreated);
-            socket.on("room-creation-error", handleRoomError);
-            socket.on("join-error", handleJoinError);
-            socket.on("room-info", handleRoomInfo);
-        }
-
-        return () => {
-            if (socket) {
-                socket.off("room-created-success", handleRoomCreated);
-                socket.off("room-creation-error", handleRoomError);
-                socket.off("join-error", handleJoinError);
-                socket.off("room-info", handleRoomInfo);
-            }
-        };
-    }, [socket, profile]);
-
-    const handleRoomCreated = (data: { room: any; message: string }) => {
-        setCreating(false);
-        setCurrentRoom(data.room);
-        setError(null);
-
-        // Navegar a la room creada
-        navigator(`/meeting/${data.room.id}`);
-    };
-
-    const handleRoomError = (data: { message: string }) => {
-        setCreating(false);
-        setError(data.message);
-    };
-
-    const handleJoinError = (data: { message: string }) => {
-        setIsJoining(false);
-        setError(data.message);
-    };
-
-    const handleRoomInfo = (data: { room: any; participants: any[] }) => {
-        setIsJoining(false);
-        setCurrentRoom(data.room);
-        setError(null);
-
-        // Navegar a la room
-        navigator(`/meeting/${data.room.id}`);
-    };
 
     /**
      * Redirects the user to the meeting page.
@@ -98,24 +45,9 @@ export default function DashboardPage() {
             setError("Por favor ingresa un ID de reunión");
             return;
         }
-
         setIsJoining(true);
         setError(null);
-
-        // Emitir evento para unirse a la room
-        emitEvent("join-room", {
-            roomId: joinRoomId.trim(),
-            user: {
-                id: user?.id || `user-${Date.now()}`,
-                userId: user?.id || `user-${Date.now()}`,
-                name: user?.firstName
-                    ? `${user.firstName} ${user.lastName || ""}`
-                    : `Usuario${Date.now().toString().slice(-4)}`,
-                isAudioEnabled: true,
-                isVideoEnabled: true,
-                isCurrentUser: true,
-            },
-        });
+        navigator(`/meeting/${joinRoomId}`);
     }
 
     const createMeeting = () => {
@@ -123,18 +55,13 @@ export default function DashboardPage() {
             setError("Por favor ingresa un título para la reunión");
             return;
         }
+        
+        const newMeetingId = Math.random().toString(36).substring(2, 10) + Math.random().toString(36).substring(2, 10);
+        navigator(`/meeting/${newMeetingId}`); 
 
-        setCreating(true);
-        setError(null);
+        // setCreating(true);
+        // setError(null);
 
-        emitEvent("create-room", {
-            name: title,
-            description:
-                description ||
-                `Reunión creada por ${user?.firstName || "Usuario"}`,
-            createdBy: user?.id || `user-${Date.now()}`,
-            maxParticipants: 10, // Puedes hacer esto configurable
-        });
     };
 
     const handleKeyPress = (e: React.KeyboardEvent, action: () => void) => {
@@ -149,13 +76,6 @@ export default function DashboardPage() {
             <h1 className="text-[28px] md:text-[34px] font-bold text-center text-[#304FFE] mb-10">
                 Bienvenido {user?.firstName || ""} 👋
             </h1>
-
-            {/* Mostrar errores */}
-            {error && (
-                <div className="max-w-lg mx-auto mb-6 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg">
-                    {error}
-                </div>
-            )}
 
             {/* --- MAIN SECTION: LEFT (text + illustration) | RIGHT (forms) --- */}
             <section className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
