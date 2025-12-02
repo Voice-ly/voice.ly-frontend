@@ -2,16 +2,26 @@ import { useEffect, useState } from "react";
 import { useChatSocketStore } from "../stores/useChatSocketStore";
 import { useUserStore } from "../stores/useUserStore";
 
+/**
+ *  Properties of the chat room
+ */
 interface Props {
   roomId: string | undefined;
   messagesEndRef: React.RefObject<HTMLDivElement | null>;
   showChat: boolean;
+  onClose: () => void;
 }
 
+/**
+ * Participants Array Model
+ */
 interface ParticipantMap {
   [uid: string]: string; // uid -> firstName
 }
 
+/**
+ * Messages Model
+ */
 interface Message {
   meetingId: string;
   senderId: string;
@@ -20,7 +30,13 @@ interface Message {
   createdAt: number;
 }
 
-export default function ChatPanel({ roomId, messagesEndRef }: Props) {
+/**
+ * Panel that works as a Chat, where users can send messages.
+ *  
+ * @param param0 : roomId, which identifies the room for the chat, and reference to the endpoint
+ * @returns : The visual panel for the chat
+ */
+export default function ChatPanel({ roomId, messagesEndRef, showChat, onClose }: Props) {
   const { profile } = useUserStore();
   const { socket, connect } = useChatSocketStore();
 
@@ -28,13 +44,18 @@ export default function ChatPanel({ roomId, messagesEndRef }: Props) {
   const [inputText, setInputText] = useState("");
   const [participantsMap, setParticipantsMap] = useState<ParticipantMap>({});
 
-  // Conectar socket al montar
+  /**
+   * Connects to the socket on mount
+   */
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) return;
     connect(token);
 
-    //Add event to send w Enter or Intro keys
+    /**
+     * Key event to send messages with Enter.
+     * @param e : Keyboard event
+     */
     const handleKeyDown = (e: KeyboardEvent) => {
       // Enter or Intro
       if (e.key === "Enter") {
@@ -50,7 +71,9 @@ export default function ChatPanel({ roomId, messagesEndRef }: Props) {
 
 
 
-  // Unirse al room y escuchar mensajes
+  /**
+   * Join to the room and listens(shows) the messages on the panel.
+   */
   useEffect(() => {
     if (!socket || !roomId) return;
 
@@ -80,6 +103,11 @@ export default function ChatPanel({ roomId, messagesEndRef }: Props) {
     };
   }, [socket, roomId]);
 
+  /**
+   * Method on charge to handle the sending of messages.
+   * 
+   * @returns returns response from the backend.
+   */
   const handleSend = () => {
     if (!socket || !inputText.trim() || !roomId) return;
 
@@ -91,6 +119,9 @@ export default function ChatPanel({ roomId, messagesEndRef }: Props) {
     setInputText("");
   };
 
+  /**
+   * Method on charge to get the name from the sender.
+   */
   const getSenderName = (senderId: string) => {
     if (senderId === profile.id) return profile.firstName;
     return participantsMap[senderId] || "Usuario";
@@ -98,15 +129,35 @@ export default function ChatPanel({ roomId, messagesEndRef }: Props) {
 
   return (
     <div
-      className="
-        absolute right-0 top-0 h-full w-80 bg-[#1E1E1E] text-white 
-        shadow-xl border-l border-gray-700 p-4 pb-24 flex flex-col
-        animate-slide-left z-30
-      "
+      className={`fixed inset-0 md:right-0 md:left-auto md:w-80 h-full bg-[#1E1E1E] text-white 
+        shadow-xl md:border-l border-gray-700 p-4 pb-24 flex flex-col
+        transition-transform duration-300 z-30
+        ${showChat ? 'translate-x-0' : 'translate-x-full'}`}
     >
-      <h2 className="text-lg font-semibold mb-3 pb-2 border-b border-gray-700/50 tracking-wide">
-        Chat de la reunión
-      </h2>
+      <div className="flex items-center justify-between mb-3 pb-2 border-b border-gray-700/50">
+        <h2 className="text-lg font-semibold tracking-wide">
+          Chat de la reunión
+        </h2>
+        <button
+          onClick={onClose}
+          className="w-8 h-8 flex items-center justify-center rounded-full bg-gray-800 hover:bg-gray-700 transition-colors flex-shrink-0"
+          aria-label="Cerrar chat"
+        >
+          <svg 
+            className="w-5 h-5" 
+            fill="none" 
+            stroke="currentColor" 
+            viewBox="0 0 24 24"
+          >
+            <path 
+              strokeLinecap="round" 
+              strokeLinejoin="round" 
+              strokeWidth={2} 
+              d="M6 18L18 6M6 6l12 12" 
+            />
+          </svg>
+        </button>
+      </div>
 
       <div className="flex-1 overflow-y-auto space-y-3 pr-2">
         {messages.length === 0 && (
