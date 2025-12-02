@@ -69,6 +69,7 @@ export default function ChatPanel({ roomId, messagesEndRef }: Props) {
 
     // Escuchar lista de participantes para mapear senderId -> firstName
     const handleParticipants = (participants: { uid: string; firstName: string }[]) => {
+      console.log(participants)
       const map: ParticipantMap = {};
       participants.forEach((p) => (map[p.uid] = p.firstName));
       setParticipantsMap(map);
