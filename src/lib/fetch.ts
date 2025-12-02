@@ -40,8 +40,6 @@ export function apiFetch(
 
     return fetch(baseUrl + endpoint, {
         ...options,
-        headers,
-        credentials: "include",
     });
 }
 
@@ -60,6 +58,5 @@ export function chatApiFetch(
     return fetch(baseUrl + endpoint, {
         headers,
         ...options,
-        credentials: "include",
     });
 }

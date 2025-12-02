@@ -1,4 +1,4 @@
-import type { UserSignupForm, } from "../types/User";
+import type { UserSignupForm } from "../types/User";
 import { apiFetch } from "./fetch";
 import {
     FacebookAuthProvider,
@@ -19,10 +19,14 @@ import { auth } from "./firebase";
 // Rutas base: /api/users
 
 export function register(request: UserSignupForm): Promise<Response> {
-    return apiFetch("/", {
-        method: "POST",
-        body: JSON.stringify(request),
-    }, "users");
+    return apiFetch(
+        "/",
+        {
+            method: "POST",
+            body: JSON.stringify(request),
+        },
+        "users"
+    );
 }
 
 /**
@@ -31,8 +35,14 @@ export function register(request: UserSignupForm): Promise<Response> {
  * @returns {Promise<Response>} A promise containing the user profile data.
  */
 
-export async function getUsers(): Promise<Response> {
-    const res = await apiFetch("/profile", { method: "GET" }, "users");
+export async function getUsers(): Promise<any> {
+    const token = "Bearer " + localStorage.getItem("token");
+
+    const res = await apiFetch(
+        "/profile",
+        { method: "GET", headers: { authorization: token } },
+        "users"
+    );
 
     if (!res.ok) throw new Error("Error obteniendo usuario");
 
@@ -47,10 +57,17 @@ export async function getUsers(): Promise<Response> {
  */
 
 export function updateProfile(data: any): Promise<Response> {
-    return apiFetch("/profile", {
-        method: "PUT",
-        body: JSON.stringify(data),
-    }, "users");
+    const token = "Bearer " + localStorage.getItem("token");
+
+    return apiFetch(
+        "/profile",
+        {
+            method: "PUT",
+            body: JSON.stringify(data),
+            headers: { authorization: token },
+        },
+        "users"
+    );
 }
 
 /**
@@ -59,7 +76,17 @@ export function updateProfile(data: any): Promise<Response> {
  * @returns {Promise<Response>} A promise that resolves when the account is deleted.
  */
 export function deleteUser(data: any): Promise<Response> {
-    return apiFetch("/profile", { method: "DELETE", body: JSON.stringify(data), }, "users");
+    const token = "Bearer " + localStorage.getItem("token");
+
+    return apiFetch(
+        "/profile",
+        {
+            method: "DELETE",
+            body: JSON.stringify(data),
+            headers: { authorization: token },
+        },
+        "users"
+    );
 }
 
 /**
@@ -86,7 +113,6 @@ async function handleSocialRegister(user: any) {
     return register(payload);
 }
 
-
 /**
  * Registers a user using Google authentication.
  * After successful Google sign-in, user data is sent to the backend for account creation.
@@ -105,7 +131,6 @@ export async function registerWithGoogle() {
 
         // Se envía al backend para crear el usuario
         return await handleSocialRegister(user);
-
     } catch (error) {
         console.error("Google registration error:", error);
         throw error;

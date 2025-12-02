@@ -38,15 +38,15 @@ export default function LoginPage() {
     };
 
     const { setProfile } = useUserStore();
-    
+
     /**
      * React state holding the login form fields.
      * @type {[UserSigninForm, Function]}
      */
     const [form, setForm] = useState<UserSigninForm>(initialForm);
 
-    /** Password vibility toggle**/ 
-    const [showPassword, setShowPassword] = useState (false);
+    /** Password vibility toggle**/
+    const [showPassword, setShowPassword] = useState(false);
     const togglePasswordVisibility = () => setShowPassword(!showPassword);
     // validation function on inputs
     const validateInputs = () => {
@@ -69,7 +69,6 @@ export default function LoginPage() {
         return true;
     };
 
-
     /**
      * Handles changes in form input fields.
      *
@@ -88,14 +87,14 @@ export default function LoginPage() {
      * @returns {Promise<void>}
      */
     const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault();
-    if (!validateInputs()) return;
+        e.preventDefault();
+        if (!validateInputs()) return;
 
-    try {
-        const res = await login(form);
+        try {
+            const res = await login(form);
 
-        const data = await res.json(); 
-
+            const data = await res.json();
+            console.log(data);
             if (!res.ok) {
                 showToast("Correo o contraseña inválidos", "error");
                 return;
@@ -112,13 +111,11 @@ export default function LoginPage() {
             localStorage.setItem("token", token.token);
             setProfile(getProfile);
             navigate("/dashboard");
-
         } catch (e) {
             console.log("Error " + e);
             showToast("Error al iniciar sesión", "error");
         }
     };
-
 
     const handleLoginWithGoogle = (e: Event) => {
         e.preventDefault();
@@ -175,7 +172,10 @@ export default function LoginPage() {
                         alert(
                             "Este email ya está registrado con Google. Debes iniciar sesión con Google."
                         );
-                        showToast("Este correo ya está registrado con otro método", "error");
+                        showToast(
+                            "Este correo ya está registrado con otro método",
+                            "error"
+                        );
                         const googleProvider = new GoogleAuthProvider();
                         const googleResult = await signInWithPopup(
                             auth,
@@ -229,7 +229,10 @@ export default function LoginPage() {
                         createdAt,
                     };
                     setProfile(profile);
-                    showToast("Inicio de sesión con Facebook exitoso", "success");
+                    showToast(
+                        "Inicio de sesión con Facebook exitoso",
+                        "success"
+                    );
                     navigate("/dashboard");
                 }
                 console.log(user);
@@ -238,7 +241,6 @@ export default function LoginPage() {
                 if (
                     error.code ===
                     "auth/account-exists-with-different-credential"
-                    
                 ) {
                     const email = error.customData.email;
                     const pendingCred = error.credential;
@@ -254,7 +256,10 @@ export default function LoginPage() {
                         alert(
                             "Este email ya está registrado con Google. Debes iniciar sesión con Google."
                         );
-                        showToast("Este correo ya está registrado con otro método", "error");
+                        showToast(
+                            "Este correo ya está registrado con otro método",
+                            "error"
+                        );
                         const googleProvider = new GoogleAuthProvider();
                         const googleResult = await signInWithPopup(
                             auth,
@@ -271,7 +276,7 @@ export default function LoginPage() {
                     }
                 } else {
                     console.log(error);
-                     showToast("Error al iniciar sesión con Facebook", "error");
+                    showToast("Error al iniciar sesión con Facebook", "error");
                 }
             });
     };
@@ -321,13 +326,12 @@ export default function LoginPage() {
                     />
 
                     <button
-                            type="button"
-                            onClick={togglePasswordVisibility}
-                            className="absolute right-2 top-7 text-xs text-blue-800"
-                        >
-                            {showPassword ? "Ocultar" : "Ver"}
+                        type="button"
+                        onClick={togglePasswordVisibility}
+                        className="absolute right-2 top-7 text-xs text-blue-800"
+                    >
+                        {showPassword ? "Ocultar" : "Ver"}
                     </button>
-                    
                 </div>
 
                 {/* Forgot password link */}
