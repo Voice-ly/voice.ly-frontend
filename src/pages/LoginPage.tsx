@@ -120,13 +120,6 @@ export default function LoginPage() {
         loginWithGoogle()
             .then(async (result: any) => {
                 const user: any = result.user;
-                const creationTime =
-                    user.auth.currentUser.metadata.creationTime;
-                const createdAt = {
-                    _seconds: Math.floor(
-                        new Date(creationTime).getTime() / 1000
-                    ),
-                };
 
                 const idToken = await user.getIdToken();
                 const res = await apiFetch(
