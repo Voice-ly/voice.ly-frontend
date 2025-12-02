@@ -14,13 +14,13 @@ interface ParticipantMap {
   [uid: string]: string; // uid -> firstName
 }
 
-interface Message {
+/*interface Message {
   meetingId: string;
   senderId: string;
   message: string;
   senderDisplayName?: string;
   createdAt: number;
-}
+}*/
 
 export default function ChatPanel({ roomId, messagesEndRef }: Props) {
   const { profile } = useUserStore();
