@@ -44,10 +44,11 @@ export function apiFetch(
     });
 }
 
+
 export function chatApiFetch(
     endpoint: string = "",
     options: RequestInit = {},
-    base: "chat" = "chat"
+    base: "meeting" = "meeting"
 ): Promise<Response> {
     const baseUrl = import.meta.env.VITE_CHAT_URL + `/api/${base}`;
 
@@ -57,7 +58,8 @@ export function chatApiFetch(
     });
 
     return fetch(baseUrl + endpoint, {
-        ...options,
         headers,
+        ...options,
+        credentials: "include",
     });
 }
