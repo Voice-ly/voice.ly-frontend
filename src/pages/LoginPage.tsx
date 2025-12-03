@@ -38,7 +38,7 @@ export default function LoginPage() {
     };
 
     const { setProfile } = useUserStore();
-
+    
     /**
      * React state holding the login form fields.
      * @type {[UserSigninForm, Function]}
@@ -87,14 +87,14 @@ export default function LoginPage() {
      * @returns {Promise<void>}
      */
     const handleSubmit = async (e: FormEvent) => {
-        e.preventDefault();
-        if (!validateInputs()) return;
+    e.preventDefault();
+    if (!validateInputs()) return;
 
-        try {
-            const res = await login(form);
+    try {
+        const res = await login(form);
 
-            const data = await res.json();
-            console.log(data);
+        const data = await res.json(); 
+
             if (!res.ok) {
                 showToast("Correo o contraseña inválidos", "error");
                 return;
@@ -111,11 +111,13 @@ export default function LoginPage() {
             localStorage.setItem("token", token.token);
             setProfile(getProfile);
             navigate("/dashboard");
+
         } catch (e) {
             console.log("Error " + e);
             showToast("Error al iniciar sesión", "error");
         }
     };
+
 
     const handleLoginWithGoogle = (e: Event) => {
         e.preventDefault();

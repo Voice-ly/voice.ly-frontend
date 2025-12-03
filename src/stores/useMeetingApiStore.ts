@@ -8,7 +8,7 @@ interface MeetingApiState {
     setError: (msg: string | null) => void;
 }
 
-// URL
+// URL 
 const BASE_URL = "https://voice-ly.onrender.com/api/meetings";
 
 export const useMeetingApiStore = create<MeetingApiState>((set) => ({
@@ -19,12 +19,13 @@ export const useMeetingApiStore = create<MeetingApiState>((set) => ({
     // CREATE MEETING → POST /api/meetings
     createMeeting: async (title, description) => {
         try {
-            const token = "Bearer " + localStorage.getItem("token");
+            const token = localStorage.getItem("token");
+
             const resp = await fetch(`${BASE_URL}`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    authorization: token,
+                    Authorization: `Bearer ${token}`,
                 },
                 body: JSON.stringify({
                     title,
@@ -39,7 +40,7 @@ export const useMeetingApiStore = create<MeetingApiState>((set) => ({
                 return null;
             }
 
-            return data.data;
+            return data.data; 
         } catch {
             set({ error: "No se pudo conectar con el servidor" });
             return null;
@@ -49,12 +50,13 @@ export const useMeetingApiStore = create<MeetingApiState>((set) => ({
     // JOIN MEETING → POST /api/meetings/:id/join
     joinMeeting: async (meetingId) => {
         try {
-            const token = "Bearer " + localStorage.getItem("token");
+            const token = localStorage.getItem("token");
+
             const resp = await fetch(`${BASE_URL}/${meetingId}/join`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    authorization: token,
+                    Authorization: `Bearer ${token}`,
                 },
             });
 
@@ -75,13 +77,11 @@ export const useMeetingApiStore = create<MeetingApiState>((set) => ({
     // GET MEETING BY ID → GET /api/meetings/:id
     getMeetingById: async (meetingId) => {
         try {
-            const token = "Bearer " + localStorage.getItem("token");
+            const token = localStorage.getItem("token");
+
             const resp = await fetch(`${BASE_URL}/${meetingId}`, {
                 method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                    authorization: token,
-                },
+                headers: { Authorization: `Bearer ${token}` },
             });
 
             const data = await resp.json();
