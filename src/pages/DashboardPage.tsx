@@ -126,11 +126,10 @@ export default function DashboardPage() {
                         <button
                             onClick={handleJoinMeeting}
                             disabled={isJoining}
-                            className={`w-full mt-4 py-2 bg-[#304FFE] rounded-full text-white font-semibold transition ${
-                                isJoining
+                            className={`w-full mt-4 py-2 bg-[#304FFE] rounded-full text-white font-semibold transition ${isJoining
                                     ? "opacity-50 cursor-not-allowed"
                                     : "hover:bg-[#1E40FF]"
-                            }`}
+                                }`}
                         >
                             {isJoining ? "Uniéndose..." : "Unirse"}
                         </button>
@@ -175,11 +174,10 @@ export default function DashboardPage() {
                             <button
                                 onClick={handleCreateMeeting}
                                 disabled={isCreating || !title.trim()}
-                                className={`w-full mt-6 py-3 bg-[#304FFE] text-white font-semibold rounded-full transition ${
-                                    isCreating || !title.trim()
+                                className={`w-full mt-6 py-3 bg-[#304FFE] text-white font-semibold rounded-full transition ${isCreating || !title.trim()
                                         ? "opacity-50 cursor-not-allowed"
                                         : "hover:bg-[#1E40FF]"
-                                }`}
+                                    }`}
                             >
                                 {isCreating ? "Creando..." : "Crear reunión"}
                             </button>

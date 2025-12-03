@@ -6,6 +6,7 @@ import type {
 import { apiFetch } from "./fetch";
 import {
     FacebookAuthProvider,
+    GithubAuthProvider,
     GoogleAuthProvider,
     signInWithPopup,
 } from "firebase/auth";
@@ -41,13 +42,12 @@ export function loginWithGoogle() {
 }
 
 /**
- * Authenticates the user using Facebook OAuth via Firebase.
+ * Authenticates the user using Github OAuth via Firebase.
  *
  * @returns {Promise<void>} Resolves when authentication completes.
  */
-
-export function loginWithFacebook() {
-    const provider = new FacebookAuthProvider();
+export function loginWithGithub() {
+    const provider = new GithubAuthProvider();
     return signInWithPopup(auth, provider);
 }
 
