@@ -130,6 +130,14 @@ export default function LoginPage() {
                     },
                     "auth"
                 );
+                const creationTime =
+                    user.auth.currentUser.metadata.creationTime;
+
+                const createdAt = {
+                    _seconds: Math.floor(
+                        new Date(creationTime).getTime() / 1000
+                    ),
+                };
 
                 const token = await res.json();
                 localStorage.setItem("token", token.token);

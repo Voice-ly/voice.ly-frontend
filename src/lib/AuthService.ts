@@ -5,7 +5,6 @@ import type {
 } from "../types/User";
 import { apiFetch } from "./fetch";
 import {
-    FacebookAuthProvider,
     GithubAuthProvider,
     GoogleAuthProvider,
     signInWithPopup,
