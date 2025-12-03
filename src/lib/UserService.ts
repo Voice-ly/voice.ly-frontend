@@ -1,7 +1,7 @@
-import type { UserSignupForm, } from "../types/User";
+import type { UserSignupForm } from "../types/User";
 import { apiFetch } from "./fetch";
 import {
-    FacebookAuthProvider,
+    GithubAuthProvider,
     //getAuth,
     GoogleAuthProvider,
     signInWithPopup,
@@ -35,8 +35,14 @@ export function register(request: UserSignupForm): Promise<Response> {
  * @returns {Promise<Response>} A promise containing the user profile data.
  */
 
-export async function getUsers(): Promise<Response> {
-    const res = await apiFetch("/profile", { method: "GET" }, "users");
+export async function getUsers(): Promise<any> {
+    const token = "Bearer " + localStorage.getItem("token");
+
+    const res = await apiFetch(
+        "/profile",
+        { method: "GET", headers: { authorization: token } },
+        "users"
+    );
 
     if (!res.ok) throw new Error("Error obteniendo usuario");
 
@@ -70,7 +76,17 @@ export function updateProfile(data: any): Promise<Response> {
  * @returns {Promise<Response>} A promise that resolves when the account is deleted.
  */
 export function deleteUser(data: any): Promise<Response> {
-    return apiFetch("/profile", { method: "DELETE", body: JSON.stringify(data), }, "users");
+    const token = "Bearer " + localStorage.getItem("token");
+
+    return apiFetch(
+        "/profile",
+        {
+            method: "DELETE",
+            body: JSON.stringify(data),
+            headers: { authorization: token },
+        },
+        "users"
+    );
 }
 
 /**
@@ -121,21 +137,11 @@ export async function registerWithGoogle() {
     }
 }
 
-/**
- * Registers a user using Facebook authentication.
- * After successful Facebook login, user data is forwarded to the backend.
- *
- * @async
- * @returns {Promise<Response>} Backend response after registration attempt.
- * @throws Will throw an error if Facebook authentication fails.
- */
-// Register with Facebook
-export async function registerWithFacebook() {
-    const provider = new FacebookAuthProvider();
+export async function registerWithGithub() {
+    const provider = new GithubAuthProvider();
     try {
         const result = await signInWithPopup(auth, provider);
         const user = result.user;
-
         return await handleSocialRegister(user);
     } catch (error) {
         console.error("Facebook error", error);

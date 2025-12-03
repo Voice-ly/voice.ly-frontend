@@ -1,10 +1,10 @@
 import { Link, useNavigate } from "react-router";
 import logo from "/logo.jpeg";
 import { useState, type ChangeEvent, type FormEvent } from "react";
-import { login, loginWithFacebook, loginWithGoogle } from "../lib/AuthService";
+import { login, loginWithGithub, loginWithGoogle } from "../lib/AuthService";
 import type { UserSigninForm } from "../types/User";
 import {
-    FacebookLoginButton,
+    GitHubLoginButton,
     GoogleLoginButton,
 } from "../components/AuthButtons";
 import { getUsers } from "../lib/UserService";
@@ -130,6 +130,14 @@ export default function LoginPage() {
                     },
                     "auth"
                 );
+                const creationTime =
+                    user.auth.currentUser.metadata.creationTime;
+
+                const createdAt = {
+                    _seconds: Math.floor(
+                        new Date(creationTime).getTime() / 1000
+                    ),
+                };
 
                 const token = await res.json();
                 localStorage.setItem("token", token.token);
@@ -137,8 +145,14 @@ export default function LoginPage() {
                 console.log(getProfile);
 
                 if (res.ok) {
-  
-                    setProfile(getProfile);
+                    const profile = {
+                        firstName: user.auth.currentUser.displayName,
+                        email: user.auth.currentUser.email,
+                        createdAt,
+                    };
+                    const token = await res.json();
+                    localStorage.setItem("token", token.token);
+                    setProfile(profile);
                     showToast("Inicio de sesión con Google exitoso", "success");
                     navigate("/dashboard");
                 }
@@ -159,8 +173,9 @@ export default function LoginPage() {
 
                     // Caso típico: ya existe la cuenta con Google
                     if (providers.includes("google.com")) {
-                        alert(
-                            "Este email ya está registrado con Google. Debes iniciar sesión con Google."
+                        showToast(
+                            "Este correo ya está registrado con otro método",
+                            "error"
                         );
                         showToast(
                             "Este correo ya está registrado con otro método",
@@ -187,9 +202,9 @@ export default function LoginPage() {
             });
     };
 
-    const handleLoginWithFacebook = (e: Event) => {
+    const handleLoginWithGithub = (e: Event) => {
         e.preventDefault();
-        loginWithFacebook()
+        loginWithGithub()
             .then(async (result) => {
                 // The signed-in user info.
                 const user: any = result.user;
@@ -219,13 +234,15 @@ export default function LoginPage() {
                         createdAt,
                     };
                     setProfile(profile);
+
+                    const token = await res.json();
+                    localStorage.setItem("token", token.token);
                     showToast(
                         "Inicio de sesión con Facebook exitoso",
                         "success"
                     );
                     navigate("/dashboard");
                 }
-                console.log(user);
             })
             .catch(async (error) => {
                 if (
@@ -243,9 +260,6 @@ export default function LoginPage() {
 
                     // Caso típico: ya existe la cuenta con Google
                     if (providers.includes("google.com")) {
-                        alert(
-                            "Este email ya está registrado con Google. Debes iniciar sesión con Google."
-                        );
                         showToast(
                             "Este correo ya está registrado con otro método",
                             "error"
@@ -266,7 +280,7 @@ export default function LoginPage() {
                     }
                 } else {
                     console.log(error);
-                    showToast("Error al iniciar sesión con Facebook", "error");
+                    showToast("Error al iniciar sesión con Github", "error");
                 }
             });
     };
@@ -277,7 +291,7 @@ export default function LoginPage() {
             <h1 className="text-3xl text-center font-bold">Inicia Sesión</h1>
             <div className="flex gap-3 justify-center my-4">
                 <GoogleLoginButton submit={handleLoginWithGoogle} />
-                <FacebookLoginButton submit={handleLoginWithFacebook} />
+                <GitHubLoginButton submit={handleLoginWithGithub} />
             </div>
             <form method="post" className="w-full" onSubmit={handleSubmit}>
                 {/* EMAIL */}
