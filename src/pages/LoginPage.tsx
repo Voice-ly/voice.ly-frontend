@@ -231,13 +231,15 @@ export default function LoginPage() {
                         createdAt,
                     };
                     setProfile(profile);
+
+                    const token = await res.json();
+                    localStorage.setItem("token", token.token);
                     showToast(
                         "Inicio de sesión con Facebook exitoso",
                         "success"
                     );
                     navigate("/dashboard");
                 }
-                console.log(user);
             })
             .catch(async (error) => {
                 if (
