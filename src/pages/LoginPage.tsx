@@ -120,13 +120,6 @@ export default function LoginPage() {
         loginWithGoogle()
             .then(async (result: any) => {
                 const user: any = result.user;
-                const creationTime =
-                    user.auth.currentUser.metadata.creationTime;
-                const createdAt = {
-                    _seconds: Math.floor(
-                        new Date(creationTime).getTime() / 1000
-                    ),
-                };
 
                 const idToken = await user.getIdToken();
                 const res = await apiFetch(
@@ -138,15 +131,14 @@ export default function LoginPage() {
                     "auth"
                 );
 
+                const token = await res.json();
+                localStorage.setItem("token", token.token);
+                const getProfile = await getUsers();
+                console.log(getProfile);
+
                 if (res.ok) {
-                    const profile = {
-                        firstName: user.auth.currentUser.displayName,
-                        email: user.auth.currentUser.email,
-                        createdAt,
-                    };
-                    const token = await res.json();
-                    localStorage.setItem("token", token.token);
-                    setProfile(profile);
+  
+                    setProfile(getProfile);
                     showToast("Inicio de sesión con Google exitoso", "success");
                     navigate("/dashboard");
                 }
