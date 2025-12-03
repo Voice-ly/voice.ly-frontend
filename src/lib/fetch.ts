@@ -48,7 +48,7 @@ export function apiFetch(
 export function chatApiFetch(
     endpoint: string = "",
     options: RequestInit = {},
-    base: "meeting" = "meeting"
+    base: "chat" = "chat"
 ): Promise<Response> {
     const baseUrl = import.meta.env.VITE_CHAT_URL + `/api/${base}`;
 

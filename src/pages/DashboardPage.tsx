@@ -11,7 +11,8 @@ export default function DashboardPage() {
     const navigator = useNavigate();
 
     const { profile, token } = useUserStore();
-    const { setCurrentRoom, setError, isCreating, setCreating } = useRoomStore();
+    const { setCurrentRoom, setError, isCreating, setCreating } =
+        useRoomStore();
     const { createMeeting, joinMeeting, error } = useMeetingApiStore();
 
     const [title, setTitle] = useState("");
@@ -25,9 +26,8 @@ export default function DashboardPage() {
         setUser(profile);
     }, [profile]);
 
-    
     //  JOIN MEETING
-   
+
     const handleJoinMeeting = async () => {
         if (!joinRoomId.trim()) {
             setError("Por favor ingresa un ID");
@@ -48,9 +48,8 @@ export default function DashboardPage() {
         navigator(`/meeting/${joinRoomId}`);
     };
 
-    
     //  CREATE MEETING
-    
+
     const handleCreateMeeting = async () => {
         if (!title.trim()) {
             setError("Por favor ingresa un título");
@@ -120,7 +119,9 @@ export default function DashboardPage() {
                             placeholder="Introduce el ID"
                             value={joinRoomId}
                             onChange={(e) => setJoinRoomId(e.target.value)}
-                            onKeyPress={(e) => handleKeyPress(e, handleJoinMeeting)}
+                            onKeyPress={(e) =>
+                                handleKeyPress(e, handleJoinMeeting)
+                            }
                             disabled={isJoining}
                         />
 
@@ -155,7 +156,9 @@ export default function DashboardPage() {
                                 className="w-full mt-2 px-4 py-2 border border-gray-300 rounded-lg outline-none focus:border-[#304FFE]"
                                 value={title}
                                 onChange={(e) => setTitle(e.target.value)}
-                                onKeyPress={(e) => handleKeyPress(e, handleCreateMeeting)}
+                                onKeyPress={(e) =>
+                                    handleKeyPress(e, handleCreateMeeting)
+                                }
                                 disabled={isCreating}
                             />
 
@@ -184,7 +187,6 @@ export default function DashboardPage() {
                             </button>
                         </div>
                     </div>
-
                 </div>
             </section>
         </div>
