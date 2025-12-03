@@ -19,13 +19,11 @@ export const useMeetingApiStore = create<MeetingApiState>((set) => ({
     // CREATE MEETING → POST /api/meetings
     createMeeting: async (title, description) => {
         try {
-            const token = localStorage.getItem("token");
-
             const resp = await fetch(`${BASE_URL}`, {
                 method: "POST",
+                credentials: "include", // Envia la cookie token
                 headers: {
                     "Content-Type": "application/json",
-                    Authorization: `Bearer ${token}`,
                 },
                 body: JSON.stringify({
                     title,
@@ -50,14 +48,9 @@ export const useMeetingApiStore = create<MeetingApiState>((set) => ({
     // JOIN MEETING → POST /api/meetings/:id/join
     joinMeeting: async (meetingId) => {
         try {
-            const token = localStorage.getItem("token");
-
             const resp = await fetch(`${BASE_URL}/${meetingId}/join`, {
                 method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${token}`,
-                },
+                credentials: "include",
             });
 
             const data = await resp.json();
@@ -77,11 +70,9 @@ export const useMeetingApiStore = create<MeetingApiState>((set) => ({
     // GET MEETING BY ID → GET /api/meetings/:id
     getMeetingById: async (meetingId) => {
         try {
-            const token = localStorage.getItem("token");
-
             const resp = await fetch(`${BASE_URL}/${meetingId}`, {
                 method: "GET",
-                headers: { Authorization: `Bearer ${token}` },
+                credentials: "include",
             });
 
             const data = await resp.json();
