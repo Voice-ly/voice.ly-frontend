@@ -49,9 +49,13 @@ export const useMeetingApiStore = create<MeetingApiState>((set) => ({
     // JOIN MEETING → POST /api/meetings/:id/join
     joinMeeting: async (meetingId) => {
         try {
+            const token = "Bearer " + localStorage.getItem("token");
             const resp = await fetch(`${BASE_URL}/${meetingId}/join`, {
                 method: "POST",
-                credentials: "include",
+                headers: {
+                    "Content-Type": "application/json",
+                    authorization: token,
+                },
             });
 
             const data = await resp.json();
@@ -71,9 +75,13 @@ export const useMeetingApiStore = create<MeetingApiState>((set) => ({
     // GET MEETING BY ID → GET /api/meetings/:id
     getMeetingById: async (meetingId) => {
         try {
+            const token = "Bearer " + localStorage.getItem("token");
             const resp = await fetch(`${BASE_URL}/${meetingId}`, {
                 method: "GET",
-                credentials: "include",
+                headers: {
+                    "Content-Type": "application/json",
+                    authorization: token,
+                },
             });
 
             const data = await resp.json();

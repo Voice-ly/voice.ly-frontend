@@ -107,8 +107,6 @@ export default function LoginPage() {
             console.log(getProfile);
 
             showToast("Inicio de sesión exitoso", "success");
-            const token = await res.json();
-            localStorage.setItem("token", token.token);
             setProfile(getProfile);
             navigate("/dashboard");
         } catch (e) {
@@ -122,13 +120,6 @@ export default function LoginPage() {
         loginWithGoogle()
             .then(async (result: any) => {
                 const user: any = result.user;
-                const creationTime =
-                    user.auth.currentUser.metadata.creationTime;
-                const createdAt = {
-                    _seconds: Math.floor(
-                        new Date(creationTime).getTime() / 1000
-                    ),
-                };
 
                 const idToken = await user.getIdToken();
                 const res = await apiFetch(
@@ -174,6 +165,10 @@ export default function LoginPage() {
 
                     // Caso típico: ya existe la cuenta con Google
                     if (providers.includes("google.com")) {
+                        showToast(
+                            "Este correo ya está registrado con otro método",
+                            "error"
+                        );
                         showToast(
                             "Este correo ya está registrado con otro método",
                             "error"

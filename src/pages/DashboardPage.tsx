@@ -10,7 +10,7 @@ import { useMeetingApiStore } from "../stores/useMeetingApiStore";
 export default function DashboardPage() {
     const navigator = useNavigate();
 
-    const { profile, token } = useUserStore();
+    const { profile } = useUserStore();
     const { setCurrentRoom, setError, isCreating, setCreating } =
         useRoomStore();
     const { createMeeting, joinMeeting, error } = useMeetingApiStore();
@@ -55,6 +55,10 @@ export default function DashboardPage() {
             setError("Por favor ingresa un título");
             return;
         }
+
+        setCreating(true);
+        setError(null);
+
         const meeting = await createMeeting(title, description);
 
         if (!meeting) {
@@ -66,9 +70,6 @@ export default function DashboardPage() {
         setCreating(false);
 
         navigator(`/meeting/${meeting.id}`);
-
-
-
     };
 
     const handleKeyPress = (e: React.KeyboardEvent, action: () => void) => {
