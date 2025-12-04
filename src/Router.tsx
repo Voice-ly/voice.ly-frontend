@@ -26,7 +26,6 @@ export default function Router() {
                     <Route path="about-us" element={<AboutUs />} />
                     <Route path="help" element={<Help />} />
 
-
                     <Route element={<LeftImageLayout />}>
                         <Route path="login" element={<LoginPage />} />
                         <Route path="register" element={<RegisterPage />} />
@@ -45,7 +44,7 @@ export default function Router() {
                     <Route path="dashboard" element={<DashboardPage />} />
                     <Route path="profile" element={<ProfilePage />} />
                 </Route>
-                <Route path="meeting/:roomId" element={<MeetingPage />} /> 
+                <Route path="meeting/:id" element={<MeetingPage />} />
             </Routes>
         </BrowserRouter>
     );
