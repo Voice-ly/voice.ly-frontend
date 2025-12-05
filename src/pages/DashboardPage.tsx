@@ -7,6 +7,15 @@ import { useUserStore } from "../stores/useUserStore";
 import { useRoomStore } from "../stores/useRoomStore";
 import { useMeetingApiStore } from "../stores/useMeetingApiStore";
 
+
+/**
+ * Dashboard Component
+ * 
+ * This component renders "Dashboard" page of the application. It includes sections to create and join
+ * meetings
+ * 
+ * @returns the Dashboard page
+ */
 export default function DashboardPage() {
     const navigator = useNavigate();
 
@@ -28,6 +37,11 @@ export default function DashboardPage() {
 
     //  JOIN MEETING
 
+    /**
+     * Handles the Joining a meeting action
+     * 
+     * @returns : joins the user to the meeting
+     */
     const handleJoinMeeting = async () => {
         if (!joinRoomId.trim()) {
             setError("Por favor ingresa un ID");
@@ -50,6 +64,11 @@ export default function DashboardPage() {
 
     //  CREATE MEETING
 
+    /**
+     * Handles the cration of a meeting
+     * 
+     * @returns : the Meeting created
+     */
     const handleCreateMeeting = async () => {
         if (!title.trim()) {
             setError("Por favor ingresa un título");
@@ -72,10 +91,19 @@ export default function DashboardPage() {
         navigator(`/meeting/${meeting.id}`);
     };
 
+    /**
+     * Handles the key event to send on every section.
+     * 
+     * @param e : Event of pressing "Enter" key
+     * @param action : the action of the section.
+     */
     const handleKeyPress = (e: React.KeyboardEvent, action: () => void) => {
         if (e.key === "Enter") action();
     };
 
+    /**
+     * Renders the Dashboard page
+     */
     return (
         <div className="w-full px-6 md:px-14 lg:px-20 py-10">
             <h1 className="text-[28px] md:text-[34px] font-bold text-center text-[#304FFE] mb-10">

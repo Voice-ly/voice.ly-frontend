@@ -13,6 +13,9 @@ interface SocketStore {
     disconnect: () => void;
 }
 
+/**
+ * Function in charge of managing sockets for chat
+ */
 export const useSocketStore = create<SocketStore>((set, get) => ({
     socket: null,
 
