@@ -7,6 +7,9 @@ interface ChatSocketState {
   disconnect: () => void;
 }
 
+/**
+ * Function that manages chat sockets
+ */
 export const useChatSocketStore = create<ChatSocketState>((set, get) => ({
   socket: null,
 

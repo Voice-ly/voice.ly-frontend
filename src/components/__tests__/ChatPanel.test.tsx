@@ -1,15 +1,16 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import ChatPanel from '../ChatPanel';
 import { useChatSocketStore } from '../../stores/useChatSocketStore';
 import { useUserStore } from '../../stores/useUserStore';
 
 // Mock de los stores
-jest.mock('../stores/useChatSocketStore');
-jest.mock('../stores/useUserStore');
+vi.mock('../../stores/useChatSocketStore');
+vi.mock('../../stores/useUserStore');
 
 // Mock de localStorage
 const mockLocalStorage = (() => {
-  let store: { [key: string]: string } = {};
+  let store: Record<string, string> = {}; // ← Cambia esto
   return {
     getItem: (key: string) => store[key] || null,
     setItem: (key: string, value: string) => { store[key] = value; },
@@ -21,13 +22,13 @@ Object.defineProperty(window, 'localStorage', { value: mockLocalStorage });
 describe('ChatPanel', () => {
   // Setup común para todas las pruebas
   const mockSocket = {
-    emit: jest.fn(),
-    on: jest.fn(),
-    off: jest.fn()
+    emit: vi.fn(),
+    on: vi.fn(),
+    off: vi.fn()
   };
 
-  const mockConnect = jest.fn();
-  const mockOnClose = jest.fn();
+  const mockConnect = vi.fn();
+  const mockOnClose = vi.fn();
   const mockMessagesEndRef = { current: null };
 
   const defaultProps = {
@@ -39,16 +40,16 @@ describe('ChatPanel', () => {
 
   beforeEach(() => {
     // Limpiar mocks antes de cada prueba
-    jest.clearAllMocks();
+    vi.clearAllMocks();
     mockLocalStorage.clear();
     
     // Configurar stores mockeados
-    (useChatSocketStore as jest.Mock).mockReturnValue({
+    vi.mocked(useChatSocketStore).mockReturnValue({
       socket: mockSocket,
       connect: mockConnect
     });
 
-    (useUserStore as jest.Mock).mockReturnValue({
+    vi.mocked(useUserStore).mockReturnValue({
       profile: { id: 'user-1', firstName: 'Juan' }
     });
 
@@ -263,7 +264,7 @@ describe('ChatPanel', () => {
       render(<ChatPanel {...defaultProps} />);
       
       // Simular recepción de mensaje
-      const receiveMessageCallback = (mockSocket.on as jest.Mock).mock.calls
+      const receiveMessageCallback = vi.mocked(mockSocket.on).mock.calls
         .find(call => call[0] === 'receive_message')?.[1];
       
       const mockMessage = {
@@ -273,7 +274,7 @@ describe('ChatPanel', () => {
         createdAt: Date.now()
       };
       
-      receiveMessageCallback(mockMessage);
+      receiveMessageCallback?.(mockMessage);
       
       await waitFor(() => {
         expect(screen.getByText(/Hola a todos/)).toBeInTheDocument();
@@ -283,7 +284,7 @@ describe('ChatPanel', () => {
     it('debe mostrar el nombre del usuario actual correctamente', async () => {
       render(<ChatPanel {...defaultProps} />);
       
-      const receiveMessageCallback = (mockSocket.on as jest.Mock).mock.calls
+      const receiveMessageCallback = vi.mocked(mockSocket.on).mock.calls
         .find(call => call[0] === 'receive_message')?.[1];
       
       const mockMessage = {
@@ -293,7 +294,7 @@ describe('ChatPanel', () => {
         createdAt: Date.now()
       };
       
-      receiveMessageCallback(mockMessage);
+      receiveMessageCallback?.(mockMessage);
       
       await waitFor(() => {
         expect(screen.getByText(/Juan/)).toBeInTheDocument();
@@ -303,7 +304,7 @@ describe('ChatPanel', () => {
     it('debe mostrar "Usuario" para participantes desconocidos', async () => {
       render(<ChatPanel {...defaultProps} />);
       
-      const receiveMessageCallback = (mockSocket.on as jest.Mock).mock.calls
+      const receiveMessageCallback = vi.mocked(mockSocket.on).mock.calls
         .find(call => call[0] === 'receive_message')?.[1];
       
       const mockMessage = {
@@ -313,7 +314,7 @@ describe('ChatPanel', () => {
         createdAt: Date.now()
       };
       
-      receiveMessageCallback(mockMessage);
+      receiveMessageCallback?.(mockMessage);
       
       await waitFor(() => {
         expect(screen.getByText(/Usuario/)).toBeInTheDocument();
@@ -333,7 +334,7 @@ describe('ChatPanel', () => {
     });
 
     it('debe manejar socket null', () => {
-      (useChatSocketStore as jest.Mock).mockReturnValue({
+      vi.mocked(useChatSocketStore).mockReturnValue({
         socket: null,
         connect: mockConnect
       });
@@ -345,7 +346,7 @@ describe('ChatPanel', () => {
 
     it('debe prevenir el comportamiento por defecto de Enter', () => {
       render(<ChatPanel {...defaultProps} />);
-      const preventDefault = jest.fn();
+      const preventDefault = vi.fn();
       
       fireEvent.keyDown(window, { 
         key: 'Enter', 

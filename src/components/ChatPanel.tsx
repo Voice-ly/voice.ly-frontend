@@ -107,7 +107,7 @@ export default function ChatPanel({ roomId, messagesEndRef, showChat, onClose }:
   /**
    * Method on charge to handle the sending of messages.
    * 
-   * @returns returns response from the backend.
+   * @returns response from the fetch to the endpoint.
    */
   const handleSend = () => {
     if (!socket || !inputText.trim() || !roomId) return;

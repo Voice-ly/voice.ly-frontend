@@ -1,6 +1,9 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
+/**
+ * Function to store the user profile
+ */
 export const useUserStore = create<any>()(
     persist(
         (set) => ({
