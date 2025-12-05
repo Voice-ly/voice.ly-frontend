@@ -34,12 +34,24 @@ export default function MeetingPage() {
   const [isAudioEnabled, setIsAudioEnabled] = useState(false);
   const [isVideoEnabled, setIsVideoEnabled] = useState(false);
 
+  /**
+   * Alternates the users audio state.
+   * 
+   * Inverts the actual value of `isAudioEnabled`, updates the state
+   * and notifies the function `toggleAudio` to apply the change on the system. 
+   */
   const handleToggleAudio = useCallback(() => {
     const newState = !isAudioEnabled;
     setIsAudioEnabled(newState);
     toggleAudio(newState);
   }, [isAudioEnabled]);
 
+  /**
+   * Alternates the users video state.
+   * 
+   * Inverts the actual value of `isVideoEnabled`, updates the state
+   * and notifies the function `toggleVideo` to apply the change on the system.
+   */
   const handleToggleVideo = useCallback(() => {
     const newState = !isVideoEnabled;
     setIsVideoEnabled(newState);
@@ -53,6 +65,13 @@ export default function MeetingPage() {
   const [inputValue, setInputValue] = useState("");
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
+  /**
+   * Automatically scrolls the chat view to the latest message.
+   * 
+   * This effect runs every time the `messages` array changes, ensuring
+   * that the most recent message is visible withour requiring the user
+   * to scroll manually.
+   */
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
@@ -65,6 +84,11 @@ export default function MeetingPage() {
   const userId = profile?.id || guestId;
   const userName = profile?.firstName || "Invitado";
 
+  /**
+   * Initializes the socket connection, WebRTC session, and message listeners
+   * for the current meeting. This effect runs whenever the user identity or
+   * meeting identifier changes.
+   */
   useEffect(() => {
     if (!meetingId) return;
 
@@ -105,6 +129,42 @@ export default function MeetingPage() {
     };
   }, [userId, userName, meetingId]);
 
+  /**
+   * Handler for commands and keyboard shortcuts to simplify navegation on the page.
+   */
+  useEffect(() => {
+    
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.altKey === true && e.key === "d") {
+        e.preventDefault();
+        handleToggleAudio();
+      }
+
+      if (e.altKey === true && e.key === "e") {
+        e.preventDefault();
+        handleToggleVideo();
+      }
+
+      if (e.altKey === true && e.key === "c") {
+        e.preventDefault();
+        setShowChat(!showChat);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown)
+  }, []);
+
+  /**
+   * Sends a chat message to the current meeting room via socket.io.
+   * 
+   * Validates that the input is not empty and emits the message event to the server.
+   * After sending, the input field is cleared.
+   * 
+   * @returns {void}
+   * 
+   * @emits chat:message - Sends the message pauload including user and room info.
+   */
   const sendMessage = () => {
     if (!inputValue.trim()) return;
 
@@ -138,16 +198,29 @@ export default function MeetingPage() {
       {/* CHAT PANEL */}
       {showChat && (
         <div
-          className="
-                    absolute right-0 top-0 h-full w-80 bg-[#1E1E1E] text-white 
-                    shadow-xl border-l border-gray-700 p-4 pb-24 flex flex-col
-                    animate-slide-left
-                "
+          className={`
+          fixed top-0 right-0 h-full bg-[#1E1E1E] text-white 
+          shadow-xl border-l border-gray-700 p-4 pb-24 flex flex-col
+          transition-transform duration-300 z-50
+
+          w-full            
+          md:w-80
+          ${showChat ? "translate-x-0" : "translate-x-full"}  /* NUEVO: animación */
+          `}
         >
           {/* Header */}
           <h2 className="text-lg font-semibold mb-3 pb-2 border-b border-gray-700/50 tracking-wide">
             Chat de la reunión
           </h2>
+
+          <button
+            onClick={() => setShowChat(!showChat)}
+            aria-label="Cerrar chat"
+            className="w-8 h-8 flex items-center justify-center rounded-full 
+              bg-gray-800 hover:bg-gray-700 transition-colors"
+          >
+            ✕
+          </button>
 
           {/* Messages */}
           <div className="flex-1 overflow-y-auto space-y-4 pr-2">
@@ -205,6 +278,7 @@ export default function MeetingPage() {
           <button
             onClick={handleToggleAudio}
             className="text-white flex flex-col items-center text-xs sm:text-sm hover:opacity-80 transition cursor-pointer"
+              title="Activar/Desactivar de microfono (Alt + D)"
           >
             <span className="text-3xl">{isAudioEnabled ? "🎤" : "🔇"}</span>
             <span>{isAudioEnabled ? "Desactivar" : "Activar"} micrófono</span>
@@ -213,12 +287,15 @@ export default function MeetingPage() {
           <button
             onClick={handleToggleVideo}
             className="text-white flex flex-col items-center text-xs sm:text-sm hover:opacity-80 transition cursor-pointer"
+              title="Activar/Desactivar de cámara (Alt + E)"
           >
             <span className="text-3xl">{isVideoEnabled ? "📷" : "🚫"}</span>
             <span>{isVideoEnabled ? "Desactivar" : "Activar"} cámara</span>
           </button>
 
-          <button className="text-white flex flex-col items-center text-xs sm:text-sm hover:opacity-80 transition cursor-pointer">
+          <button className="text-white flex flex-col items-center text-xs sm:text-sm hover:opacity-80 transition cursor-pointer"
+              title="Ver Participantes (Alt + B)"
+          >
             <span className="text-3xl">👥</span>
             <span>Participantes</span>
           </button>
@@ -226,6 +303,7 @@ export default function MeetingPage() {
           <button
             onClick={() => setShowChat(!showChat)}
             className="text-white flex flex-col items-center text-xs sm:text-sm hover:opacity-80 transition"
+              title="Chat (Alt + C)"
           >
             <span className="text-3xl">💬</span>
             <span>Chat</span>

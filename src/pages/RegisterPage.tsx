@@ -224,6 +224,12 @@ export default function RegisterPage() {
         }
     };
 
+    /**
+     * Starts the authentication proccess with Google using Firebase.
+     * 
+     * This function opens an emergent window to complete the log in with their google account.
+     * 
+     */
     const handleLoginWithGoogle = (e: Event) => {
         e.preventDefault();
         loginWithGoogle()
@@ -298,6 +304,12 @@ export default function RegisterPage() {
             });
     };
 
+    /**
+     * Starts the authentication proccess with Github using Firebase.
+     * 
+     * This function opens an emergent window to complete the log in with their github account.
+     * 
+     */
     const handleLoginWithGithub = (e: Event) => {
         e.preventDefault();
         loginWithGithub()
