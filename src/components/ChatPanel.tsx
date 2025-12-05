@@ -183,7 +183,7 @@ export default function ChatPanel({ roomId, messagesEndRef, showChat, onClose }:
           className="flex-1 px-3 py-2 rounded-lg bg-[#1E1E1E] text-sm border border-gray-700 focus:border-blue-500 outline-none"
         />
         <button
-          className="bg-gradient-to-r from-[#304FFE] to-black px-4 py-2 rounded-lg"
+          className="bg-gradient-to-r from-[#304FFE] to-black px-4 py-2 rounded-lg cursor-pointer"
           onClick={handleSend}
         >
           ➤
