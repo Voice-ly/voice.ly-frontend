@@ -8,10 +8,10 @@ import {
 } from "../lib/UserService";
 import type { UserSignupForm } from "../types/User";
 import {
-    FacebookLoginButton,
+    GitHubLoginButton,
     GoogleLoginButton,
 } from "../components/AuthButtons";
-import { loginWithFacebook, loginWithGoogle } from "../lib/AuthService";
+import { loginWithGithub, loginWithGoogle } from "../lib/AuthService";
 import {
     fetchSignInMethodsForEmail,
     GoogleAuthProvider,
@@ -298,13 +298,13 @@ export default function RegisterPage() {
             });
     };
 
-    const handleLoginWithFacebook = (e: Event) => {
+    const handleLoginWithGithub = (e: Event) => {
         e.preventDefault();
-        loginWithFacebook()
+        loginWithGithub()
             .then(async (result) => {
                 // The signed-in user info.
                 const user: any = result.user;
-
+                console.log(result);
                 const creationTime =
                     user.auth.currentUser.metadata.creationTime;
 
@@ -388,7 +388,7 @@ export default function RegisterPage() {
                 </h1>
                 <div className="flex gap-3 justify-center my-4">
                     <GoogleLoginButton submit={handleLoginWithGoogle} />
-                    <FacebookLoginButton submit={handleLoginWithFacebook} />
+                    <GitHubLoginButton submit={handleLoginWithGithub} />
                 </div>
 
                 {/* FIRST NAME */}

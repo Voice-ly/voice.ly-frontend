@@ -1,5 +1,5 @@
 import type { SendMessageRequest } from "../types/Chat";
-import { chatApiFetch } from "./fetch";
+import { apiFetch } from "./fetch";
 
 export function sendMessage(
     meetingId: string,
@@ -9,7 +9,7 @@ export function sendMessage(
 
     const token = "Bearer " + localStorage.getItem("token");
     console.log(request);
-    return chatApiFetch(`/${meetingId}/messages`, {
+    return apiFetch(`/${meetingId}/messages`, {
         method: "POST",
         body: JSON.stringify(request),
         headers: { "Content-Type": "application/json", "Authorization": token }, // fix header
@@ -32,7 +32,7 @@ export function getMessages(
 
     const token = "Bearer " + localStorage.getItem("token");
 
-    return chatApiFetch(`/${meetingId}/messages?${params.toString()}`, {
+    return apiFetch(`/${meetingId}/messages?${params.toString()}`, {
         method: "GET",
         headers: {
             "Content-Type": "application/json",

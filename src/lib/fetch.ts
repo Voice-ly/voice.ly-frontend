@@ -28,16 +28,22 @@ export function apiFetch(
 ): Promise<Response> {
     const baseUrl = import.meta.env.VITE_BASE_URL + `/api/${base}`;
 
-    const headers = new Headers({
-        "Content-Type": "application/json",
-        ...options.headers,
-    });
+    // Crear headers sin romper los de opciones
+    const headers = new Headers(options.headers || {});
+    headers.set("Content-Type", "application/json");
+
+    // Agregar token SOLO si existe (sin afectar rutas públicas)
+    const token = localStorage.getItem("token");
+    if (token) {
+        headers.set("Authorization", `Bearer ${token}`);
+    }
 
     return fetch(baseUrl + endpoint, {
         ...options,
         headers,
     });
 }
+
 
 export function chatApiFetch(
     endpoint: string = "",
