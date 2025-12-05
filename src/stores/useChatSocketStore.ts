@@ -7,18 +7,21 @@ interface ChatSocketState {
   disconnect: () => void;
 }
 
+/**
+ * Function that manages chat sockets
+ */
 export const useChatSocketStore = create<ChatSocketState>((set, get) => ({
   socket: null,
 
   connect: (token: string) => {
     const URL = import.meta.env.VITE_CHAT_SOCKET_URL;
 
-    // evitar múltiples conexiones
+    // avoid multiple connections
     if (get().socket) return;
 
     const socket = io(URL, {
       auth: { token },
-      transports: ["websocket", "polling"], // recomendado
+      transports: ["websocket", "polling"], // recommended
     });
 
     socket.on("connect", () => console.log("🟢 Chat socket connected"));

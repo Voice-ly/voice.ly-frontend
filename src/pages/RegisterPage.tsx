@@ -91,11 +91,11 @@ export default function RegisterPage() {
             value &&
             !nameRegex.test(value)
         ) {
-            return; // Solo letras
+            return; // Letters only
         }
 
         if (name === "age" && !/^\d*$/.test(value)) {
-            return; // Solo números
+            return; // Numbers only
         }
 
         switch (name) {
@@ -224,6 +224,12 @@ export default function RegisterPage() {
         }
     };
 
+    /**
+     * Starts the authentication proccess with Google using Firebase.
+     * 
+     * This function opens an emergent window to complete the log in with their google account.
+     * 
+     */
     const handleLoginWithGoogle = (e: Event) => {
         e.preventDefault();
         loginWithGoogle()
@@ -266,13 +272,13 @@ export default function RegisterPage() {
                     const email = error.customData.email;
                     const pendingCred = error.credential;
 
-                    // Consultar proveedores asociados al email
+                    // Consults providers associated to email
                     const providers = await fetchSignInMethodsForEmail(
                         auth,
                         email
                     );
 
-                    // Caso típico: ya existe la cuenta con Google
+                    // Typical case: already exists the account with google
                     if (providers.includes("google.com")) {
                         alert(
                             "Este email ya está registrado con Google. Debes iniciar sesión con Google."
@@ -284,7 +290,7 @@ export default function RegisterPage() {
                             googleProvider
                         );
 
-                        // Vincular las credenciales de Facebook al usuario existente
+                        // Synchronize Google credentials to existent user
                         await linkWithCredential(
                             googleResult.user,
                             pendingCred
@@ -298,6 +304,12 @@ export default function RegisterPage() {
             });
     };
 
+    /**
+     * Starts the authentication proccess with Github using Firebase.
+     * 
+     * This function opens an emergent window to complete the log in with their github account.
+     * 
+     */
     const handleLoginWithGithub = (e: Event) => {
         e.preventDefault();
         loginWithGithub()
@@ -342,13 +354,13 @@ export default function RegisterPage() {
                     const email = error.customData.email;
                     const pendingCred = error.credential;
 
-                    // Consultar proveedores asociados al email
+                    // Consults providers associated to email
                     const providers = await fetchSignInMethodsForEmail(
                         auth,
                         email
                     );
 
-                    // Caso típico: ya existe la cuenta con Google
+                    // Typical case: already exists the account with google
                     if (providers.includes("google.com")) {
                         alert(
                             "Este email ya está registrado con Google. Debes iniciar sesión con Google."
@@ -360,7 +372,7 @@ export default function RegisterPage() {
                             googleProvider
                         );
 
-                        // Vincular las credenciales de Facebook al usuario existente
+                        // Synchronize Github credentials to existent user
                         await linkWithCredential(
                             googleResult.user,
                             pendingCred

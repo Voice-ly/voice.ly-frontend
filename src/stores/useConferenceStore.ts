@@ -12,6 +12,9 @@ const initialState = {
     isJoining: false,
 };
 
+/**
+ * Function on charge of managing Audio and Video for the meeting
+ */
 export const useConferenceStore = create<ConferenceState>()(
     devtools(
         (set, get) => ({

@@ -28,11 +28,11 @@ export function apiFetch(
 ): Promise<Response> {
     const baseUrl = import.meta.env.VITE_BASE_URL + `/api/${base}`;
 
-    // Crear headers sin romper los de opciones
+    // Create headers without breaking options
     const headers = new Headers(options.headers || {});
     headers.set("Content-Type", "application/json");
 
-    // Agregar token SOLO si existe (sin afectar rutas públicas)
+    // Add token ONLY if it already exists (without interfering with public routes)
     const token = localStorage.getItem("token");
     if (token) {
         headers.set("Authorization", `Bearer ${token}`);
@@ -44,7 +44,18 @@ export function apiFetch(
     });
 }
 
-
+/**
+ * Performs a standarized API request using a predefined base URL.
+ * 
+ * This function automatically attaches JSON headers, includes credentials
+ * (cookies/session), and allows selecting between different API base paths
+ * such as `/api/chat`.
+ * 
+ * @param endpoint : The API endpoint to call.
+ * @param options  : Additional fetch options.
+ * @param base : base API section to use, default is "chat".
+ * @returns {Promise<Response>} : The fetch response promise.
+ */
 export function chatApiFetch(
     endpoint: string = "",
     options: RequestInit = {},

@@ -11,6 +11,9 @@ interface MeetingApiState {
 // URL
 const BASE_URL = "https://voice-ly.onrender.com/api/meetings";
 
+/**
+ * Function to use the Meeting Api.
+ */
 export const useMeetingApiStore = create<MeetingApiState>((set) => ({
     error: null,
 
