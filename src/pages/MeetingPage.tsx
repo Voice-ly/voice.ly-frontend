@@ -320,7 +320,7 @@ export default function MeetingPage() {
 
                     <button
                         onClick={() => setShowChat(!showChat)}
-                        className="text-white flex flex-col items-center text-xs sm:text-sm hover:opacity-80 transition"
+                        className="text-white flex flex-col items-center text-xs sm:text-sm hover:opacity-80 transition cursor-pointer"
                         title="Chat (Alt + C)"
                     >
                         <span className="text-3xl">💬</span>
