@@ -36,7 +36,7 @@ const HomePage: React.FC = () => {
           text-white
         "
       >
-        {/* --- TEXTO --- */}
+        {/* --- TEXT --- */}
         <div className="flex flex-col items-center  text-center md:text-center space-y-6 w-full md:w-1/2">
           
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight drop-shadow-lg">
@@ -62,7 +62,7 @@ const HomePage: React.FC = () => {
           </Link>
         </div>
 
-        {/* --- IMAGEN --- */}
+        {/* --- IMAGE --- */}
         <div className="flex justify-center md:justify-end w-full md:w-1/2">
           <img
             src="/img1-home.png"

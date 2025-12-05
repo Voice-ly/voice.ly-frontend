@@ -28,11 +28,11 @@ export function apiFetch(
 ): Promise<Response> {
     const baseUrl = import.meta.env.VITE_BASE_URL + `/api/${base}`;
 
-    // Crear headers sin romper los de opciones
+    // Create headers without breaking options
     const headers = new Headers(options.headers || {});
     headers.set("Content-Type", "application/json");
 
-    // Agregar token SOLO si existe (sin afectar rutas públicas)
+    // Add token ONLY if it already exists (without interfering with public routes)
     const token = localStorage.getItem("token");
     if (token) {
         headers.set("Authorization", `Bearer ${token}`);

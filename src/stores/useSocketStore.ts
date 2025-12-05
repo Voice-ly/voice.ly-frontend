@@ -29,7 +29,7 @@ export const useSocketStore = create<SocketStore>((set, get) => ({
             console.log("Chat socket conectado:", socket.id);
         });
 
-        // restaurar listener si existía
+        // restore listener if it already existed
         const savedCallback = (get() as any)._onMessage;
         if (savedCallback) socket.on("receive_message", savedCallback);
 
