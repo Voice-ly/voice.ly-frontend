@@ -215,8 +215,10 @@ export default function LoginPage() {
      */
     const handleLoginWithGithub = (e: Event) => {
         e.preventDefault();
+        console.log("Entrando a github");
         loginWithGithub()
             .then(async (result) => {
+                console.log(result);
                 // The signed-in user info.
                 const user: any = result.user;
 
@@ -248,10 +250,7 @@ export default function LoginPage() {
 
                     const token = await res.json();
                     localStorage.setItem("token", token.token);
-                    showToast(
-                        "Inicio de sesión con Facebook exitoso",
-                        "success"
-                    );
+                    showToast("Inicio de sesión con Github exitoso", "success");
                     navigate("/dashboard");
                 }
             })
