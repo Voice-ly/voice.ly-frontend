@@ -100,7 +100,7 @@ export default function LoginPage() {
                 return;
             }
 
-            // guardar token real del backend
+            // Save real token from backend
             localStorage.setItem("token", data.token);
 
             const getProfile = await getUsers();
@@ -171,13 +171,13 @@ export default function LoginPage() {
                     const email = error.customData.email;
                     const pendingCred = error.credential;
 
-                    // Consultar proveedores asociados al email
+                    // Consults providers associated to email
                     const providers = await fetchSignInMethodsForEmail(
                         auth,
                         email
                     );
 
-                    // Caso típico: ya existe la cuenta con Google
+                    // Typical case: already exists the account with google
                     if (providers.includes("google.com")) {
                         showToast(
                             "Este correo ya está registrado con otro método",
@@ -193,7 +193,7 @@ export default function LoginPage() {
                             googleProvider
                         );
 
-                        // Vincular las credenciales de Facebook al usuario existente
+                        // Synchronize Facebook credentials to existent user
                         await linkWithCredential(
                             googleResult.user,
                             pendingCred
@@ -264,13 +264,13 @@ export default function LoginPage() {
                     const email = error.customData.email;
                     const pendingCred = error.credential;
 
-                    // Consultar proveedores asociados al email
+                    // Consults providers associated to email
                     const providers = await fetchSignInMethodsForEmail(
                         auth,
                         email
                     );
 
-                    // Caso típico: ya existe la cuenta con Google
+                    // Typical case: already exists the account with google
                     if (providers.includes("google.com")) {
                         showToast(
                             "Este correo ya está registrado con otro método",
@@ -282,7 +282,7 @@ export default function LoginPage() {
                             googleProvider
                         );
 
-                        // Vincular las credenciales de Facebook al usuario existente
+                        // Synchronize Github credentials to existent user
                         await linkWithCredential(
                             googleResult.user,
                             pendingCred

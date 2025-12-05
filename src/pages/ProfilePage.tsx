@@ -96,10 +96,10 @@ export default function ProfilePage() {
     }, []);
     
     const formatFullName = (value: string) => {
-    // elimina espacios dobles y ajusta el nombre
+    // Deletes double spaces and adjusts names
     return value
-        .replace(/\s+/g, " ")     // convierte dobles espacios → 1 espacio
-        .trimStart();             // evita espacio al inicio
+        .replace(/\s+/g, " ")     // Transforms 2 spaces into 1
+        .trimStart();             // Avoids initial space
         };
 
     /**
@@ -133,7 +133,7 @@ export default function ProfilePage() {
         <section className="flex justify-center p-6">
             <div className="w-full max-w-3xl bg-white rounded-2xl shadow-lg p-10">
 
-                {/* Volver */}
+                {/* Return */}
                 <Link
                     to="/dashboard"
                     className="text-blue-600 underline text-sm mb-6 inline-block"
@@ -141,15 +141,15 @@ export default function ProfilePage() {
                     ← Volver al Dashboard
                 </Link>
 
-                {/* Título */}
+                {/* Title */}
                 <h1 className="text-4xl font-bold mb-8 text-gray-800">
                     Perfil de Usuario
                 </h1>
 
-                {/* FORMULARIO */}
+                {/* FORM */}
                 <form className="space-y-7" onSubmit={handleSubmit}>
                     
-                    {/* Nombres + Apellidos */}
+                    {/* Name + Last Name */}
                     <div className="flex flex-col">
                         <label className="text-lg font-semibold mb-1">
                             Nombres y Apellidos
@@ -186,7 +186,7 @@ export default function ProfilePage() {
                         />
                     </div>
 
-                    {/* Edad */}
+                    {/* Age */}
                     <div className="flex flex-col">
                         <label className="text-lg font-semibold mb-1">Edad</label>
                         <input
@@ -202,7 +202,7 @@ export default function ProfilePage() {
                         />
                     </div>
 
-                    {/* Contraseña */}
+                    {/* Password */}
                     <div className="flex flex-col relative">
                         <label className="text-lg font-semibold mb-1">
                             Contraseña
@@ -228,7 +228,7 @@ export default function ProfilePage() {
                     </div>
                         
 
-                    {/* Fecha de creación */}
+                    {/* Creation date */}
                     <div className="pt-2">
                         <span className="text-lg font-semibold">Creado desde:</span>
                         <span className="text-md text-gray-700 ml-2">
@@ -240,7 +240,7 @@ export default function ProfilePage() {
                         </span>
                     </div>
 
-                    {/* Botones */}
+                    {/* Buttons */}
                     <div className="flex justify-center gap-6 pt-6">
                         <button
                             type="button"
@@ -259,7 +259,7 @@ export default function ProfilePage() {
                 </form>
             </div>
 
-            {/* MODAL DE ELIMINAR */}
+            {/* DELETE MODAL */}
             {showDeleteModal && (
                 <div className="fixed inset-0 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4">
                     <div className="bg-white w-full max-w-md rounded-2xl p-8 shadow-lg relative">
@@ -298,7 +298,7 @@ export default function ProfilePage() {
                         </div>
                             
 
-                            {/* Botones del modal */}
+                            {/* Modal buttons */}
                             <div className="flex justify-center gap-4 mt-4">
                                 <button
                                     type="button"

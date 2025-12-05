@@ -234,7 +234,7 @@ function createPeerConnection(theirSocketId, isInitiator = false) {
 
   const peerConnection = new Peer({
     initiator: isInitiator,
-    stream: localMediaStream,      // <-- aquí
+    stream: localMediaStream,      // <-- here
     config: {
       iceServers,
     },
@@ -244,9 +244,7 @@ function createPeerConnection(theirSocketId, isInitiator = false) {
     socket.emit("signal", theirSocketId, socket.id, data)
   );
 
-  // ya no necesitamos addStream en 'connect'
-  // peerConnection.on("connect", () => peerConnection.addStream(localMediaStream));
-
+  
   peerConnection.on("stream", (stream) =>
     updateClientMediaElements(theirSocketId, stream)
   );
@@ -390,10 +388,17 @@ function removeClientMediaElement(_id) {
   }
 }
 
+/**
+ * Gets container for video on the conference
+ * @returns : video container
+ */
 function getVideoContainer() {
   return document.getElementById("video-grid");
 }
 
+/**
+ * Uses the container to render the user video.
+ */
 function createLocalVideo(stream, username) {
   const container = getVideoContainer();
   if (!container) return;

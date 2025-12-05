@@ -27,6 +27,9 @@ interface RoomState {
     clearError: () => void;
 }
 
+/**
+ * Zustand store in charge of managing the state related to rooms within the application.
+ */
 export const useRoomStore = create<RoomState>((set) => ({
     rooms: [],
     currentRoom: null,

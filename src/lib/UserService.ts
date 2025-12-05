@@ -46,7 +46,7 @@ export async function getUsers(): Promise<any> {
 
     if (!res.ok) throw new Error("Error obteniendo usuario");
 
-    return await res.json(); // <-- AQUÍ EL JSON REAL
+    return await res.json(); // <-- REAL JSON HERE
 }
 
 /**
@@ -99,7 +99,7 @@ export function deleteUser(data: any): Promise<Response> {
  */
 
 async function handleSocialRegister(user: any) {
-    const tempPassword = "Aa!12345"; // contraseña temporal q cumple todas las reglas
+    const tempPassword = "Aa!12345"; // temporal password that accomplish all rules
 
     const payload: UserSignupForm = {
         firstName: user.displayName?.split(" ")[0] || "User",
@@ -107,7 +107,7 @@ async function handleSocialRegister(user: any) {
         email: user.email || "",
         password: tempPassword,
         confirmpassword: tempPassword,
-        age: 18, // debe ser > 0
+        age: 18, // should be > 0
     };
 
     return register(payload);
@@ -129,7 +129,7 @@ export async function registerWithGoogle() {
         const result = await signInWithPopup(auth, provider);
         const user = result.user;
 
-        // Se envía al backend para crear el usuario
+        // Its sent to backend to create the new user
         return await handleSocialRegister(user);
     } catch (error) {
         console.error("Google registration error:", error);
@@ -137,6 +137,9 @@ export async function registerWithGoogle() {
     }
 }
 
+/**
+ * Register with Github 
+ */
 export async function registerWithGithub() {
     const provider = new GithubAuthProvider();
     try {
