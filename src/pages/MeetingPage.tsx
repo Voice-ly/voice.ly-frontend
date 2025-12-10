@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect, useCallback } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useUserStore } from "../stores/useUserStore";
 import { socket } from "../lib/Socket";
 // @ts-ignore
@@ -9,6 +9,7 @@ import {
     toggleVideo,
     cleanupWebRTC,
 } from "../lib/webrtc";
+import { exitMeeting } from "../lib/ChatService";
 
 /**
  * MeetingPage Component
@@ -38,7 +39,7 @@ export default function MeetingPage() {
     const [showChat, setShowChat] = useState(false);
     const [isAudioEnabled, setIsAudioEnabled] = useState(false);
     const [isVideoEnabled, setIsVideoEnabled] = useState(false);
-
+    const navigate = useNavigate();
     /**
      * Alternates the users audio state.
      *
@@ -180,6 +181,13 @@ export default function MeetingPage() {
         });
 
         setInputValue("");
+    };
+
+    const handleExitMeeting = () => {
+        if (!meetingId) return;
+
+        exitMeeting(meetingId);
+        navigate("/dashboard");
     };
 
     return (
@@ -328,11 +336,12 @@ export default function MeetingPage() {
                     </button>
                 </div>
 
-                <Link to="/dashboard">
-                    <button className="bg-red-600 text-white px-6 py-2 rounded-full text-sm font-semibold shadow-md hover:bg-red-700 transition">
-                        Salir
-                    </button>
-                </Link>
+                <button
+                    onClick={handleExitMeeting}
+                    className="bg-red-600 text-white px-6 py-2 rounded-full text-sm font-semibold shadow-md hover:bg-red-700 transition"
+                >
+                    Salir
+                </button>
             </div>
         </div>
     );
