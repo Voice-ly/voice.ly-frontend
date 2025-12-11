@@ -3,10 +3,10 @@ import { apiFetch } from "./fetch";
 
 /**
  * Sends a message.
- * 
+ *
  * This function builds a query string based on the provided parameters
  * and performs an authenticated POST request to the messages endpoint.
- * 
+ *
  * @param meetingId : Identifier of the meeting
  * @param request : user info and credentials
  * @returns {Promise<Response>} : The API response retutned by `apiFetch`.
@@ -22,16 +22,16 @@ export function sendMessage(
     return apiFetch(`/${meetingId}/messages`, {
         method: "POST",
         body: JSON.stringify(request),
-        headers: { "Content-Type": "application/json", "Authorization": token }, // fix header
+        headers: { "Content-Type": "application/json", Authorization: token }, // fix header
     });
 }
 
 /**
  * Gets a list of messages associated with a specific meeting.
- * 
+ *
  * This function builds a query string based on the provided parameters
  * and performs an authenticated GET request to the messages endpoint.
- * 
+ *
  * @param meetingId : Identifier of the meeting.
  * @param limit : Maximum amount of messages to retrieve.
  * @param startAfter : Message ID or timestamp used for pagination; retrieves
@@ -58,7 +58,22 @@ export function getMessages(
         method: "GET",
         headers: {
             "Content-Type": "application/json",
-            "Authorization": token,
+            Authorization: token,
         },
     });
+}
+
+export function exitMeeting(meetingId: string) {
+    const token = "Bearer " + localStorage.getItem("token");
+    return apiFetch(
+        `/${meetingId}/end`,
+        {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: token,
+            },
+        },
+        "meetings"
+    );
 }
