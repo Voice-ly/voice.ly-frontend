@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect, useCallback } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useUserStore } from "../stores/useUserStore";
 import { socket } from "../lib/Socket";
 // @ts-ignore
