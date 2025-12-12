@@ -1,5 +1,6 @@
 import { Link } from "react-router";
 import logo from "/logo.jpeg";
+import manual_usuario from "/manual_usuario.pdf";
 
 /**
  * Footer Component
@@ -86,7 +87,7 @@ export default function Footer() {
                         </h2>
                         <div className="h-1 bg-[#1976D2] mb-2 w-full"></div>
                         <p className="text-[5px] text-[#7B76F1] sm:text-[9px]">
-                            <a href={import.meta.env.VITE_BASE_URL + "manual_usuario.pdf"} target="_blank" rel="noopener noreferrer">Manual_usuario.pdf</a>
+                            <a href={manual_usuario} target="_blank" rel="noopener noreferrer">Manual_usuario.pdf</a>
                         </p>
                     </div>
                 </div>
