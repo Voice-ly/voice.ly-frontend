@@ -374,7 +374,7 @@ export default function LoginPage() {
                 <p className="text-[#424242] text-[13px] text-center mt-4">
                     ¿No tienes una cuenta?{" "}
                     <Link to={"/register"} className="text-[#1976D2] font-bold">
-                        Registrate ahora!
+                        ¡Registrate ahora!
                     </Link>
                 </p>
             </form>

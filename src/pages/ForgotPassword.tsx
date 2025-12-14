@@ -114,7 +114,7 @@ export default function ForgotPassword() {
                         disabled={loading}
                         className={`bg-gradient-to-r from-indigo-600 to-purple-600 rounded-full text-white font-semibold px-10 py-3.5 text-sm tracking-wide uppercase hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200 {loading ? 'opacity-50 cursor-not-allowed' : ''}`}
                     >
-                        {loading ? "ENVIANDO..." : "ENVIAR"}
+                        {loading ? "Enviando..." : "Enviar"}
                     </button>
                 </div>
 
